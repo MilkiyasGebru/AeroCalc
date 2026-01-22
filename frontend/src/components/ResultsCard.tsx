@@ -9,7 +9,7 @@ interface ResultsCardProps {
 
 export default function ResultsCard(props : ResultsCardProps) {
     return (
-        <Card className="w-4/5 bg-white border-transparent h-fit">
+        <Card className="bg-white border-transparent h-fit">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg ">
                     <TrendingUp className="w-5 h-5 text-blue-300"/>

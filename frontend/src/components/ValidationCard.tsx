@@ -9,8 +9,8 @@ interface FooterProps {
 
 export default function ValidationCard(props: FooterProps) {
     return (
-        <div className="w-full ">
-            <Card className="w-11/12 md:w-4/6 mx-auto bg-white border-transparent">
+        <div className="max-w-5/6  mx-auto ">
+            <Card className="max-w-full  mx-auto bg-white border-transparent">
                 <CardHeader className="font-bold text-left pb-3 ">
                     <CardTitle className="flex items-center gap-3 text-lg">
                         <CircleAlert className="text-red-600" />

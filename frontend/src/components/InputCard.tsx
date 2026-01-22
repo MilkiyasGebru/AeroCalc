@@ -32,7 +32,7 @@ interface InputCardProps {
 
 export default function InputCard(props: InputCardProps){
     return (
-        <Card className="max-w-11/12 mx-auto bg-white border-transparent mb-4">
+        <Card className="  bg-white border-transparent mb-4">
             <CardHeader>
                 <CardTitle className="flex gap-2 items-center text-xl">
                     <Calculator className="w-5 h-5 text-blue-300"/>

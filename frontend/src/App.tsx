@@ -45,7 +45,7 @@ function App() {
           <h2 className="text-center max-w-[90%] mx-auto  text-4xl font-bold mb-4">Building Wind Response Calculator</h2>
           <p className="text-center max-w-[80%] mx-auto text-lg mb-4">Calculate force, acceleration, and power spectral density for wind-induced building responses</p>
           <ValidationCard width={width} depth={depth}/>
-          <div className="w-full grid lg:grid-cols-2 gap-6 mt-3">
+          <div className="max-w-5/6 grid lg:grid-cols-2 gap-6 mt-3 mx-auto">
               <InputCard width={width} height={height} depth={depth}
                          meanSpeed={meanSpeed} initialFrequency={initialFrequency} finalFrequency={finalFrequency}
                          deltaFrequency={deltaFrequency} buildingDensity={buildingDensity} totalFloors={totalFloors}
