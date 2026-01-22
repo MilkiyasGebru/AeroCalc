@@ -59,7 +59,9 @@ function App() {
               <ResultsCard rms_vr_proposed={vr} rms_a_r_Proposed={ar} />
           </div>
           {torsionPsds.length > 0 && (
-              <PSDGraph torsion_psds={torsionPsds} across_psds={acrossPsds} frequencies={GenerateFrequencies(initialFrequency, finalFrequency, deltaFrequency)}/>
+              <div className="max-w-5/6 mx-auto bg-white rounded-lg mt-3">
+                <PSDGraph torsion_psds={torsionPsds} across_psds={acrossPsds} frequencies={GenerateFrequencies(initialFrequency, finalFrequency, deltaFrequency)}/>
+              </div>
           )}
       </div>
   )

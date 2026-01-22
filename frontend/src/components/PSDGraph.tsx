@@ -7,7 +7,7 @@ interface PSDGraphProps {
 }
 
 interface graph_point {
-    frequency: number;
+    frequency: string;
     torsion_psd: number;
     across_psd: number;
 }
