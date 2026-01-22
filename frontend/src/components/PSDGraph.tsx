@@ -15,7 +15,7 @@ export default function PSDGraph(props: PSDGraphProps) {
 
     const graph_data: graph_point[] = props.frequencies.map((frequency, index)=>{
         return {
-            frequency: frequency,
+            frequency: frequency.toFixed(2),
             torsion_psd: props.torsion_psds[index],
             across_psd: props.across_psds[index],
         }
