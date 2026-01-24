@@ -4,10 +4,13 @@ import InputCard from "@/components/InputCard.tsx";
 import ResultsCard from "@/components/ResultsCard.tsx";
 import {useOutputBuildingContext} from "@/contexts/useOutputBuildingContext.ts";
 import PSDGraph from "@/components/PSDGraph.tsx";
+import MGraphs from "@/components/MGraphs.tsx";
+import {useInputBuildingContext} from "@/contexts/useInputBuildingContext.ts";
 
 
 function App() {
     const {torsionPsds} = useOutputBuildingContext()
+    const {csvData} = useInputBuildingContext()
 
 
   return (
@@ -20,11 +23,15 @@ function App() {
               <InputCard />
               <ResultsCard  />
           </div>
-          {torsionPsds.length > 0 && (
-              <div className="max-w-5/6 mx-auto bg-white rounded-lg mt-3">
-                <PSDGraph />
-              </div>
-          )}
+          <div className="max-w-5/6 grid lg:grid-cols-2 gap-6 mt-3 mx-auto">
+              {(csvData.length>0) && <MGraphs graph_data={csvData} />}
+              {torsionPsds.length > 0 && (
+                  <div className="max-w-5/6 mx-auto bg-white rounded-lg mt-3">
+                    <PSDGraph />
+                  </div>
+              )}
+          </div>
+
       </div>
 
   )
