@@ -49,8 +49,8 @@ export default function PSDGraph() {
             />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="across_psd" stroke="#8884d8" />
-            <Line type="monotone" dataKey="torsion_psd" stroke="#82ca9d" />
+            <Line type="monotone" dot={false} dataKey="across_psd" stroke="#8884d8" />
+            <Line type="monotone" dot={false} dataKey="torsion_psd" stroke="#82ca9d" />
 
         </LineChart>
     )

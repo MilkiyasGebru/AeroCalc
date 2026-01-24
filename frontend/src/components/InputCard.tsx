@@ -19,17 +19,12 @@ import {
 
 
 import {FileUploadDialog} from "@/components/FileUploadDialog.tsx";
-import MGraphs from "@/components/MGraphs.tsx";
 import {useInputBuildingContext} from "@/contexts/useInputBuildingContext.ts";
 import {useOutputBuildingContext} from "@/contexts/useOutputBuildingContext.ts";
 
 
 
-interface IUploadData {
-    M1: number;
-    M2: number;
-    M3: number;
-}
+
 
 export default function InputCard(){
 
@@ -38,6 +33,8 @@ export default function InputCard(){
     // Part - 2
     const {buildingDensity, meanSpeed, Tone, damping, setBuildingDensity, setMeanSpeed, setTone, setDamping} = useInputBuildingContext()
 
+    // Part -3 Handling CsvData
+    const { setCSVData} = useInputBuildingContext()
     // Handling Submit
     const {handleAnalyticalCalculation} = useOutputBuildingContext()
 
@@ -48,7 +45,6 @@ export default function InputCard(){
     const [showFileUpload, setShowFileUpload] = useState(false);
     const [uploadedFile, setUploadedFile] = useState<File | null>(null);
     const [experimentSource, setExperimentSource] = useState<string>("");
-    const [csvData, setCSVData] = useState<IUploadData[]>([]);
     const handleExperimentSelection = (value : string)=>{
         if (value == "database"){
             setExperimentSource(value)
@@ -384,7 +380,7 @@ export default function InputCard(){
 
                 </CardContent>
             </>}
-            <MGraphs graph_data={csvData} />
+
 
             <FileUploadDialog
                 open={showFileUpload}
