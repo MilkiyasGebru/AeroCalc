@@ -1,13 +1,12 @@
 import {Card, CardContent, CardHeader, CardTitle, CardDescription} from "@/components/ui/card"
 import {CircleAlert} from "lucide-react";
 import { Badge } from "@/components/ui/badge"
+import {useInputBuildingContext} from "@/contexts/useInputBuildingContext.ts";
 
-interface FooterProps {
-    width: number;
-    depth: number;
-}
 
-export default function ValidationCard(props: FooterProps) {
+
+export default function ValidationCard() {
+    const {width, depth} = useInputBuildingContext()
     return (
         <div className="max-w-5/6  mx-auto ">
             <Card className="max-w-full  mx-auto bg-white border-transparent">
@@ -25,7 +24,7 @@ export default function ValidationCard(props: FooterProps) {
                     <div className="flex mt-4 ">
                         <div className="flex flex-row items-center gap-4 ">
                             <p className="text-lg">Current Ratio:</p>
-                            <Badge className="rounded-full px-6 py-3 text-md">{(props.width/props.depth).toFixed(2)} </Badge>
+                            <Badge className="rounded-full px-6 py-3 text-md">{(width/depth).toFixed(2)} </Badge>
                             <span className="text-sm">
                                 Valid Range: {">= 1"}
                             </span>

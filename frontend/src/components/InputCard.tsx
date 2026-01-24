@@ -7,7 +7,6 @@ import {useState} from "react";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue,
 } from "@/components/ui/select"
 import MeanSpeedGraph from "@/components/MeanSpeedGraph.tsx";
-import {LineChart} from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import Papa from "papaparse";
@@ -21,32 +20,10 @@ import {
 
 import {FileUploadDialog} from "@/components/FileUploadDialog.tsx";
 import MGraphs from "@/components/MGraphs.tsx";
+import {useInputBuildingContext} from "@/contexts/useInputBuildingContext.ts";
+import {useOutputBuildingContext} from "@/contexts/useOutputBuildingContext.ts";
 
-interface InputCardProps {
-    width: number;
-    height: number;
-    depth: number;
-    meanSpeed: number;
-    initialFrequency: number;
-    finalFrequency: number;
-    deltaFrequency: number;
-    totalFloors: number;
-    damping: number;
-    Tone: number;
-    buildingDensity: number;
-    setWidth: (width: number) => void;
-    setHeight: (height: number) => void;
-    setDepth: (depth: number) => void;
-    setMeanSpeed: (meanSpeed: number) => void;
-    setInitialFrequency: (initialFrequency: number) => void;
-    setFinalFrequency: (finalFrequency: number) => void;
-    setDeltaFrequency: (deltaFrequency: number) => void;
-    setBuildingDensity: (buildingDensity: number) => void;
-    setTotalFloors: (totalFloors: number) => void;
-    setDamping: (damping: number)=> void;
-    setTone: (Tone: number)=> void;
-    handleClick: ()=> void;
-}
+
 
 interface IUploadData {
     M1: number;
@@ -54,9 +31,15 @@ interface IUploadData {
     M3: number;
 }
 
-export default function InputCard(props: InputCardProps){
+export default function InputCard(){
 
+    // Part-1
+    const {width, height,depth,totalFloors, setWidth, setHeight, setDepth,setTotalFloors } = useInputBuildingContext()
+    // Part - 2
+    const {buildingDensity, meanSpeed, Tone, damping, setBuildingDensity, setMeanSpeed, setTone, setDamping} = useInputBuildingContext()
 
+    // Handling Submit
+    const {handleAnalyticalCalculation} = useOutputBuildingContext()
 
     const [step, setStep] = useState(0);
     const [terrain, setTerrain] = useState<string>("open")
@@ -77,7 +60,7 @@ export default function InputCard(props: InputCardProps){
     }
     const handleSubmit = ()=>{
         if (analyticalSelected){
-            props.handleClick()
+            handleAnalyticalCalculation()
         }
         if (uploadedFile){
             Papa.parse(uploadedFile, {
@@ -97,15 +80,15 @@ export default function InputCard(props: InputCardProps){
 
     };
 
-    const coefficient = (terrain == "open")? (props.height/10)**0.28: 0.5*((props.height/12.7)**0.5);
-    const MaxHeight: number = props.height * 1.5;
+    const coefficient = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
+    const MaxHeight: number = height * 1.5;
     const graph_data = [];
     let h : number = 0;
     while (h < MaxHeight){
         const c = (terrain == "open")? (h/10)**0.28: 0.5*((h/12.7)**0.5);
         graph_data.push({
             height: h,
-            speed: props.meanSpeed * c ** 0.5
+            speed: meanSpeed * c ** 0.5
         })
         h += 1;
     }
@@ -134,8 +117,8 @@ export default function InputCard(props: InputCardProps){
                             <Input
                                 id="width"
                                 type="number"
-                                value={props.width}
-                                onChange={(e) => props.setWidth(parseFloat(e.target.value))}
+                                value={width}
+                                onChange={(e) => setWidth(parseFloat(e.target.value))}
                                 className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
                             />
                         </div>
@@ -144,8 +127,8 @@ export default function InputCard(props: InputCardProps){
                             <Input
                                 id="height"
                                 type="number"
-                                value={props.height}
-                                onChange={(e) => props.setHeight(parseFloat(e.target.value))}
+                                value={height}
+                                onChange={(e) => setHeight(parseFloat(e.target.value))}
                                 className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
                             />
                         </div>
@@ -154,8 +137,8 @@ export default function InputCard(props: InputCardProps){
                             <Input
                                 id="depth"
                                 type="number"
-                                value={props.depth}
-                                onChange={(e) => props.setDepth(parseFloat(e.target.value))}
+                                value={depth}
+                                onChange={(e) => setDepth(parseFloat(e.target.value))}
                                 className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
                             />
                         </div>
@@ -164,8 +147,8 @@ export default function InputCard(props: InputCardProps){
                             <Input
                                 id="NFloors"
                                 type="number"
-                                value={props.totalFloors}
-                                onChange={(e) => props.setTotalFloors(parseFloat(e.target.value))}
+                                value={totalFloors}
+                                onChange={(e) => setTotalFloors(parseFloat(e.target.value))}
                                 className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
                             />
                         </div>
@@ -176,7 +159,7 @@ export default function InputCard(props: InputCardProps){
                         <Button
                             className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
                             onClick={handlePrev}
-                            disabled={step == 0}
+                            disabled={true}
                         >
                             Prev
                         </Button>
@@ -204,12 +187,12 @@ export default function InputCard(props: InputCardProps){
                     <div className="grid grid-cols sm:grid-cols-2 gap-2">
 
                         <div className="space-y-2">
-                            <Label htmlFor="NFloors">Building Density</Label>
+                            <Label htmlFor="density">Building Density</Label>
                             <Input
-                                id="NFloors"
+                                id="density"
                                 type="number"
-                                value={props.buildingDensity}
-                                onChange={(e) => props.setBuildingDensity(parseFloat(e.target.value))}
+                                value={buildingDensity}
+                                onChange={(e) => setBuildingDensity(parseFloat(e.target.value))}
                                 className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
                             />
                         </div>
@@ -219,8 +202,8 @@ export default function InputCard(props: InputCardProps){
                             <Input
                                 id="damping"
                                 type="number"
-                                value={props.damping}
-                                onChange={(e) => props.setDamping(parseFloat(e.target.value))}
+                                value={damping}
+                                onChange={(e) => setDamping(parseFloat(e.target.value))}
                                 className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
                             />
                         </div>
@@ -229,8 +212,8 @@ export default function InputCard(props: InputCardProps){
                             <Input
                                 id="Tone"
                                 type="number"
-                                value={props.Tone}
-                                onChange={(e) => props.setTone(parseFloat(e.target.value))}
+                                value={Tone}
+                                onChange={(e) => setTone(parseFloat(e.target.value))}
                                 className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
                             />
                         </div>
@@ -240,7 +223,6 @@ export default function InputCard(props: InputCardProps){
                         <Button
                             className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
                             onClick={handlePrev}
-                            disabled={step == 0}
                         >
                             Prev
                         </Button>
@@ -274,8 +256,8 @@ export default function InputCard(props: InputCardProps){
                             <Input
                                 id="mean_velocity"
                                 type="number"
-                                value={props.meanSpeed}
-                                onChange={(e) => props.setMeanSpeed(parseFloat(e.target.value))}
+                                value={meanSpeed}
+                                onChange={(e) => setMeanSpeed(parseFloat(e.target.value))}
                                 className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
                             />
                         </div>
@@ -297,14 +279,13 @@ export default function InputCard(props: InputCardProps){
                         </div>
 
                     </div>
-                    <MeanSpeedGraph graph_data={graph_data} current_point={{height: props.height, speed: props.meanSpeed * coefficient ** 0.5}}/>
+                    <MeanSpeedGraph graph_data={graph_data} current_point={{height: height, speed: meanSpeed * coefficient ** 0.5}}/>
 
 
                     <div className="flex gap-2">
                         <Button
                             className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
                             onClick={handlePrev}
-                            disabled={step == 0}
                         >
                             Prev
                         </Button>
@@ -389,7 +370,6 @@ export default function InputCard(props: InputCardProps){
                         <Button
                             className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
                             onClick={handlePrev}
-                            disabled={step == 0}
                         >
                             Prev
                         </Button>

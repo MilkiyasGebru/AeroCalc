@@ -1,23 +1,21 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import {frequencies} from "../../CONSTANTS.ts";
+import {useOutputBuildingContext} from "@/contexts/useOutputBuildingContext.ts";
 
-interface PSDGraphProps {
-    frequencies: number[];
-    torsion_psds: number[];
-    across_psds: number[];
-}
+
 
 interface graph_point {
     frequency: string;
     torsion_psd: number;
     across_psd: number;
 }
-export default function PSDGraph(props: PSDGraphProps) {
-
-    const graph_data: graph_point[] = props.frequencies.map((frequency, index)=>{
+export default function PSDGraph() {
+    const {torsionPsds, acrossPsds} = useOutputBuildingContext()
+    const graph_data: graph_point[] = frequencies.map((frequency, index)=>{
         return {
             frequency: frequency.toFixed(2),
-            torsion_psd: props.torsion_psds[index],
-            across_psd: props.across_psds[index],
+            torsion_psd: torsionPsds[index],
+            across_psd: acrossPsds[index],
         }
     })
 
