@@ -7,6 +7,20 @@ import {useState} from "react";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue,
 } from "@/components/ui/select"
 import MeanSpeedGraph from "@/components/MeanSpeedGraph.tsx";
+import {LineChart} from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import Papa from "papaparse";
+
+import {
+    Field,
+    FieldContent,
+    FieldDescription,
+} from "@/components/ui/field"
+
+
+import {FileUploadDialog} from "@/components/FileUploadDialog.tsx";
+import MGraphs from "@/components/MGraphs.tsx";
 
 interface InputCardProps {
     width: number;
@@ -34,11 +48,55 @@ interface InputCardProps {
     handleClick: ()=> void;
 }
 
-
+interface IUploadData {
+    M1: number;
+    M2: number;
+    M3: number;
+}
 
 export default function InputCard(props: InputCardProps){
+
+
+
     const [step, setStep] = useState(0);
     const [terrain, setTerrain] = useState<string>("open")
+    const [analyticalSelected, setAnalyticalSelected] = useState<boolean>(false)
+    const [experimentalSelected, setExperimentalSelected] = useState<boolean>(false)
+    const [showFileUpload, setShowFileUpload] = useState(false);
+    const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+    const [experimentSource, setExperimentSource] = useState<string>("");
+    const [csvData, setCSVData] = useState<IUploadData[]>([]);
+    const handleExperimentSelection = (value : string)=>{
+        if (value == "database"){
+            setExperimentSource(value)
+        }
+        else {
+            setShowFileUpload(true);
+            setExperimentSource(value)
+        }
+    }
+    const handleSubmit = ()=>{
+        if (analyticalSelected){
+            props.handleClick()
+        }
+        if (uploadedFile){
+            Papa.parse(uploadedFile, {
+                header: true,
+                dynamicTyping: true, // Automatically converts strings to numbers
+                complete: (results) => {
+                    console.log(results)
+                    setCSVData(results.data)
+                },
+            })
+        }
+    }
+
+
+    const handleFileSelect = (file: File) => {
+        setUploadedFile(file);
+
+    };
+
     const coefficient = (terrain == "open")? (props.height/10)**0.28: 0.5*((props.height/12.7)**0.5);
     const MaxHeight: number = props.height * 1.5;
     const graph_data = [];
@@ -261,6 +319,98 @@ export default function InputCard(props: InputCardProps){
 
                 </CardContent>
             </>}
+            {step == 3 && <>
+                <CardHeader>
+                    <CardTitle className="flex gap-2 items-center text-xl">
+                        <Calculator className="w-5 h-5 text-blue-300"/>
+                        Aerodynamic
+                    </CardTitle>
+                    <CardDescription>
+                        Choose how you want to perform the calculation
+                    </CardDescription>
+
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div className="grid grid-cols gap-2">
+
+
+                        <div className="space-y-2 ">
+                            <Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">
+                                <Checkbox id="analytical-checkbox" name="terms-checkbox" value={analyticalSelected} onCheckedChange={setAnalyticalSelected} />
+
+                                <FieldContent>
+                                    <Label htmlFor="analytical-checkbox">Analytical Calculation</Label>
+                                    <FieldDescription>
+                                        Use percise mathematical formulas
+                                    </FieldDescription>
+                                </FieldContent>
+                            </Field>
+                            <Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">
+                                <Checkbox id="experimental-checkbox" name="terms-checkbox" value={experimentalSelected} onCheckedChange={setExperimentalSelected} />
+
+                                <FieldContent>
+                                    <Label htmlFor="experimental-checkbox">Experimental Calculation</Label>
+                                    <FieldDescription>
+                                        Use available experimental data from our database or file upload
+                                    </FieldDescription>
+                                </FieldContent>
+                            </Field>
+                        </div>
+
+
+                        { experimentalSelected &&
+                            <div className="space-y-2">
+                                <h2>Data Source</h2>
+                                <RadioGroup value={experimentSource} onValueChange={(value)=>handleExperimentSelection(value)} className="w-fit">
+                                    <div className="flex items-center gap-3">
+                                        <RadioGroupItem value="database" id="r1" />
+                                        <Label htmlFor="r1">Database</Label>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <RadioGroupItem value="file_upload" id="r2" />
+                                        <Label htmlFor="r2">Upload Data</Label>
+                                        {uploadedFile && (
+                                            <span className="text-xs text-primary font-medium">
+                                                {uploadedFile.name}
+                                            </span>
+                                        )}
+                                    </div>
+
+                                </RadioGroup>
+
+                            </div>
+                        }
+
+
+                    </div>
+
+
+                    <div className="flex gap-2">
+                        <Button
+                            className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
+                            onClick={handlePrev}
+                            disabled={step == 0}
+                        >
+                            Prev
+                        </Button>
+                        <Button
+                            className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
+                            onClick={handleSubmit}
+                        >
+                            Submit
+                        </Button>
+
+                    </div>
+
+                </CardContent>
+            </>}
+            <MGraphs graph_data={csvData} />
+
+            <FileUploadDialog
+                open={showFileUpload}
+                onOpenChange={setShowFileUpload}
+                onFileSelect={handleFileSelect}
+            />
         </Card>
     )
 }
