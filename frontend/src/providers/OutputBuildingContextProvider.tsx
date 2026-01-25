@@ -8,9 +8,9 @@ import {
 import {calculate_experimental_psd_normalized} from "@/hooks/digital_processor.ts";
 
 interface IUploadData {
-    M1: number;
-    M2: number;
-    M3: number;
+    MX: number;
+    MY: number;
+    MZ: number;
 }
 interface OutputBuildingContextInterface {
     torsionPsds: number[];
@@ -51,9 +51,10 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
     const [experimentalVr, setExperimentalVr] = useState<number | null>(null)
     const handleAnalyticalCalculation = useCallback(()=>{
 
-        let across_psds: number[] = CalculateAcrossPsdResponse(width,height,depth,frequencies)
-        let torsion_psds: number[] = CalculateTorsionPsdResponse(width,height,depth,meanSpeed,frequencies)
         const c = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
+        let across_psds: number[] = CalculateAcrossPsdResponse(Math.max(width,depth),height,Math.min(width,depth),frequencies)
+        let torsion_psds: number[] = CalculateTorsionPsdResponse(Math.max(width,depth),height,Math.min(width,depth),meanSpeed*c**0.5,frequencies)
+
 
         const [x,y]:number[] = CalculateFD(Math.max(width,depth), height, Math.min(width,depth), meanSpeed*c**0.5,Tone, totalFloors, damping, frequencies, across_psds, torsion_psds)
         setVr(x)
@@ -66,8 +67,8 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         const Mx : number[] = [];
         const Mz : number[] = [];
         csvData.map(val => {
-            Mx.push(val.M1)
-            Mz.push(val.M3)
+            Mx.push(val.MX)
+            Mz.push(val.MZ)
         })
         const experi_across_psds : number[] = calculate_experimental_psd_normalized(Mx,width,height,1,1.83)
         setExperimentalAcrossPsds(experi_across_psds)
