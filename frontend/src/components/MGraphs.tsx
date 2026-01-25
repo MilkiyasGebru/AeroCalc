@@ -38,7 +38,7 @@ export default function MGraphs({graph_data}:{graph_data: IGraph}) {
                 />
                 <Tooltip />
                 <Legend />
-                <Line type="basis" dataKey="val" dot={false}  stroke={(graph_data.Mtype=="M1")?"#ff4d4f":((graph_data.Mtype=="M2")?"#73d13d":"#ffd666")}  />
+                <Line type="basis" dataKey="val" dot={false}  stroke={(graph_data.Mtype=="MX")?"#ff4d4f":((graph_data.Mtype=="MY")?"#73d13d":"#ffd666")}  />
 
 
             </LineChart>

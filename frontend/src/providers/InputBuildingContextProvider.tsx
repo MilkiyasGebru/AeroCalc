@@ -23,9 +23,9 @@ interface InputBuildingContextInterface {
     setCSVData: (val: IUploadData[]) => void;
 }
 interface IUploadData {
-    M1: number;
-    M2: number;
-    M3: number;
+    MX: number;
+    MY: number;
+    MZ: number;
 }
 
 export const InputBuildingContext = createContext<InputBuildingContextInterface | undefined>(undefined);
