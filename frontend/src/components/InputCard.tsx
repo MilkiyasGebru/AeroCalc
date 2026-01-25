@@ -10,7 +10,6 @@ import MeanSpeedGraph from "@/components/MeanSpeedGraph.tsx";
 import { Checkbox } from "@/components/ui/checkbox"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import Papa from "papaparse";
-
 import {
     Field,
     FieldContent,
@@ -23,6 +22,16 @@ import {useInputBuildingContext} from "@/contexts/useInputBuildingContext.ts";
 import {useOutputBuildingContext} from "@/contexts/useOutputBuildingContext.ts";
 
 
+const parseFile = (file: File): Promise<any[]> => {
+    return new Promise((resolve, reject) => {
+        Papa.parse(file, {
+            header: true,
+            dynamicTyping: true,
+            complete: (results) => resolve(results.data),
+            error: (error) => reject(error),
+        });
+    });
+};
 
 
 
@@ -33,10 +42,8 @@ export default function InputCard(){
     // Part - 2
     const {buildingDensity, meanSpeed, Tone, damping, setBuildingDensity, setMeanSpeed, setTone, setDamping} = useInputBuildingContext()
 
-    // Part -3 Handling CsvData
-    const { setCSVData} = useInputBuildingContext()
     // Handling Submit
-    const {handleAnalyticalCalculation} = useOutputBuildingContext()
+    const {handleAnalyticalCalculation,handleExperimentalCalculation, } = useOutputBuildingContext()
 
     const [step, setStep] = useState(0);
     const [terrain, setTerrain] = useState<string>("open")
@@ -54,20 +61,18 @@ export default function InputCard(){
             setExperimentSource(value)
         }
     }
-    const handleSubmit = ()=>{
+    const handleSubmit = async ()=>{
         if (analyticalSelected){
             handleAnalyticalCalculation()
         }
-        if (uploadedFile){
-            Papa.parse(uploadedFile, {
-                header: true,
-                dynamicTyping: true, // Automatically converts strings to numbers
-                complete: (results) => {
-                    console.log(results)
-                    setCSVData(results.data)
-                },
-            })
+
+        if (uploadedFile && experimentalSelected){
+            const parsedData = await parseFile(uploadedFile)
+            handleExperimentalCalculation(parsedData)
+
+
         }
+
     }
 
 
