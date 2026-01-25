@@ -3,7 +3,7 @@ import {Calculator} from "lucide-react";
 import {Input} from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {Button} from "@/components/ui/button.tsx";
-import {useEffect, useState} from "react";
+import { useEffect, useMemo, useState} from "react";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue,
 } from "@/components/ui/select"
 import MeanSpeedGraph from "@/components/MeanSpeedGraph.tsx";
@@ -35,6 +35,9 @@ const parseFile = (file: File): Promise<any[]> => {
         });
     });
 };
+
+import { Canvas } from "@react-three/fiber";
+import {ArrowHelper, Vector3} from "three";
 
 
 
@@ -111,6 +114,40 @@ export default function InputCard(){
     const handlePrev = ()=>{
         setStep(s => s - 1)
     }
+    // const arrowLength = Math.max(width, height, depth) * 0.6;
+    const box_object = useMemo(() => {
+        const width = 2;
+        const depth = 2;
+        const arrowLength = 4;
+
+        // Center of the front-left face edge
+        const facePoint = new Vector3(
+            -width / 2,
+            0,
+            -depth / 2
+        );
+
+        // Start the arrow outside the prism
+        const arrowStart = new Vector3(
+            -width / 2 - arrowLength * 0.7,
+            0,
+            depth / 2 + arrowLength * 0.7
+        );
+
+
+        // Direction: from arrow start → face
+        const direction = facePoint
+            .clone()
+            .sub(arrowStart)
+            .normalize();
+
+        return new ArrowHelper(
+            direction,
+            arrowStart,
+            arrowLength,
+            0xef4444
+        );
+    }, [width, depth])
     return (
         <Card className="  bg-white border-transparent mb-4">
             {step == 0 && <>
@@ -184,6 +221,27 @@ export default function InputCard(){
                         </Button>
 
                     </div>
+                    <div className="h-[220px]  rounded-md border bg-white">
+                        <Canvas camera={{position: [4, 3, 6], fov: 50}}>
+                            <ambientLight intensity={0.6}/>
+                            <directionalLight position={[5, 5, 5]}/>
+
+                            <mesh>
+                                <boxGeometry args={[3*(Math.max(width,depth)/Math.max(width,depth,height)), 3*(height/Math.max(width,depth,height)), 3*(Math.min(width,depth)/Math.max(width,depth,height))]}/>
+                                {/* Map over your colors to create an array of material components */}
+                                {[
+                                    "#1d4ed8", "#333aaa", "#22c55e",
+                                    "#64748b", "#f59e0b", "#9333ea"
+                                ].map((col, i) => (
+                                    <meshStandardMaterial key={i} attach={`material-${i}`} color={col} />
+                                ))}
+                            </mesh>
+                            <primitive
+                                object={box_object}
+
+                            />
+                        </Canvas>
+                    </div>
                 </CardContent>
             </>}
             {step == 1 && <>
@@ -193,7 +251,7 @@ export default function InputCard(){
                         Dynamic Property Input Parameters
                     </CardTitle>
                     <CardDescription>
-                        Enter the dynamic properites
+                    Enter the dynamic properites
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
