@@ -27,8 +27,8 @@ const parseFile = (file: File): Promise<any[]> => {
         Papa.parse(file, {
             header: true,
             dynamicTyping: true,
-            complete: (results) => resolve(results.data),
-            error: (error) => reject(error),
+            complete: (results:any) => resolve(results.data),
+            error: (error:any) => reject(error),
         });
     });
 };
@@ -318,7 +318,7 @@ export default function InputCard(){
 
                         <div className="space-y-2 ">
                             <Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">
-                                <Checkbox id="analytical-checkbox" name="terms-checkbox" value={analyticalSelected} onCheckedChange={setAnalyticalSelected} />
+                                <Checkbox id="analytical-checkbox" name="terms-checkbox" checked={analyticalSelected} onCheckedChange={(checked)=>setAnalyticalSelected(checked==true)} />
 
                                 <FieldContent>
                                     <Label htmlFor="analytical-checkbox">Analytical Calculation</Label>
@@ -328,7 +328,7 @@ export default function InputCard(){
                                 </FieldContent>
                             </Field>
                             <Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">
-                                <Checkbox id="experimental-checkbox" name="terms-checkbox" value={experimentalSelected} onCheckedChange={setExperimentalSelected} />
+                                <Checkbox id="experimental-checkbox" name="terms-checkbox" checked={experimentalSelected} onCheckedChange={(checked)=>setExperimentalSelected(checked===true)} />
 
                                 <FieldContent>
                                     <Label htmlFor="experimental-checkbox">Experimental Calculation</Label>

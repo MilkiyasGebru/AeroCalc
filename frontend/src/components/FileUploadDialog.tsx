@@ -16,7 +16,7 @@ interface FileUploadDialogProps {
 }
 
 export function FileUploadDialog({ open, onOpenChange, onFileSelect }: FileUploadDialogProps) {
-    const [isDragOver, setIsDragOver] = useState(false);
+    const [, setIsDragOver] = useState(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
     const handleDragOver = useCallback((e: React.DragEvent) => {
