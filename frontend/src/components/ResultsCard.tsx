@@ -22,22 +22,22 @@ export default function ResultsCard() {
                 <div
                     className="flex flex-col border p-3 rounded-md items-center bg-[hsl(210,20%,98%)] border-transparent">
                     <span className="font-bold">Analytical AR</span>
-                    <span>{ar.toFixed(3)}</span>
+                    <span>{ar?ar.toFixed(3):"?"}</span>
                 </div>
                 <div
                     className="flex flex-col border p-3 rounded-md items-center bg-[hsl(210,20%,98%)] border-transparent">
                     <span className="font-bold">Analytical VR</span>
-                    <span>{vr.toFixed(3)}</span>
+                    <span>{vr?vr.toFixed(3):"?"}</span>
                 </div>
                 <div
                     className="flex flex-col border p-3 rounded-md items-center bg-[hsl(210,20%,98%)] border-transparent">
-                    <span className="font-bold">Analytical AR</span>
-                    <span>{experimentalAr.toFixed(3)}</span>
+                    <span className="font-bold">Experimental AR</span>
+                    <span>{experimentalAr?experimentalAr.toFixed(3):"?"}</span>
                 </div>
                 <div
                     className="flex flex-col border p-3 rounded-md items-center bg-[hsl(210,20%,98%)] border-transparent">
-                    <span className="font-bold">Analytical VR</span>
-                    <span>{experimentalVr.toFixed(3)}</span>
+                    <span className="font-bold">Experimental VR</span>
+                    <span>{experimentalVr?experimentalVr.toFixed(3):"?"}</span>
                 </div>
             </CardContent>
         </Card>
