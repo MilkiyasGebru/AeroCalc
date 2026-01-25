@@ -21,9 +21,9 @@ function App() {
               <ResultsCard  />
           </div>
           <div className="max-w-5/6 grid lg:grid-cols-2 gap-6  mx-auto mb-3 ">
-              {(csvData.length>0) && <MGraphs graph_data={{"val":csvData.map(data => data.M1), "Mtype":"M1"}} />}
-              {(csvData.length>0) && <MGraphs graph_data={{"val":csvData.map(data => data.M2), "Mtype":"M2"}} />}
-              {(csvData.length>0) && <MGraphs graph_data={{"val":csvData.map(data => data.M3), "Mtype":"M3"}} />}
+              {(csvData.length>0) && <MGraphs graph_data={{"val":csvData.map(data => data.MX), "Mtype":"MX"}} />}
+              {(csvData.length>0) && <MGraphs graph_data={{"val":csvData.map(data => data.MY), "Mtype":"MY"}} />}
+              {(csvData.length>0) && <MGraphs graph_data={{"val":csvData.map(data => data.MZ), "Mtype":"MZ"}} />}
 
           </div>
           <div className="max-w-5/6 mx-auto">
