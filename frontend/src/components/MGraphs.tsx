@@ -7,13 +7,14 @@ interface IGraph {
 }
 
 export default function MGraphs({graph_data}: {graph_data: IGraph[] }) {
-
+    const samplingRate = Math.ceil(graph_data.length / 1000);
+    const sampledData = graph_data.filter((_, index) => index % samplingRate === 0);
     return (
         <div>
             <LineChart
                 style={{ width: '90%', maxWidth: '1400px', height: '100%', maxHeight: '70vh', aspectRatio: 1.618 }}
                 responsive
-                data={graph_data}
+                data={sampledData}
                 margin={{
                     top: 5,
                     right: 5,
@@ -38,9 +39,9 @@ export default function MGraphs({graph_data}: {graph_data: IGraph[] }) {
                 />
                 <Tooltip />
                 <Legend />
-                <Line type="basis" dataKey="M1" dot={false}  stroke="#8884d8" />
-                <Line type="basis" dataKey="M2" dot={false}  stroke="#8884d8" />
-                <Line type="basis" dataKey="M3" dot={false}  stroke="#8884d8" />
+                <Line type="basis" dataKey="M1" dot={false}  stroke="#8884d8" isAnimationActive={false} />
+                {/*<Line type="basis" dataKey="M2" dot={false}  stroke="#8884d8" />*/}
+                {/*<Line type="basis" dataKey="M3" dot={false}  stroke="#8884d8" />*/}
 
 
             </LineChart>
