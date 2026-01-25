@@ -53,9 +53,9 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
 
         let across_psds: number[] = CalculateAcrossPsdResponse(width,height,depth,frequencies)
         let torsion_psds: number[] = CalculateTorsionPsdResponse(width,height,depth,meanSpeed,frequencies)
+        const c = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
 
-        const [x,y]:number[] = CalculateFD(width, height, depth, meanSpeed, totalFloors, damping, frequencies, across_psds, torsion_psds)
-        console.log(Tone, terrain)
+        const [x,y]:number[] = CalculateFD(Math.max(width,depth), height, Math.min(width,depth), meanSpeed*c**0.5,Tone, totalFloors, damping, frequencies, across_psds, torsion_psds)
         setVr(x)
         setAr(y)
         setAcrossPsds(across_psds)
@@ -76,9 +76,8 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         setExperimentalTorsionPsds(experi_torsion_psds)
 
         setCSVData(csvData)
-        console.log(experi_torsion_psds.length, frequencies.length)
 
-        const [x,y]:number[] = CalculateFD(width, height, depth, meanSpeed, totalFloors, damping, frequencies, experi_across_psds, experi_torsion_psds)
+        const [x,y]:number[] = CalculateFD(width, height, depth, meanSpeed,Tone, totalFloors, damping, frequencies, experi_across_psds, experi_torsion_psds)
 
         setExperimentalVr(x)
         setExperimentalAr(y)
