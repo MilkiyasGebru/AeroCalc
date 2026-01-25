@@ -38,7 +38,7 @@ export const OutputBuildingContext = createContext<OutputBuildingContextInterfac
 
 export const OutputBuildingContextProvider = ({children}: {children: React.ReactNode})=>{
 
-    const {width,height,depth,meanSpeed,damping,totalFloors,terrain,Tone,csvData, setCSVData} = useInputBuildingContext();
+    const {width,height,depth,meanSpeed,damping,totalFloors,terrain,Tone, setCSVData} = useInputBuildingContext();
 
     const [torsionPsds, setTorsionPsds] = useState<number[]>([]);
     const [acrossPsds, setAcrossPsds] = useState<number[]>([]);
