@@ -10,6 +10,7 @@ interface InputBuildingContextInterface {
     damping: number;
     Tone: number;
     terrain: string;
+    csvData: IUploadData[];
     setWidth: (val: number) => void;
     setHeight: (val: number) => void;
     setDepth: (val: number) => void;
@@ -19,6 +20,12 @@ interface InputBuildingContextInterface {
     setDamping: (val: number) => void;
     setTone: (val: number) => void;
     setTerrain: (val: string) => void;
+    setCSVData: (val: IUploadData[]) => void;
+}
+interface IUploadData {
+    M1: number;
+    M2: number;
+    M3: number;
 }
 
 export const InputBuildingContext = createContext<InputBuildingContextInterface | undefined>(undefined);
@@ -33,10 +40,11 @@ export const InputBuildingContextProvider = ({children}: {children: React.ReactN
     const [damping, setDamping] = useState<number>(0.15);
     const [Tone, setTone] = useState<number>(6.127169106);
     const [terrain, setTerrain] = useState<string>("open");
+    const [csvData, setCSVData] = useState<IUploadData[]>([]);
     return (
         <InputBuildingContext.Provider value={{
-            width, height, depth, meanSpeed, buildingDensity, totalFloors, damping, Tone, terrain,
-                setWidth, setHeight, setDepth,setMeanSpeed, setBuildingDensity,setTotalFloors,setDamping,setTerrain,setTone}} >
+            width, height, depth, meanSpeed, buildingDensity, totalFloors, damping, Tone, terrain,csvData,
+                setWidth, setHeight, setDepth,setMeanSpeed, setBuildingDensity,setTotalFloors,setDamping,setTerrain,setTone, setCSVData}} >
             {children}
         </InputBuildingContext.Provider>
     );

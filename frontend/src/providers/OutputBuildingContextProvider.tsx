@@ -15,12 +15,12 @@ interface IUploadData {
 interface OutputBuildingContextInterface {
     torsionPsds: number[];
     acrossPsds: number[];
-    ar: number;
-    vr: number;
+    ar: number | null;
+    vr: number | null;
     experimentalTorsionPsds: number[];
     experimentalAcrossPsds: number[];
-    experimentalAr: number;
-    experimentalVr: number;
+    experimentalAr: number | null;
+    experimentalVr: number | null;
     setTorsionPsds: (val: number[])=> void;
     setAcrossPsds: (val: number[])=>void;
     setAr: (val: number)=> void;
