@@ -389,6 +389,7 @@ export default function InputCard(){
                         <Button
                             className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
                             onClick={handleSubmit}
+                            disabled={!(analyticalSelected || (experimentalSelected && (uploadedFile !== null)))}
                         >
                             Submit
                         </Button>
