@@ -3,7 +3,7 @@ import {Calculator} from "lucide-react";
 import {Input} from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {Button} from "@/components/ui/button.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue,
 } from "@/components/ui/select"
 import MeanSpeedGraph from "@/components/MeanSpeedGraph.tsx";
@@ -15,7 +15,10 @@ import {
     FieldContent,
     FieldDescription,
 } from "@/components/ui/field"
-
+interface IMeanSpeedData {
+    height: number;
+    speed: number;
+}
 
 import {FileUploadDialog} from "@/components/FileUploadDialog.tsx";
 import {useInputBuildingContext} from "@/contexts/useInputBuildingContext.ts";
@@ -75,24 +78,33 @@ export default function InputCard(){
 
     }
 
+    const [graphData, setGraphData] = useState<IMeanSpeedData[]>([])
 
     const handleFileSelect = (file: File) => {
         setUploadedFile(file);
 
     };
-
     const coefficient = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
-    const MaxHeight: number = height * 1.5;
-    const graph_data = [];
-    let h : number = 0;
-    while (h < MaxHeight){
-        const c = (terrain == "open")? (h/10)**0.28: 0.5*((h/12.7)**0.5);
-        graph_data.push({
-            height: h,
-            speed: meanSpeed * c ** 0.5
-        })
-        h += 1;
-    }
+
+    useEffect(() => {
+        const handler: number | undefined = setTimeout(()=>{
+            const MaxHeight: number = height * 1.5;
+            const graph_data = [];
+            let h : number = 0;
+            while (h < MaxHeight){
+                const c = (terrain == "open")? (h/10)**0.28: 0.5*((h/12.7)**0.5);
+                graph_data.push({
+                    height: h,
+                    speed: meanSpeed * c ** 0.5
+                })
+                h += 1;
+            }
+            setGraphData(graph_data)
+        }, 1000)
+        return ()=>clearTimeout(handler)
+
+    }, [terrain, height, meanSpeed]);
+
     const handleNext = ()=>{
         setStep(s => s + 1)
     }
@@ -280,7 +292,7 @@ export default function InputCard(){
                         </div>
 
                     </div>
-                    <MeanSpeedGraph graph_data={graph_data} current_point={{height: height, speed: meanSpeed * coefficient ** 0.5}}/>
+                    <MeanSpeedGraph graph_data={graphData} current_point={{height: height, speed: meanSpeed * coefficient ** 0.5}}/>
 
 
                     <div className="flex gap-2">
@@ -345,7 +357,7 @@ export default function InputCard(){
                                 <h2>Data Source</h2>
                                 <RadioGroup value={experimentSource} onValueChange={(value)=>handleExperimentSelection(value)} className="w-fit">
                                     <div className="flex items-center gap-3">
-                                        <RadioGroupItem value="database" id="r1" />
+                                        <RadioGroupItem value="database" id="r1" disabled={true} />
                                         <Label htmlFor="r1">Database</Label>
                                     </div>
                                     <div className="flex items-center gap-3">
