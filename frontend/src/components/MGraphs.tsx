@@ -25,11 +25,11 @@ export default function MGraphs({graph_data}:{graph_data: IGraph}) {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis   type="category" domain={['auto', 'auto']} // Or ['dataMin', 'dataMax']
                        allowDataOverflow={true}
-                       label={{ value: 'Height', position: 'insideBottom', offset: 0 }}
+                       label={{ value: '', position: 'insideBottom', offset: 0 }}
                 />
                 <YAxis width="auto"  type="number" domain={['auto', 'auto']}
                        label={{
-                           value: 'Mean Speed',
+                           value: graph_data.Mtype,
                            angle: -90,
                            position: 'insideLeft',
                            style: { textAnchor: 'middle' },
@@ -38,7 +38,7 @@ export default function MGraphs({graph_data}:{graph_data: IGraph}) {
                 />
                 <Tooltip />
                 <Legend />
-                <Line type="basis" dataKey="val" dot={false}  stroke="#8884d8"  />
+                <Line type="basis" dataKey="val" dot={false}  stroke={(graph_data.Mtype=="M1")?"#ff4d4f":((graph_data.Mtype=="M2")?"#73d13d":"#ffd666")}  />
 
 
             </LineChart>

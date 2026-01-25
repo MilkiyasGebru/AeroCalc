@@ -53,8 +53,8 @@ export default function PSDGraph() {
             <Legend />
             <Line type="monotone" dot={false} dataKey="across_psd" stroke="#8884d8" />
             <Line type="monotone" dot={false} dataKey="torsion_psd" stroke="#82ca9d" />
-            <Line type="monotone" dot={false} dataKey="experimental_across_psd" stroke="#8724d8" />
-            <Line type="monotone" dot={false} dataKey="experimental_torsion_psd" stroke="#756a9d" />
+            <Line type="monotone" dot={false} dataKey="experimental_across_psd" stroke="#ff4d4f" />
+            <Line type="monotone" dot={false} dataKey="experimental_torsion_psd" stroke="#ffd666" />
 
 
         </LineChart>
