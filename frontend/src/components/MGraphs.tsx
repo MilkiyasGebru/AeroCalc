@@ -1,14 +1,13 @@
 import {CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
 
 interface IGraph {
-    M1: number;
-    M2: number;
-    M3: number;
+    val: number[];
+    Mtype: string
 }
 
-export default function MGraphs({graph_data}: {graph_data: IGraph[] }) {
-    const samplingRate = Math.ceil(graph_data.length / 1000);
-    const sampledData = graph_data.filter((_, index) => index % samplingRate === 0);
+export default function MGraphs({graph_data}:{graph_data: IGraph}) {
+    const samplingRate = Math.ceil(graph_data.val.length / 1000);
+    const sampledData = graph_data.val.filter((_, index) => index % samplingRate === 0).map(val => ({"val":val}));
     return (
         <div>
             <LineChart
@@ -39,9 +38,7 @@ export default function MGraphs({graph_data}: {graph_data: IGraph[] }) {
                 />
                 <Tooltip />
                 <Legend />
-                <Line type="basis" dataKey="M1" dot={false}  stroke="#8884d8" isAnimationActive={false} />
-                {/*<Line type="basis" dataKey="M2" dot={false}  stroke="#8884d8" />*/}
-                {/*<Line type="basis" dataKey="M3" dot={false}  stroke="#8884d8" />*/}
+                <Line type="basis" dataKey="val" dot={false}  stroke="#8884d8"  />
 
 
             </LineChart>
