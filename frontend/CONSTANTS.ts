@@ -1,7 +1,7 @@
 export const frequencies: number[] = []
-const initial_frequency: number = 0.0019
-const final_frequency: number = 3.8950
-const delta_frequency: number = 0.0019
+const initial_frequency: number = 0.001877739375104
+const final_frequency: number = initial_frequency*2050
+const delta_frequency: number = 0.001877739375104
 
 let current : number = initial_frequency;
 
