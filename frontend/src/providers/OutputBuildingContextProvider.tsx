@@ -64,11 +64,9 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
 
     const handleExperimentalCalculation = useCallback((csvData: IUploadData[])=>{
         const Mx : number[] = [];
-        // const My : number[] = [];
         const Mz : number[] = [];
         csvData.map(val => {
             Mx.push(val.M1)
-            // My.push(val.M2)
             Mz.push(val.M3)
         })
         const experi_across_psds : number[] = calculate_experimental_psd_normalized(Mx,width,height,1,1.83)
@@ -77,15 +75,11 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         const experi_torsion_psds : number[] = calculate_experimental_psd_normalized(Mz,depth,height,1, 1.83)
         setExperimentalTorsionPsds(experi_torsion_psds)
 
-        // setCSVData(csvData)
+        setCSVData(csvData)
         console.log(experi_torsion_psds.length, frequencies.length)
-        // let across_psds: number[] = CalculateAcrossPsdResponse(width,height,depth,frequencies)
-        // let torsion_psds: number[] = CalculateTorsionPsdResponse(width,height,depth,meanSpeed,frequencies)
 
         const [x,y]:number[] = CalculateFD(width, height, depth, meanSpeed, totalFloors, damping, frequencies, experi_across_psds, experi_torsion_psds)
-        // console.log(Tone, terrain)
-        // setVr(x)
-        // setAr(y)
+
         setExperimentalVr(x)
         setExperimentalAr(y)
 
