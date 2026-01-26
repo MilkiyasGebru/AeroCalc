@@ -22,8 +22,8 @@ export default function PSDGraph() {
     })
 
     return (
-
-        <LineChart
+        <>
+        { (torsionPsds.length > 0 || acrossPsds.length>0 || experimentalAcrossPsds.length >0 || experimentalTorsionPsds.length>0 ) && <LineChart
             style={{ width: '90%', maxWidth: '1400px', height: '100%', maxHeight: '70vh', aspectRatio: 1.618 }}
             responsive
             data={graph_data}
@@ -57,6 +57,7 @@ export default function PSDGraph() {
             <Line type="monotone" dot={false} dataKey="experimental_torsion_psd" stroke="#ffd666" />
 
 
-        </LineChart>
+        </LineChart>}
+        </>
     )
 }

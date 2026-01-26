@@ -1,13 +1,11 @@
 import './App.css'
 import InputCard from "@/components/InputCard.tsx";
 import ResultsCard from "@/components/ResultsCard.tsx";
-import {useOutputBuildingContext} from "@/contexts/useOutputBuildingContext.ts";
 import PSDGraph from "@/components/PSDGraph.tsx";
 import MGraphs from "@/components/MGraphs.tsx";
 import {useInputBuildingContext} from "@/contexts/useInputBuildingContext.ts";
 
 function App() {
-    const {torsionPsds} = useOutputBuildingContext()
     const {csvData} = useInputBuildingContext()
 
 
@@ -27,11 +25,9 @@ function App() {
 
           </div>
           <div className="max-w-5/6 mx-auto">
-              {torsionPsds.length > 0 && (
                   <div className="w-full bg-white rounded-md border-transparent">
                       <PSDGraph />
                   </div>
-              )}
           </div>
 
       </div>
