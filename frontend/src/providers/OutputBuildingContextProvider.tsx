@@ -38,7 +38,7 @@ export const OutputBuildingContext = createContext<OutputBuildingContextInterfac
 
 export const OutputBuildingContextProvider = ({children}: {children: React.ReactNode})=>{
 
-    const {width,height,depth,meanSpeed,damping,totalFloors,terrain,Tone, setCSVData} = useInputBuildingContext();
+    const {width,height,depth,meanSpeed,damping,totalFloors,terrain,Tone,experimentalMeanSpeed, experimentalFrequency, setCSVData} = useInputBuildingContext();
 
     const [torsionPsds, setTorsionPsds] = useState<number[]>([]);
     const [acrossPsds, setAcrossPsds] = useState<number[]>([]);
@@ -55,7 +55,6 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         let across_psds: number[] = CalculateAcrossPsdResponse(Math.max(width,depth),height,Math.min(width,depth),frequencies)
         let torsion_psds: number[] = CalculateTorsionPsdResponse(Math.max(width,depth),height,Math.min(width,depth),meanSpeed*c**0.5,frequencies)
 
-
         const [x,y]:number[] = CalculateFD(Math.max(width,depth), height, Math.min(width,depth), meanSpeed*c**0.5,Tone, totalFloors, damping, frequencies, across_psds, torsion_psds)
         setVr(x)
         setAr(y)
@@ -70,10 +69,10 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
             Mx.push(val.MX)
             Mz.push(val.MZ)
         })
-        const experi_across_psds : number[] = calculate_experimental_psd_normalized(Mx,width,height,1,1.83)
+        const experi_across_psds : number[] = calculate_experimental_psd_normalized(Mx,width,height,experimentalMeanSpeed,experimentalFrequency)
         setExperimentalAcrossPsds(experi_across_psds)
 
-        const experi_torsion_psds : number[] = calculate_experimental_psd_normalized(Mz,depth,height,1, 1.83)
+        const experi_torsion_psds : number[] = calculate_experimental_psd_normalized(Mz,depth,height,experimentalMeanSpeed, experimentalFrequency)
         setExperimentalTorsionPsds(experi_torsion_psds)
 
         setCSVData(csvData)
@@ -85,7 +84,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
 
 
 
-    },[width,height])
+    },[width,height,experimentalMeanSpeed,experimentalFrequency])
 
     return (
         <OutputBuildingContext.Provider value={{
