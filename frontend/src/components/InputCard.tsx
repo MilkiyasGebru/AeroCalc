@@ -48,6 +48,8 @@ export default function InputCard(){
     // Part - 2
     const {buildingDensity, meanSpeed, Tone, damping, setBuildingDensity, setMeanSpeed, setTone, setDamping} = useInputBuildingContext()
 
+    // Part -3
+    const {experimentalFrequency, experimentalMeanSpeed, setExperimentalMeanSpeed, setExperimentalFrequency} = useInputBuildingContext()
     // Handling Submit
     const {handleAnalyticalCalculation,handleExperimentalCalculation, } = useOutputBuildingContext()
 
@@ -427,6 +429,30 @@ export default function InputCard(){
                                             </span>
                                         )}
                                     </div>
+                                    {experimentSource=="file_upload" && <div className="grid grid-cols sm:grid-cols-2 gap-2">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="experimentalMeanSpeed">U_H_expt (m/s)</Label>
+                                            <Input
+                                                id="experimentalMeanSpeed"
+                                                type="number"
+                                                value={experimentalMeanSpeed}
+                                                onChange={(e) => setExperimentalMeanSpeed(parseFloat(e.target.value))}
+                                                className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="experimentalFrequency">f_expt</Label>
+                                            <Input
+                                                id="experimentalFrequency"
+                                                type="number"
+                                                value={experimentalFrequency}
+                                                onChange={(e) => setExperimentalFrequency(parseFloat(e.target.value))}
+                                                className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
+                                            />
+                                        </div>
+
+
+                                    </div>}
 
                                 </RadioGroup>
 
