@@ -25,7 +25,7 @@ export default function MeanSpeedGraph({graph_data, current_point}: {graph_data:
             >
 
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="height"   type="number" domain={['auto', 'auto']} // Or ['dataMin', 'dataMax']
+                <XAxis dataKey="speed"   type="number" domain={['auto', 'auto']} // Or ['dataMin', 'dataMax']
                        allowDataOverflow={true}
                        label={{ value: 'Height', position: 'insideBottom', offset: 0 }}
                 />
@@ -40,7 +40,7 @@ export default function MeanSpeedGraph({graph_data, current_point}: {graph_data:
                 />
                 <Tooltip />
                 <Legend />
-                <Line type="basis" dataKey="speed" dot={false}  stroke="#8884d8" />
+                <Line type="basis" dataKey="height" dot={false}  stroke="#8884d8" />
                 <ReferenceDot
                     x={current_point.height}
                     y={current_point.speed}
