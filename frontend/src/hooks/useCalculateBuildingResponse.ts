@@ -57,8 +57,7 @@ function CalculateVandW( numbers: number[][], alpha_bd: number, IH: number) : Va
 function CalculateFB(numbers: number[][], number_index: number, frequencies: number[]) : number[]{
     return frequencies.map(frequency => {
         const [ c1, c2, c3, c4] = numbers[number_index];
-        const c5 : number = (number_index == 6)?c1:numbers[number_index][5]
-        console.log(c1, c2, c3, c4, c5)
+        const c5 : number = (number_index == 6)?c1:numbers[number_index][4]
         return c1*frequency/(1+c2*(c5*frequency)**c3)**c4;
     })
 }
@@ -176,8 +175,6 @@ export function CalculateTorsionPsdResponse(width:number, height:number, depth:n
     })
     let numbers : number[][] | null = null;
     let torsion_psd : number[] | null = null;
-    // console.log("alpha_bd is ", alpha_bd)
-    // console.log("alpha_h is ", alpha_h)
     if (alpha_h < 1) {
 
         numbers = [
@@ -197,7 +194,6 @@ export function CalculateTorsionPsdResponse(width:number, height:number, depth:n
         //     const [ c1, c2, c3, c4, c5] = numbers![3];
         //     return c1*frequency/(1+c2*(c5*frequency)**c3)**c4;
         // })
-
         const FB: number[] = CalculateFB(numbers, 3, f_non_norm)
 
         // const FW: number[] = f_non_norm.map(frequency => {
