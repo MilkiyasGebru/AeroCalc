@@ -42,8 +42,8 @@ export default function MeanSpeedGraph({graph_data, current_point}: {graph_data:
                 <Legend />
                 <Line type="basis" dataKey="height" dot={false}  stroke="#8884d8" />
                 <ReferenceDot
-                    x={current_point.height}
-                    y={current_point.speed}
+                    x={current_point.speed}
+                    y={current_point.height}
                     r={2}
                     fill="#8884d8"
                     stroke="red"
