@@ -38,7 +38,17 @@ export default function MeanSpeedGraph({graph_data, current_point}: {graph_data:
                            offset: 20
                        }}
                 />
-                <Tooltip />
+                <Tooltip
+                    formatter={(value)=>[
+                        typeof value === 'number' ? value.toFixed() : value,
+                        "Height"
+                    ]}
+                    labelFormatter={(label) => (
+                        <span className="font-mono font-bold text-slate-500">
+                            Speed: {label.toFixed(2)}
+                        </span>
+                    )}
+                />
                 <Legend />
                 <Line type="basis" dataKey="height" dot={false}  stroke="#8884d8" />
                 <ReferenceDot
