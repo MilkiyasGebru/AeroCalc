@@ -205,7 +205,7 @@ export default function InputCard(){
                     <div className="grid grid-cols sm:grid-cols-2 gap-2">
 
                         <div className="space-y-2">
-                            <Label htmlFor="density">Building Density</Label>
+                            <Label htmlFor="density">Building Density (Kg/m<sup>3</sup>)</Label>
                             <Input
                                 id="density"
                                 type="number"
@@ -226,7 +226,7 @@ export default function InputCard(){
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="Fundamental Period">Tone</Label>
+                            <Label htmlFor="Fundamental Period">Fundamental Period (sec)</Label>
                             <Input
                                 id="Tone"
                                 type="number"
