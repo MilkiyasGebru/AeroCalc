@@ -72,7 +72,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         const experi_across_psds : number[] = calculate_experimental_psd_normalized(Mx,width,height,experimentalMeanSpeed,experimentalFrequency)
         setExperimentalAcrossPsds(experi_across_psds)
 
-        const experi_torsion_psds : number[] = calculate_experimental_psd_normalized(Mz,depth,height,experimentalMeanSpeed, experimentalFrequency)
+        const experi_torsion_psds : number[] = calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency)
         setExperimentalTorsionPsds(experi_torsion_psds)
 
         setCSVData(csvData)
