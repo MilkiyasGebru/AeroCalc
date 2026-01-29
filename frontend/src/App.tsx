@@ -15,19 +15,25 @@ function App() {
           <h2 className="text-center max-w-[90%] mx-auto  text-4xl font-bold mb-4">Building Wind Response Calculator</h2>
           <p className="text-center max-w-[80%] mx-auto text-lg mb-4">Calculate force, acceleration, and power spectral density for wind-induced building responses</p>
           <div className="max-w-5/6 grid lg:grid-cols-2 gap-6 mt-3 mb-10 mx-auto">
-              <InputCard />
-              <ResultsCard  />
-          </div>
-          <div className="max-w-5/6 grid lg:grid-cols-2 gap-6  mx-auto mb-3 ">
-              {(csvData.length>0) && <MGraphs graph_data={{"val":csvData.map(data => data.MX), "Mtype":"MX"}} />}
-              {(csvData.length>0) && <MGraphs graph_data={{"val":csvData.map(data => data.MY), "Mtype":"MY"}} />}
-              {(csvData.length>0) && <MGraphs graph_data={{"val":csvData.map(data => data.MZ), "Mtype":"MZ"}} />}
+              <InputCard/>
 
+              <div className="grid lg:grid-cols-2 gap-2">
+                  {(csvData.length > 0) && <MGraphs graph_data={{"val": csvData.map(data => data.MX), "Mtype": "MX"}}/>}
+                  {(csvData.length > 0) && <MGraphs graph_data={{"val": csvData.map(data => data.MY), "Mtype": "MY"}}/>}
+                  {(csvData.length > 0) && <MGraphs graph_data={{"val": csvData.map(data => data.MZ), "Mtype": "MZ"}}/>}
+
+              </div>
           </div>
-          <div className="max-w-5/6 mx-auto">
-                  <div className="w-full bg-white rounded-md border-transparent">
-                      <PSDGraph />
-                  </div>
+          <div className="max-w-5/6 grid lg:grid-cols-2 gap-3 mx-auto">
+              <div className="w-full bg-white rounded-md border-transparent">
+                  <PSDGraph/>
+              </div>
+              <div className="w-full bg-white rounded-md border-transparent">
+                  <PSDGraph/>
+              </div>
+          </div>
+          <div className="max-w-5/6 grid lg:grid-cols-2 gap-6 mt-3 mb-10 mx-auto">
+              <ResultsCard/>
           </div>
 
       </div>

@@ -118,7 +118,7 @@ export default function InputCard(){
         setStep(s => s - 1)
     }
     return (
-        <Card className="  bg-white border-transparent mb-4">
+        <Card className="  bg-white border-transparent mb-4 max-h-fit">
             {step == 0 && <>
                 <CardHeader>
                     <CardTitle className="flex gap-2 items-center text-xl">

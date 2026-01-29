@@ -9,9 +9,9 @@ export default function MGraphs({graph_data}:{graph_data: IGraph}) {
     const samplingRate = Math.ceil(graph_data.val.length / 1000);
     const sampledData = graph_data.val.filter((_, index) => index % samplingRate === 0).map(val => ({"val":val}));
     return (
-        <div className="bg-white rounded-md border-transparent">
+        <div className="bg-white rounded-md border-transparent max-w-[400px] p-3">
             <LineChart
-                style={{ width: '90%', maxWidth: '1400px', height: '100%', maxHeight: '70vh', aspectRatio: 1.618 }}
+                style={{ width: '100%', maxWidth: '400px', height: '100%', maxHeight: '30vh', aspectRatio: 1.618 }}
                 responsive
                 data={sampledData}
                 margin={{
