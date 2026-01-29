@@ -23,9 +23,11 @@ export default function MGraphs({graph_data}:{graph_data: IGraph}) {
             >
 
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis   type="category" domain={['auto', 'auto']} // Or ['dataMin', 'dataMax']
+                <XAxis     // Or ['dataMin', 'dataMax']
                        allowDataOverflow={true}
-                       label={{ value: '', position: 'insideBottom', offset: 0 }}
+                       // label={{ value: '', position: 'insideBottom', offset: 0 }}
+                       tick={false}
+                       tickLine={false}
                 />
                 <YAxis width="auto"  type="number" domain={['auto', 'auto']}
                        label={{
@@ -36,7 +38,22 @@ export default function MGraphs({graph_data}:{graph_data: IGraph}) {
                            offset: 20
                        }}
                 />
-                <Tooltip />
+                <Tooltip
+                    formatter={(value, name)=> [
+                        <span className="font-mono font-bold text-slate-500">
+                            {typeof value === 'number' ? value.toFixed(2) : value}
+                        </span>,
+                        name
+
+                    ]}
+
+                    labelFormatter={() => (
+                        <span className="font-mono font-bold text-slate-500">
+                            {/*Speed: {label.toFixed(2)}*/}
+                        </span>
+                    )}
+
+                />
                 <Legend />
                 <Line type="basis" dataKey="val" dot={false}  stroke={(graph_data.Mtype=="MX")?"#ff4d4f":((graph_data.Mtype=="MY")?"#73d13d":"#ffd666")}  />
 
