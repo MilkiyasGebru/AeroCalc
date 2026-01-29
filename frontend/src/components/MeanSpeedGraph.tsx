@@ -27,11 +27,11 @@ export default function MeanSpeedGraph({graph_data, current_point}: {graph_data:
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="speed"   type="number" domain={['auto', 'auto']} // Or ['dataMin', 'dataMax']
                        allowDataOverflow={true}
-                       label={{ value: 'Height', position: 'insideBottom', offset: 0 }}
+                       label={{ value: 'speed', position: 'insideBottom', offset: 0 }}
                 />
                 <YAxis width="auto"  type="number" domain={['auto', 'auto']}
                        label={{
-                           value: 'Mean Speed',
+                           value: 'height',
                            angle: -90,
                            position: 'insideLeft',
                            style: { textAnchor: 'middle' },
@@ -39,18 +39,21 @@ export default function MeanSpeedGraph({graph_data, current_point}: {graph_data:
                        }}
                 />
                 <Tooltip
-                    formatter={(value)=>[
-                        typeof value === 'number' ? value.toFixed() : value,
+                    formatter={(value)=> [
+                        <span className="font-mono font-bold text-slate-500">
+                            {typeof value === 'number' ? value.toFixed(2) : value}
+                        </span>,
                         "Height"
+
                     ]}
                     labelFormatter={(label) => (
                         <span className="font-mono font-bold text-slate-500">
                             Speed: {label.toFixed(2)}
                         </span>
-                    )}
-                />
+                        )}
+                            />
                 <Legend />
-                <Line type="basis" dataKey="height" dot={false}  stroke="#8884d8" />
+                <Line type="basis" dataKey="height" dot={false} stroke="#8884d8"/>
                 <ReferenceDot
                     x={current_point.speed}
                     y={current_point.height}
@@ -61,7 +64,7 @@ export default function MeanSpeedGraph({graph_data, current_point}: {graph_data:
                 />
 
             </LineChart>
-        </div>
-    )
+                        </div>
+                        )
 
-}
+                    }
