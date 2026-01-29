@@ -45,7 +45,7 @@ export default function InputCard(){
     // Part-1
     const {width, height,depth,totalFloors, setWidth, setHeight, setDepth,setTotalFloors } = useInputBuildingContext()
     // Part - 2
-    const {buildingDensity, meanSpeed, Tone, damping, setBuildingDensity, setMeanSpeed, setTone, setDamping} = useInputBuildingContext()
+    const {buildingDensity, meanSpeed, Tone, damping, setBuildingDensity, setMeanSpeed, setTone, setDamping, setCSVData} = useInputBuildingContext()
 
     // Part -3
     const {experimentalFrequency, experimentalMeanSpeed, setExperimentalMeanSpeed, setExperimentalFrequency} = useInputBuildingContext()
@@ -74,8 +74,8 @@ export default function InputCard(){
         }
 
         if (uploadedFile && experimentalSelected){
-            const parsedData = await parseFile(uploadedFile)
-            handleExperimentalCalculation(parsedData)
+            // const parsedData = await parseFile(uploadedFile)
+            handleExperimentalCalculation()
 
 
         }
@@ -84,8 +84,10 @@ export default function InputCard(){
 
     const [graphData, setGraphData] = useState<IMeanSpeedData[]>([])
 
-    const handleFileSelect = (file: File) => {
+    const handleFileSelect = async (file: File) => {
         setUploadedFile(file);
+        const parsedData = await parseFile(file)
+        setCSVData(parsedData)
 
     };
     const coefficient = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);

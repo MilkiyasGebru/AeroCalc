@@ -7,11 +7,7 @@ import {
 } from "@/hooks/useCalculateBuildingResponse.ts";
 import {calculate_experimental_psd_normalized} from "@/hooks/digital_processor.ts";
 
-interface IUploadData {
-    MX: number;
-    MY: number;
-    MZ: number;
-}
+
 interface OutputBuildingContextInterface {
     torsionPsds: number[];
     acrossPsds: number[];
@@ -30,7 +26,7 @@ interface OutputBuildingContextInterface {
     setExperimentalAr: (val: number)=> void;
     setExperimentalVr: (val: number)=> void;
     handleAnalyticalCalculation : () => void;
-    handleExperimentalCalculation : (csvData: IUploadData[] ) => void;
+    handleExperimentalCalculation : () => void;
 }
 
 
@@ -38,7 +34,7 @@ export const OutputBuildingContext = createContext<OutputBuildingContextInterfac
 
 export const OutputBuildingContextProvider = ({children}: {children: React.ReactNode})=>{
 
-    const {width,height,depth,meanSpeed,damping,totalFloors,terrain,Tone,experimentalMeanSpeed, experimentalFrequency, setCSVData} = useInputBuildingContext();
+    const {width,height,depth,meanSpeed,damping,totalFloors,terrain,Tone,experimentalMeanSpeed, experimentalFrequency, csvData} = useInputBuildingContext();
 
     const [torsionPsds, setTorsionPsds] = useState<number[]>([]);
     const [acrossPsds, setAcrossPsds] = useState<number[]>([]);
@@ -62,7 +58,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         setTorsionPsds(torsion_psds)
     }, [width, depth, height, meanSpeed, totalFloors, damping])
 
-    const handleExperimentalCalculation = useCallback((csvData: IUploadData[])=>{
+    const handleExperimentalCalculation = useCallback(()=>{
         const Mx : number[] = [];
         const Mz : number[] = [];
         csvData.map(val => {
@@ -75,7 +71,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         const experi_torsion_psds : number[] = calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency)
         setExperimentalTorsionPsds(experi_torsion_psds)
 
-        setCSVData(csvData)
+        // setCSVData(csvData)
 
         const [x,y]:number[] = CalculateFD(width, height, depth, meanSpeed,Tone, totalFloors, damping, frequencies, experi_across_psds, experi_torsion_psds)
 
@@ -84,7 +80,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
 
 
 
-    },[width,height,experimentalMeanSpeed,experimentalFrequency])
+    },[width,height,experimentalMeanSpeed,experimentalFrequency,csvData])
 
     return (
         <OutputBuildingContext.Provider value={{
