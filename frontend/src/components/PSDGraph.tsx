@@ -39,6 +39,9 @@ export default function PSDGraph() {
             <XAxis dataKey="frequency" scale="log"  type="number" domain={['auto', 'auto']} // Or ['dataMin', 'dataMax']
                    allowDataOverflow={true}
                    label={{ value: 'fB/UH', position: 'insideBottom', offset: 0 }}
+                   tickFormatter={(value:number)=> {
+                       return value.toExponential(2)
+                   }}
             />
             <YAxis width="auto" scale="log" type="number" domain={['auto', 'auto']}
                    label={{
@@ -48,8 +51,24 @@ export default function PSDGraph() {
                        style: { textAnchor: 'middle' },
                        offset: 20
                    }}
+                   tickFormatter={(value:number)=> {
+                       return value.toExponential(2)
+                   }}
             />
-            <Tooltip />
+            <Tooltip
+                formatter={(value, name)=> [
+                    <span className="font-mono font-bold text-slate-500">
+                            {typeof value === 'number' ? value.toExponential(2) : value}
+                        </span>,
+                    name
+
+                ]}
+                labelFormatter={(label) => (
+                    <span className="font-mono font-bold text-slate-500">
+                            Frequency: {label.toFixed(2)}
+                        </span>
+                )}
+            />
             <Legend />
             <Line type="monotone" dot={false} dataKey="across_psd" stroke="#8884d8" />
             <Line type="monotone" dot={false} dataKey="torsion_psd" stroke="#82ca9d" />
