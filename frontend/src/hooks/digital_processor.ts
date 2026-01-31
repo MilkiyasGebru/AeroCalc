@@ -61,19 +61,25 @@ function mean(arr: number[]): number {
     return arr.reduce((sum, x) => sum + x, 0) / arr.length;
 }
 
-function normalizePsd(psd_across: number[], f_across: number[], width: number, height: number, UH : number){
+function normalizePsd(psd_across: number[], f_across: number[], width: number, height: number, UH : number): {
+    "psd": number[],
+    "normalizedFrequency": number[],
+}{
 
-    // const f_normalized_across: number[] = f_across.map(f => {
-    //     return f*width/UH
-    // });
+    const f_normalized: number[] = f_across.map(f => {
+        return f*width/UH
+    });
     const psd_across_normalized = f_across.map((f,index)=>{
         return psd_across[index]*f/(0.5*1.2929*UH**2*width*height**2)**2
     })
-    return psd_across_normalized
+    return {"psd": psd_across_normalized, "normalizedFrequency": f_normalized}
 
 }
 
-export function calculate_experimental_psd_normalized(M: number[], width_depth: number, height: number, UH:number, f_expt: number): number[]{
+export function calculate_experimental_psd_normalized(M: number[], width_depth: number, height: number, UH:number, f_expt: number): {
+    "psd": number[],
+    "normalizedFrequency": number[],
+}{
     const meanM : number = mean(M)
     const window = hamming(3000);
     const mZeroMean = M.map(x => 1000 * (x - meanM));
