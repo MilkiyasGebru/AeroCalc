@@ -12,6 +12,7 @@ interface InputBuildingContextInterface {
     Tone: number;
     experimentalFrequency: number;
     terrain: string;
+    normalizedExperimentalFrequencies: number[];
     csvData: IUploadData[];
     setWidth: (val: number) => void;
     setHeight: (val: number) => void;
@@ -25,6 +26,7 @@ interface InputBuildingContextInterface {
     setCSVData: (val: IUploadData[]) => void;
     setExperimentalFrequency: (val: number)=> void;
     setExperimentalMeanSpeed: (val: number)=> void;
+    setNormalizedExperimentalFrequencies: (val: number[]) => void;
 
 }
 interface IUploadData {
@@ -36,8 +38,8 @@ interface IUploadData {
 export const InputBuildingContext = createContext<InputBuildingContextInterface | undefined>(undefined);
 
 export const InputBuildingContextProvider = ({children}: {children: React.ReactNode}) => {
-    const [width, setWidth] = useState<number>(40);
-    const [height, setHeight] = useState<number>(300);
+    const [width, setWidth] = useState<number>(42);
+    const [height, setHeight] = useState<number>(33.7);
     const [depth, setDepth] = useState<number>(30);
     const [meanSpeed, setMeanSpeed] = useState<number>(30);
     const [buildingDensity, setBuildingDensity] = useState<number>(150);
@@ -47,10 +49,12 @@ export const InputBuildingContextProvider = ({children}: {children: React.ReactN
     const [terrain, setTerrain] = useState<string>("open");
     const [csvData, setCSVData] = useState<IUploadData[]>([]);
     const [experimentalMeanSpeed, setExperimentalMeanSpeed] = useState<number>(1);
-    const [experimentalFrequency, setExperimentalFrequency] = useState<number>(0.183);
+    const [experimentalFrequency, setExperimentalFrequency] = useState<number>(0.18312429715297);
+    const [normalizedExperimentalFrequencies, setNormalizedExperimentalFrequencies] = useState<number[]>([]);
     return (
         <InputBuildingContext.Provider value={{
             width, height, depth, meanSpeed, buildingDensity, totalFloors, damping, Tone, terrain,csvData,experimentalMeanSpeed,experimentalFrequency,
+            normalizedExperimentalFrequencies, setNormalizedExperimentalFrequencies,
             setExperimentalFrequency,setExperimentalMeanSpeed,setWidth, setHeight, setDepth,setMeanSpeed, setBuildingDensity,setTotalFloors,setDamping,setTerrain,setTone, setCSVData}} >
             {children}
         </InputBuildingContext.Provider>
