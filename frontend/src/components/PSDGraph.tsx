@@ -1,29 +1,40 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import {frequencies} from "../../CONSTANTS.ts";
-import {useOutputBuildingContext} from "@/contexts/useOutputBuildingContext.ts";
+import {useInputBuildingContext} from "@/contexts/useInputBuildingContext.ts";
 
 
 
 interface graph_point {
     frequency: number;
-    torsion_psd: number;
-    across_psd: number;
+    psd: number | null;
+    experimentalPsd: number | null;
 }
-export default function PSDGraph() {
-    const {torsionPsds, acrossPsds,experimentalAcrossPsds,experimentalTorsionPsds} = useOutputBuildingContext()
-    const graph_data: graph_point[] = frequencies.map((frequency, index)=>{
-        return {
-            frequency: frequency,
-            torsion_psd: torsionPsds[index],
-            across_psd: acrossPsds[index],
-            experimental_torsion_psd: Math.max(experimentalTorsionPsds[index],0.00000001),
-            experimental_across_psd: Math.max(experimentalAcrossPsds[index],0.000001),
-        }
-    })
+
+interface PSDGraphInterface {
+    psds: number[];
+    experimentalPsds: number[];
+    graphType: string;
+}
+
+export default function PSDGraph(props : PSDGraphInterface) {
+    const { psds, experimentalPsds} = props;
+    const {normalizedExperimentalFrequencies} = useInputBuildingContext()
+    const allFrequencies = Array.from(new Set([...frequencies, ...normalizedExperimentalFrequencies])).sort((a,b)=>a-b)
+
+    const graph_data: graph_point[] = []
+    for (let index = 1; index < allFrequencies.length; index++) {
+        const freqIndex: number = frequencies.indexOf(allFrequencies[index]);
+        const expFreqIndex: number = normalizedExperimentalFrequencies.indexOf(allFrequencies[index]);
+        graph_data.push({
+            frequency: frequencies[index],
+            psd:  freqIndex !== -1? psds[freqIndex]: null,
+            experimentalPsd: expFreqIndex !== -1? experimentalPsds[expFreqIndex]: null,
+        })
+    }
 
     return (
         <>
-        { (torsionPsds.length > 0 || acrossPsds.length>0 || experimentalAcrossPsds.length >0 || experimentalTorsionPsds.length>0 ) && <LineChart
+        { (psds.length > 0 || experimentalPsds.length>0) && <LineChart
             style={{ width: '90%', maxWidth: '1400px', height: '100%', maxHeight: '70vh', aspectRatio: 1.618 }}
             responsive
             data={graph_data}
@@ -40,10 +51,10 @@ export default function PSDGraph() {
                    allowDataOverflow={true}
                    label={{ value: 'fB/UH', position: 'insideBottom', offset: 0 }}
                    tickFormatter={(value:number)=> {
-                       return value.toExponential(2)
+                       return value?.toExponential(2)
                    }}
             />
-            <YAxis width="auto" scale="log" type="number" domain={['auto', 'auto']}
+            <YAxis width="auto" scale="log"  type="number" domain={['auto', 'auto']}
                    label={{
                        value: 'f S_M(f) / (0.5 ρ U_H^2 B H^2)^2',
                        angle: -90,
@@ -60,20 +71,20 @@ export default function PSDGraph() {
                     <span className="font-mono font-bold text-slate-500">
                             {typeof value === 'number' ? value.toExponential(2) : value}
                         </span>,
-                    name
+                    name == `${props.graphType} psd`? `${props.graphType} PSDs`:`Experimental ${props.graphType} PSDs `
 
                 ]}
                 labelFormatter={(label) => (
                     <span className="font-mono font-bold text-slate-500">
-                            Frequency: {label.toFixed(2)}
+                            Frequency: {label.toExponential(2)}
                         </span>
                 )}
             />
             <Legend />
-            <Line type="monotone" dot={false} dataKey="across_psd" stroke="#8884d8" />
-            <Line type="monotone" dot={false} dataKey="torsion_psd" stroke="#82ca9d" />
-            <Line type="monotone" dot={false} dataKey="experimental_across_psd" stroke="#ff4d4f" />
-            <Line type="monotone" dot={false} dataKey="experimental_torsion_psd" stroke="#ffd666" />
+            <Line name={`${props.graphType} psd`} type="basis" dot={false} dataKey="psd" connectNulls={true} stroke={props.graphType !== "Across"?"#fff222":"#af7875"} />
+            <Line name={`Experimental ${props.graphType} psd`} type="basis" dot={false} dataKey="experimentalPsd" connectNulls={true} stroke={props.graphType !== "Across"? "#aaa23d":"#ff4d4f"}  />
+            {/*<Line type="monotone" dot={false} dataKey="experimental_across_psd" stroke="#ff4d4f" />*/}
+            {/*<Line type="monotone" dot={false} dataKey="experimental_torsion_psd" stroke="#ffd666" />*/}
 
 
         </LineChart>}
