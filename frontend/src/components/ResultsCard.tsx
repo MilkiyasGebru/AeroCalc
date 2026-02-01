@@ -7,7 +7,8 @@ import {useOutputBuildingContext} from "@/contexts/useOutputBuildingContext.ts";
 export default function ResultsCard() {
     const {ar, vr, experimentalAr, experimentalVr} = useOutputBuildingContext()
     return (
-        <Card className="bg-white border-transparent h-fit">
+        <>
+        { (ar != null || vr != null || experimentalAr != null || experimentalVr != null) && <Card className="bg-white border-transparent h-fit">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg ">
                     <TrendingUp className="w-5 h-5 text-blue-300"/>
@@ -41,5 +42,7 @@ export default function ResultsCard() {
                 </div>
             </CardContent>
         </Card>
+        }
+        </>
     )
 }
