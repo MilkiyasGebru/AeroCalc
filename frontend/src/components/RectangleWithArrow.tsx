@@ -11,7 +11,7 @@ export const RectangleWithArrow = ({ width = 300, height = 200 }) => {
                 {/* Width Label (Top) */}
                 <div className="absolute -top-7 left-0 w-full flex flex-col items-center">
                   <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">
-                    Width: {width}meters
+                    Width: {Math.max(width, height)}meters
                   </span>
                     <div className="w-full h-[1px] bg-slate-300 mt-1"></div>
                 </div>
@@ -21,7 +21,7 @@ export const RectangleWithArrow = ({ width = 300, height = 200 }) => {
                   <span
                       className="text-xs font-bold text-slate-600 uppercase tracking-wider -rotate-90 whitespace-nowrap"
                   >
-                    Depth: {height} meters
+                    Depth: {Math.min(height, width)} meters
                   </span>
                 </div>
 
