@@ -7,6 +7,16 @@ import {
 } from "@/hooks/useCalculateBuildingResponse.ts";
 import {calculate_experimental_psd_normalized} from "@/hooks/digital_processor.ts";
 
+declare global {
+    interface Window {
+        pywebview: {
+            api: {
+                compute(M: number[],width: number,height: number,experimentalMeanSpeed: number,experimentalFrequency: number): Promise<{ psd: number[], normalizedFrequency: number[] }>;
+            };
+        };
+    }
+}
+
 
 interface OutputBuildingContextInterface {
     torsionPsds: number[];
@@ -58,28 +68,53 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         setTorsionPsds(torsion_psds)
     }, [width, depth, height, meanSpeed, totalFloors, damping])
 
-    const handleExperimentalCalculation = useCallback(()=>{
+    const handleExperimentalCalculation = useCallback(async ()=>{
         const Mx : number[] = [];
         const Mz : number[] = [];
         csvData.map(val => {
             Mx.push(val.MX)
             Mz.push(val.MZ)
         })
-        const experi_across_psds : number[] = calculate_experimental_psd_normalized(Mx,width,height,experimentalMeanSpeed,experimentalFrequency).psd
-        setExperimentalAcrossPsds(experi_across_psds)
 
-        const {psd, normalizedFrequency} = calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency)
-        // const  : number[] = calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency)
-        setExperimentalTorsionPsds(psd)
-        // console.log("Normalized ",normalizedFrequency)
-        setNormalizedExperimentalFrequencies(normalizedFrequency)
-        console.log("new",calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency))
-        // setCSVData(csvData)
+        if (window.pywebview?.api?.compute) {
+            // DESKTOP MODE: Call Python
+            console.log("Using Python for calculation...");
+            const acrossResult = await window.pywebview.api.compute(Mx,width, height, experimentalMeanSpeed, experimentalFrequency);
+            const torsionResult = await window.pywebview.api.compute(Mz,width, depth, experimentalMeanSpeed, experimentalFrequency);
+            console.log(acrossResult.normalizedFrequency)
+            setExperimentalAcrossPsds(acrossResult.psd)
+            setNormalizedExperimentalFrequencies(acrossResult.normalizedFrequency)
+            setExperimentalTorsionPsds(torsionResult.psd)
+        } else {
+            // WEB MODE: Fallback to Local JavaScript
+            const experi_across_psds : number[] = calculate_experimental_psd_normalized(Mx,width,height,experimentalMeanSpeed,experimentalFrequency).psd
+            setExperimentalAcrossPsds(experi_across_psds)
 
-        const [x,y]:number[] = CalculateFD(width, height, depth, meanSpeed,Tone, totalFloors, damping, frequencies, experi_across_psds, psd)
+            const {psd, normalizedFrequency} = calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency)
+            console.log("Normalized Frequency is ", normalizedFrequency)
+            // const  : number[] = calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency)
+            setExperimentalTorsionPsds(psd)
+            // console.log("Normalized ",normalizedFrequency)
+            setNormalizedExperimentalFrequencies(normalizedFrequency)
+            console.log("new",calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency))
+            // setCSVData(csvData)
+        }
 
-        setExperimentalVr(x)
-        setExperimentalAr(y)
+        // const experi_across_psds : number[] = calculate_experimental_psd_normalized(Mx,width,height,experimentalMeanSpeed,experimentalFrequency).psd
+        // setExperimentalAcrossPsds(experi_across_psds)
+        //
+        // const {psd, normalizedFrequency} = calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency)
+        // // const  : number[] = calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency)
+        // setExperimentalTorsionPsds(psd)
+        // // console.log("Normalized ",normalizedFrequency)
+        // setNormalizedExperimentalFrequencies(normalizedFrequency)
+        // console.log("new",calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency))
+        // // setCSVData(csvData)
+        //
+        // // const [x,y]:number[] = CalculateFD(width, height, depth, meanSpeed,Tone, totalFloors, damping, frequencies, experi_across_psds, psd)
+        //
+        // setExperimentalVr(x)
+        // setExperimentalAr(y)
 
 
 
