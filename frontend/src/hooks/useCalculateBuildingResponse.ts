@@ -420,3 +420,80 @@ export function CalculateFD(width: number, height: number, depth: number, mean_s
 
 
 }
+
+export function CalculateAlong(width: number, height: number, depth: number, mean_speed:number, Tone:number, damping:number,frequencies: number[], building_density: number ){
+
+    const LU = 300 * (height / 300 ) ** (0.67 + 0.05* Math.log(0.05))
+    const normalized_frequencies: number[] = frequencies.map(freq => {
+        return freq*LU / mean_speed
+    })
+
+    const Kaimal_V_psd_norm : number[] = normalized_frequencies.map(freq => {
+        return 6.8*freq / ((1+10.2*freq)**(5/3))
+    })
+    const su2: number = (0.1*mean_speed)**2
+    const Kaimal_V_psd : number[] = frequencies.map((freq, index)=> {
+        return Kaimal_V_psd_norm[index]*su2/freq
+    })
+
+    const S_v_to_S_F: number = (1.2929*1.3*(width*height)*mean_speed)**2
+
+    const Kaimal_F_psd_norm: number[] = Kaimal_V_psd.map(kaimal_psd_value => {
+        return kaimal_psd_value * S_v_to_S_F
+    })
+
+    const X_square = frequencies.map(freq => {
+        return (1/(1+(2*freq*Math.sqrt(width*height)/mean_speed)**(4/3)))
+    })
+
+    const natural_frequency: number = 1/Tone
+
+    const one_over_H_square: number[] = frequencies.map(freq => {
+        return ((1-(freq/natural_frequency)**2)**2 + 4*damping**2*(freq/natural_frequency)**2)
+    })
+
+    const multiplier : number[] = one_over_H_square.map(h_value => {
+        return 1/((2*Math.PI*natural_frequency)**4*(building_density*(width*depth*height))**2*h_value)
+    })
+
+
+    const multiplier_bg: number = 1/((2*Math.PI*natural_frequency)**4*(building_density*(width*depth*height))**2)
+
+    const Sx: number[] = Kaimal_F_psd_norm.map((kaimal_v_value, index)=> {
+        return X_square[index]*kaimal_v_value*multiplier[index]
+    })
+
+    // =AG6#*AF6#*$AJ$6
+    const Sx_bg: number[] = Kaimal_F_psd_norm.map((kaimal_v_value, index)=> {
+
+        return X_square[index]*kaimal_v_value*multiplier_bg
+    })
+
+    //=IF(AK6#-AL6#>0,AK6#-AL6#,0) AK - Sx and AL -Sx_bg
+    const Sx_r: number[] = Sx.map((Sx_value, index)=>{
+        return Math.max(Sx_value - Sx_bg[index], 0)
+    })
+
+    // =(2*PI()*$Y6#)^4*AM6#
+    const G_Sx_r: number[] = Sx_r.map((Sx_r_value, index) => {
+        return (2*Math.PI*frequencies[index])**4*Sx_r_value
+    })
+
+    const area : number = G_Sx_r.reduce((totalArea, currentGSxr, i)=>{
+        if (i === 0){
+            return totalArea
+        }
+        const prevGSxr : number = G_Sx_r[i-1]
+        const prevFreq: number = frequencies[i-1]
+        const currentFreq: number = frequencies[i]
+
+        const avgHeight = (currentGSxr + prevGSxr) / 2;
+        const width = currentFreq - prevFreq;
+
+        return totalArea + (avgHeight * width);
+
+    }, 0)
+
+    return Math.sqrt(area) * 1000/9.81
+
+}
