@@ -13,32 +13,6 @@ function App() {
     const {csvData} = useInputBuildingContext()
     const {torsionPsds, experimentalTorsionPsds, acrossPsds, experimentalAcrossPsds} = useOutputBuildingContext()
 
-    console.log(CalculateAlong(35.71498714,193.525,28.2309602057443,27.7681800576695,1/0.147058823529412,0.02,frequencies, 200))
-    // const [x, setX] = useState<number>(0)
-    // useEffect(() => {
-    // const callApi = async () => {
-    //     try {
-    //         // Safety check: verify the API exists before calling
-    //         if (window.pywebview?.api?.compute) {
-    //             const result = await window.pywebview.api.compute();
-    //             setX(result);
-    //         }
-    //     } catch (error) {
-    //         console.error("API call failed:", error);
-    //     }
-    // };
-
-//     if (window.pywebview?.api) {
-//         callApi();
-//     } else {
-//         // The browser calls this automatically once 'pywebviewready' fires
-//         window.addEventListener('pywebviewready', callApi);
-//
-//         // Cleanup: removes the listener if the component unmounts
-//         // before the event even happens.
-//         return () => window.removeEventListener('pywebviewready', callApi);
-//     }
-// }, []);
     return (
 
       <div className="bg-[hsl(210,20%,98%)]  min-h-screen w-full py-4">
