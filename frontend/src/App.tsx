@@ -5,9 +5,6 @@ import PSDGraph from "@/components/PSDGraph.tsx";
 import MGraphs from "@/components/MGraphs.tsx";
 import {useInputBuildingContext} from "@/contexts/useInputBuildingContext.ts";
 import {useOutputBuildingContext} from "@/contexts/useOutputBuildingContext.ts";
-import {CalculateAlong} from "@/hooks/useCalculateBuildingResponse.ts";
-import {frequencies} from "../CONSTANTS.ts";
-// import {useEffect, useState} from "react";
 
 function App() {
     const {csvData} = useInputBuildingContext()
