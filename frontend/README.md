@@ -1,73 +1,42 @@
-# React + TypeScript + Vite
+## README FOR SRC/Hooks/useCalculateBuildingResponse.ts
+This code implements Structural Wind Engineering calculations to determine how a building vibrates under wind loads. It calculates the Power Spectral Density (PSD) for three primary components: Along-wind, Across-wind, and Torsional responses.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🏗️ Core Structural Logic
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Calculate PSD: Determining the energy distribution of wind forces over those frequencies.
 
-## React Compiler
+2. Mechanical Admittance: Applying the building's dynamic properties (mass, damping, stiffness).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+3. RMS Integration: Calculating the Root Mean Square (RMS) acceleration and velocity.
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+# 1. Directional PSD Calculations
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Across-Wind Response (**CalculateAcrossPsdResponse**) - This function calculates the across-wind response. It uses empirical "look-up" matrices based on the building's aspect ratios:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+#### a. $\alpha_{bd}$: Width/Depth ratio.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+#### b.$\alpha_h$: Aspect ratio (Height relative to the plan area).
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Torsional Response (**CalculateTorsionPsdResponse**) - Calculates the twisting force. It uses three sub-functions to build the spectrum:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+* **CalculateFB**: Background response.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+* **CalculateFV** & **CalculateFW**: Resonant peaks modeled using Gaussian-style distributions to represent specific aerodynamic phenomena.
+
+Along-Wind Response (**CalculateAlong**): This implements the **Kaimal Spectrum** model. It represents the turbulence in the direction of the wind.
+
+# 2. Dynamic Analysis & Integration (**CalculateFD**)
+
+This function transforms force spectra into actual building motion (acceleration/velocity).
+
+Key Steps:
+
+1. Modal Mass Calculation: Determines the generalized mass for each vibration mode based on total floors and building density.
+
+2. Transfer Function: Uses the building's natural frequency (Tone) and damping to determine how much the building amplifies specific wind frequencies.
+
+3. Integration (Trapezoidal Rule): To find the total RMS response, the code calculates the area under the PSD curve.
+
+#
