@@ -28,7 +28,7 @@ export const useBuildingParameters = () => {
         let across_psds: number[] = CalculateAcrossPsdResponse(width,height,depth,frequencies)
         let torsion_psds: number[] = CalculateTorsionPsdResponse(width,height,depth,meanSpeed,frequencies)
 
-        const [x,y]:number[] = CalculateFD(width, height, depth, meanSpeed, Tone, totalFloors, damping, GenerateFrequencies(initialFrequency, finalFrequency, deltaFrequency), across_psds, torsion_psds)
+        const [x,y]:number[] = CalculateFD(width, height, depth, meanSpeed, Tone, totalFloors, damping, GenerateFrequencies(initialFrequency, finalFrequency, deltaFrequency), across_psds, torsion_psds, buildingDensity)
 
         setVr(x)
         setAr(y)
