@@ -28,11 +28,13 @@ interface OutputBuildingContextInterface {
     experimentalAcrossPsds: number[];
     experimentalAr: number | null;
     experimentalVr: number | null;
+    experimentalAccelartionYDirection: number | null;
     setTorsionPsds: (val: number[])=> void;
     setAcrossPsds: (val: number[])=>void;
     setAr: (val: number)=> void;
     setVr: (val: number)=> void;
     setAccelartionYDirection: (val: number)=> void;
+    setExperimentalAccelartionYDirection: (val: number)=> void;
     setExperimentalTorsionPsds: (val: number[])=> void;
     setExperimentalAcrossPsds: (val: number[])=> void;
     setExperimentalAr: (val: number)=> void;
@@ -58,6 +60,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
     const [experimentalAr, setExperimentalAr] = useState<number | null>(null)
     const [experimentalVr, setExperimentalVr] = useState<number | null>(null)
     const [accelartionYDirection, setAccelartionYDirection] = useState<number | null>(null)
+    const [experimentalAccelartionYDirection, setExperimentalAccelartionYDirection] = useState<number | null>(null)
     const handleAnalyticalCalculation = useCallback(()=>{
 
         const c = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
@@ -128,6 +131,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
             torsionPsds, acrossPsds, ar,vr, setTorsionPsds, setAcrossPsds, setAr, setVr,
             experimentalTorsionPsds,experimentalAcrossPsds,experimentalAr,experimentalVr,
             accelartionYDirection, setAccelartionYDirection,
+            experimentalAccelartionYDirection, setExperimentalAccelartionYDirection,
             setExperimentalTorsionPsds,setExperimentalAcrossPsds,setExperimentalAr,setExperimentalVr, handleAnalyticalCalculation,handleExperimentalCalculation
         }}>
             {children}
