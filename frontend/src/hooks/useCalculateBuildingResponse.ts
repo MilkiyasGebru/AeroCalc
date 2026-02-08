@@ -279,12 +279,12 @@ export function CalculateTorsionPsdResponse(width:number, height:number, depth:n
 
 }
 
-export function CalculateFD(width: number, height: number, depth: number, mean_speed: number, Tone:number, totalFloors:number, damping:number, frequencies: number[], across_psds: number[], torsion_psds: number[]) : number[]{
+export function CalculateFD(width: number, height: number, depth: number, mean_speed: number, Tone:number, totalFloors:number, damping:number, frequencies: number[], across_psds: number[], torsion_psds: number[], building_density: number) : number[]{
     const f_eqns: number[] = frequencies.map(frequency => {
         return frequency*mean_speed/width;
     })
     // const T1 = 6.127169106;
-    const story_m: number = 150*(width*height*depth)/totalFloors
+    const story_m: number = building_density*(width*height*depth)/totalFloors
     const mass: number[] = [story_m, story_m, story_m*(width**2 + depth**2)/12]
     let Nmodes: number = 3;
     const z = CreateDiagonalMatrix(Nmodes, damping)
