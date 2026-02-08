@@ -5,7 +5,7 @@ import {useOutputBuildingContext} from "@/contexts/useOutputBuildingContext.ts";
 
 
 export default function ResultsCard() {
-    const {ar, vr, experimentalAr, experimentalVr} = useOutputBuildingContext()
+    const {ar, vr, experimentalAr, experimentalVr, accelartionYDirection} = useOutputBuildingContext()
     return (
         <>
         { (ar != null || vr != null || experimentalAr != null || experimentalVr != null) && <Card className="bg-white border-transparent h-fit">
@@ -19,26 +19,31 @@ export default function ResultsCard() {
                 </CardDescription>
 
             </CardHeader>
-            <CardContent className="grid grid-cols sm:grid-cols-2 gap-2">
+            <CardContent className="grid grid-cols sm:grid-cols-3 gap-2">
                 <div
                     className="flex flex-col border p-3 rounded-md items-center bg-[hsl(210,20%,98%)] border-transparent">
                     <span className="font-bold">Analytical AR</span>
-                    <span>{ar?ar.toFixed(3):"?"}</span>
+                    <span>{ar ? ar.toFixed(3) : "?"}</span>
                 </div>
                 <div
                     className="flex flex-col border p-3 rounded-md items-center bg-[hsl(210,20%,98%)] border-transparent">
                     <span className="font-bold">Analytical VR</span>
-                    <span>{vr?vr.toFixed(3):"?"}</span>
+                    <span>{vr ? vr.toFixed(3) : "?"}</span>
+                </div>
+                <div
+                    className="flex flex-col border p-3 rounded-md items-center bg-[hsl(210,20%,98%)] border-transparent">
+                    <span className="font-semibold">Analytical Accelartion in Y-direction</span>
+                    <span>{accelartionYDirection ? accelartionYDirection.toFixed(3) : "?"}</span>
                 </div>
                 <div
                     className="flex flex-col border p-3 rounded-md items-center bg-[hsl(210,20%,98%)] border-transparent">
                     <span className="font-bold">Experimental AR</span>
-                    <span>{experimentalAr?experimentalAr.toFixed(3):"?"}</span>
+                    <span>{experimentalAr ? experimentalAr.toFixed(3) : "?"}</span>
                 </div>
                 <div
                     className="flex flex-col border p-3 rounded-md items-center bg-[hsl(210,20%,98%)] border-transparent">
                     <span className="font-bold">Experimental VR</span>
-                    <span>{experimentalVr?experimentalVr.toFixed(3):"?"}</span>
+                    <span>{experimentalVr ? experimentalVr.toFixed(3) : "?"}</span>
                 </div>
             </CardContent>
         </Card>

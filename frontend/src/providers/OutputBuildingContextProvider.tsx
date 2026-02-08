@@ -3,7 +3,7 @@ import {useInputBuildingContext} from "@/contexts/useInputBuildingContext.ts";
 import {frequencies} from "../../CONSTANTS.ts";
 import {
     CalculateAcrossPsdResponse, CalculateFD,
-    CalculateTorsionPsdResponse,
+    CalculateTorsionPsdResponse, CalculateAlong,
 } from "@/hooks/useCalculateBuildingResponse.ts";
 import {calculate_experimental_psd_normalized} from "@/hooks/digital_processor.ts";
 
@@ -23,6 +23,7 @@ interface OutputBuildingContextInterface {
     acrossPsds: number[];
     ar: number | null;
     vr: number | null;
+    accelartionYDirection: number | null;
     experimentalTorsionPsds: number[];
     experimentalAcrossPsds: number[];
     experimentalAr: number | null;
@@ -31,6 +32,7 @@ interface OutputBuildingContextInterface {
     setAcrossPsds: (val: number[])=>void;
     setAr: (val: number)=> void;
     setVr: (val: number)=> void;
+    setAccelartionYDirection: (val: number)=> void;
     setExperimentalTorsionPsds: (val: number[])=> void;
     setExperimentalAcrossPsds: (val: number[])=> void;
     setExperimentalAr: (val: number)=> void;
@@ -55,12 +57,13 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
     const [experimentalAcrossPsds, setExperimentalAcrossPsds] = useState<number[]>([]);
     const [experimentalAr, setExperimentalAr] = useState<number | null>(null)
     const [experimentalVr, setExperimentalVr] = useState<number | null>(null)
+    const [accelartionYDirection, setAccelartionYDirection] = useState<number | null>(null)
     const handleAnalyticalCalculation = useCallback(()=>{
 
         const c = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
         let across_psds: number[] = CalculateAcrossPsdResponse(Math.max(width,depth),height,Math.min(width,depth),frequencies)
         let torsion_psds: number[] = CalculateTorsionPsdResponse(Math.max(width,depth),height,Math.min(width,depth),meanSpeed*c**0.5,frequencies)
-
+        setAccelartionYDirection(CalculateAlong(Math.max(width, depth), height, Math.min(width,depth), meanSpeed*c**0.5,Tone,damping,frequencies,buildingDensity))
         const [x,y]:number[] = CalculateFD(Math.max(width,depth), height, Math.min(width,depth), meanSpeed*c**0.5,Tone, totalFloors, damping, frequencies, across_psds, torsion_psds, buildingDensity)
         setVr(x)
         setAr(y)
@@ -124,6 +127,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         <OutputBuildingContext.Provider value={{
             torsionPsds, acrossPsds, ar,vr, setTorsionPsds, setAcrossPsds, setAr, setVr,
             experimentalTorsionPsds,experimentalAcrossPsds,experimentalAr,experimentalVr,
+            accelartionYDirection, setAccelartionYDirection,
             setExperimentalTorsionPsds,setExperimentalAcrossPsds,setExperimentalAr,setExperimentalVr, handleAnalyticalCalculation,handleExperimentalCalculation
         }}>
             {children}
