@@ -8,7 +8,7 @@ import {useOutputBuildingContext} from "@/contexts/useOutputBuildingContext.ts";
 
 function App() {
     const {csvData} = useInputBuildingContext()
-    const {torsionPsds, experimentalTorsionPsds, acrossPsds, experimentalAcrossPsds} = useOutputBuildingContext()
+    const {torsionPsds, experimentalTorsionPsds, acrossPsds, experimentalAcrossPsds, experimentalAlongPsds} = useOutputBuildingContext()
 
     return (
 
@@ -27,10 +27,13 @@ function App() {
           </div>
           <div className="max-w-5/6 grid lg:grid-cols-2 gap-3 mx-auto">
               <div className="w-full bg-white rounded-md border-transparent">
-                  <PSDGraph psds={acrossPsds} experimentalPsds={experimentalAcrossPsds} graphType="Across" />
+                  <PSDGraph psds={acrossPsds} experimentalPsds={experimentalAcrossPsds} graphType="Across"/>
               </div>
               <div className="w-full bg-white rounded-md border-transparent">
-                  <PSDGraph psds={torsionPsds} experimentalPsds={experimentalTorsionPsds} graphType="Torsion" />
+                  <PSDGraph psds={torsionPsds} experimentalPsds={experimentalTorsionPsds} graphType="Torsion"/>
+              </div>
+              <div className="w-full bg-white rounded-md border-transparent">
+                  <PSDGraph  psds={[]} experimentalPsds={experimentalAlongPsds} graphType="Along"/>
               </div>
           </div>
           <div className="max-w-5/6 grid lg:grid-cols-2 gap-6 mt-3 mb-10 mx-auto">
@@ -39,7 +42,7 @@ function App() {
 
       </div>
 
-  )
+    )
 }
 
 export default App

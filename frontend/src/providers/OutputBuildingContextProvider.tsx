@@ -26,6 +26,7 @@ interface OutputBuildingContextInterface {
     accelartionYDirection: number | null;
     experimentalTorsionPsds: number[];
     experimentalAcrossPsds: number[];
+    experimentalAlongPsds: number[];
     experimentalAr: number | null;
     experimentalVr: number | null;
     experimentalAccelartionYDirection: number | null;
@@ -37,6 +38,7 @@ interface OutputBuildingContextInterface {
     setExperimentalAccelartionYDirection: (val: number)=> void;
     setExperimentalTorsionPsds: (val: number[])=> void;
     setExperimentalAcrossPsds: (val: number[])=> void;
+    setExperimentalAlongPsds: (val: number[])=> void;
     setExperimentalAr: (val: number)=> void;
     setExperimentalVr: (val: number)=> void;
     handleAnalyticalCalculation : () => void;
@@ -61,6 +63,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
     const [experimentalVr, setExperimentalVr] = useState<number | null>(null)
     const [accelartionYDirection, setAccelartionYDirection] = useState<number | null>(null)
     const [experimentalAccelartionYDirection, setExperimentalAccelartionYDirection] = useState<number | null>(null)
+    const [experimentalAlongPsds, setExperimentalAlongPsds] = useState<number[]>([])
     const handleAnalyticalCalculation = useCallback(()=>{
 
         const c = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
@@ -77,8 +80,10 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
     const handleExperimentalCalculation = useCallback(async ()=>{
         const Mx : number[] = [];
         const Mz : number[] = [];
+        const My: number[] = [];
         csvData.map(val => {
             Mx.push(val.MX)
+            My.push(val.MY)
             Mz.push(val.MZ)
         })
 
@@ -100,6 +105,8 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
             console.log("Normalized Frequency is ", normalizedFrequency)
             // const  : number[] = calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency)
             setExperimentalTorsionPsds(psd)
+            const along_psds : number[] = calculate_experimental_psd_normalized(My,width,height,experimentalMeanSpeed,experimentalFrequency).psd
+            setExperimentalAlongPsds(along_psds)
             // console.log("Normalized ",normalizedFrequency)
             setNormalizedExperimentalFrequencies(normalizedFrequency)
             console.log("new",calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency))
@@ -131,6 +138,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
             torsionPsds, acrossPsds, ar,vr, setTorsionPsds, setAcrossPsds, setAr, setVr,
             experimentalTorsionPsds,experimentalAcrossPsds,experimentalAr,experimentalVr,
             accelartionYDirection, setAccelartionYDirection,
+            experimentalAlongPsds, setExperimentalAlongPsds,
             experimentalAccelartionYDirection, setExperimentalAccelartionYDirection,
             setExperimentalTorsionPsds,setExperimentalAcrossPsds,setExperimentalAr,setExperimentalVr, handleAnalyticalCalculation,handleExperimentalCalculation
         }}>
