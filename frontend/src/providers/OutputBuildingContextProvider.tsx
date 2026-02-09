@@ -111,6 +111,10 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
             setNormalizedExperimentalFrequencies(normalizedFrequency)
             console.log("new",calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency))
             // setCSVData(csvData)
+            const [x,y]:number[] = CalculateFD(width, height, depth, meanSpeed,Tone, totalFloors, damping, frequencies, experi_across_psds, psd, buildingDensity)
+            //
+            setExperimentalVr(x)
+            setExperimentalAr(y)
         }
 
         // const experi_across_psds : number[] = calculate_experimental_psd_normalized(Mx,width,height,experimentalMeanSpeed,experimentalFrequency).psd
@@ -124,7 +128,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         // console.log("new",calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency))
         // // setCSVData(csvData)
         //
-        // // const [x,y]:number[] = CalculateFD(width, height, depth, meanSpeed,Tone, totalFloors, damping, frequencies, experi_across_psds, psd)
+        // const [x,y]:number[] = CalculateFD(width, height, depth, meanSpeed,Tone, totalFloors, damping, frequencies, experi_across_psds, psd)
         //
         // setExperimentalVr(x)
         // setExperimentalAr(y)
