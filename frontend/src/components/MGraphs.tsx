@@ -64,7 +64,7 @@ export default function MGraphs({graph_data}:{graph_data: IGraph}) {
                     )}
 
                 />
-                <Line type="basis" dataKey="val" dot={false}  stroke={(graph_data.Mtype=="MX")?"#ff4d4f":((graph_data.Mtype=="MY")?"#73d13d":"#ffd666")}  />
+                <Line type="basis" dataKey="val" dot={false} strokeWidth={0.7}  stroke={(graph_data.Mtype=="MX")?"#ff4d4f":((graph_data.Mtype=="MY")?"#73d13d":"#ffd666")}  />
 
 
             </LineChart>
