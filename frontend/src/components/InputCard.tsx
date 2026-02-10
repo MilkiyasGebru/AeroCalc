@@ -24,6 +24,7 @@ interface IMeanSpeedData {
 import {FileUploadDialog} from "@/components/FileUploadDialog.tsx";
 import {useInputBuildingContext} from "@/contexts/useInputBuildingContext.ts";
 import {useOutputBuildingContext} from "@/contexts/useOutputBuildingContext.ts";
+import {TooltipContent, Tooltip, TooltipTrigger, TooltipProvider} from "@radix-ui/react-tooltip";
 
 
 const parseFile = (file: File): Promise<any[]> => {
@@ -280,33 +281,35 @@ export default function InputCard(){
                 </>}
                 {step == 2 && <>
                     <CardHeader>
-                        <CardTitle className="flex gap-2 items-center text-xl">
+                        <CardTitle className="flex gap-2 items-center justify-center text-xl">
                             <Calculator className="w-5 h-5 text-blue-300"/>
-                            Wind Parameters
+                            User Input 3
                         </CardTitle>
                         <CardDescription>
-                            Enter the wind properites
+                            Load Wind Climate
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="grid grid-cols sm:grid-cols-2 gap-2">
+                        <div className="grid grid-cols gap-2">
 
 
-                            <div className="space-y-2">
-                                <Label htmlFor="mean_velocity">Mean Speed at 10meters at 10 years (m/s)</Label>
+                            <div className="space-y-2 flex items-center justify-center mx-auto w-full">
+                                <Label htmlFor="mean_velocity" className="w-1/2">Mean Speed at 10meters at 10 years
+                                    (m/s)</Label>
                                 <Input
                                     id="mean_velocity"
                                     type="number"
                                     value={meanSpeed}
                                     onChange={(e) => setMeanSpeed(parseFloat(e.target.value))}
-                                    className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
+                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
                                 />
                             </div>
-                            <div>
-                                <Label htmlFor="terrain">Terrain Type</Label>
+                            <div className="space-y-2 flex items-center justify-center mx-auto w-full">
+                                <Label htmlFor="terrain" className="w-1/2">Terrain Type:</Label>
                                 <Select value={terrain} onValueChange={setTerrain}>
-                                    <SelectTrigger id="terrain" className="w-full max-w-48 border-transparent bg-[hsl(210,20%,98%)]">
-                                        <SelectValue placeholder="Open" />
+                                    <SelectTrigger id="terrain"
+                                                   className="w-full max-w-48 border-transparent bg-[hsl(210,20%,98%)]">
+                                        <SelectValue placeholder="Open"/>
                                     </SelectTrigger>
                                     <SelectContent className="bg-[hsl(210,20%,98%)]">
                                         <SelectGroup>
@@ -320,8 +323,40 @@ export default function InputCard(){
                             </div>
 
                         </div>
-                        <MeanSpeedGraph graph_data={graphData} current_point={{height: height, speed: meanSpeed * coefficient ** 0.5}}/>
+                        <div className="grid grid-cols-4">
+                            <div className="flex items-center justify-center gap-2">
+                                Wind Speed
+                                <TooltipProvider>
+                                <Tooltip key="bottom">
+                                    <TooltipTrigger asChild>
+                                        <div className="flex gap-1">
+                                            <p className="font-semibold text-blue-300 w-full hover:cursor-pointer">i:</p>
+                                        </div>
 
+                                    </TooltipTrigger>
+                                    < TooltipContent side="bottom">
+                                        <div className="border rounded max-w-[200px] bg-white opacity-100 px-2 py-2">
+                                            “The wind profile is developed based on the dynamic wind load calculation procedure in NBC 2025”
+                                        </div>
+                                    </TooltipContent>
+                                </Tooltip>
+                                </TooltipProvider>
+
+                            </div>
+                            <MeanSpeedGraph graph_data={graphData}
+                                            current_point={{height: height, speed: meanSpeed * coefficient ** 0.5}}/>
+                        </div>
+                        <div className="space-y-2 flex items-center justify-center mx-auto w-full">
+                            <Label htmlFor="mean_velocity" className="w-1/2">Mean Speed at roof meters at 10 years
+                                (m/s)</Label>
+                            <Input
+                                id="mean_velocity"
+                                type="number"
+                                value={meanSpeed}
+                                onChange={(e) => setMeanSpeed(parseFloat(e.target.value))}
+                                className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                            />
+                        </div>
 
                         <div className="flex gap-2">
                             <Button
@@ -357,7 +392,7 @@ export default function InputCard(){
 
 
                             <div className="space-y-2 ">
-                                <Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">
+                            <Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">
                                     <Checkbox id="analytical-checkbox" name="terms-checkbox" checked={analyticalSelected} onCheckedChange={(checked)=>setAnalyticalSelected(checked==true)} />
 
                                     <FieldContent>
