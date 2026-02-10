@@ -1,4 +1,4 @@
-import {CartesianGrid, Legend, Line, LineChart, ReferenceDot, Tooltip, XAxis, YAxis} from "recharts";
+import { Line, LineChart, ReferenceDot, Tooltip, XAxis, YAxis} from "recharts";
 
 interface IMeanSpeedGraph {
     speed: number;
@@ -11,7 +11,7 @@ interface IMeanSpeedGraph {
 export default function MeanSpeedGraph({graph_data, current_point}: {graph_data: IMeanSpeedGraph[], current_point: IMeanSpeedGraph }) {
 
     return (
-        <div>
+        <div className="col-span-3">
             <LineChart
                 style={{ width: '90%', maxWidth: '1400px', height: '100%', maxHeight: '70vh', aspectRatio: 1.618 }}
                 responsive
@@ -24,14 +24,13 @@ export default function MeanSpeedGraph({graph_data, current_point}: {graph_data:
                 }}
             >
 
-                <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="speed"   type="number" domain={['auto', 'auto']} // Or ['dataMin', 'dataMax']
                        allowDataOverflow={true}
-                       label={{ value: 'speed', position: 'insideBottom', offset: 0 }}
+                       label={{ value: 'Wind Speed (m/s)', position: 'insideBottom', offset: -3 }}
                 />
                 <YAxis width="auto"  type="number" domain={['auto', 'auto']}
                        label={{
-                           value: 'height',
+                           value: 'Height (m)',
                            angle: -90,
                            position: 'insideLeft',
                            style: { textAnchor: 'middle' },
@@ -52,7 +51,7 @@ export default function MeanSpeedGraph({graph_data, current_point}: {graph_data:
                         </span>
                         )}
                             />
-                <Legend />
+                {/*<Legend />*/}
                 <Line type="basis" dataKey="height" dot={false} stroke="#8884d8"/>
                 <ReferenceDot
                     x={current_point.speed}
