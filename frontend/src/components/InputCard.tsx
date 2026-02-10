@@ -57,15 +57,12 @@ export default function InputCard(){
     const [terrain, setTerrain] = useState<string>("open")
     const [analyticalSelected, setAnalyticalSelected] = useState<boolean>(false)
     const [experimentalSelected, setExperimentalSelected] = useState<boolean>(false)
-    const [showFileUpload, setShowFileUpload] = useState(false);
-    const [uploadedFile, setUploadedFile] = useState<File | null>(null);
     const [experimentSource, setExperimentSource] = useState<string>("");
     const handleExperimentSelection = (value : string)=>{
         if (value == "database"){
             setExperimentSource(value)
         }
         else {
-            setShowFileUpload(true);
             setExperimentSource(value)
         }
     }
@@ -74,23 +71,14 @@ export default function InputCard(){
             handleAnalyticalCalculation()
         }
 
-        if (uploadedFile && experimentalSelected){
-            // const parsedData = await parseFile(uploadedFile)
+        if (  experimentalSelected){
             handleExperimentalCalculation()
-
-
         }
 
     }
 
     const [graphData, setGraphData] = useState<IMeanSpeedData[]>([])
 
-    const handleFileSelect = async (file: File) => {
-        setUploadedFile(file);
-        const parsedData = await parseFile(file)
-        setCSVData(parsedData)
-
-    };
     const coefficient = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
 
     useEffect(() => {
@@ -118,6 +106,17 @@ export default function InputCard(){
     const handlePrev = ()=>{
         setStep(s => s - 1)
     }
+
+    // State for visibility of each dialog
+    const [showFile1, setShowFile1] = useState(false);
+    const [showFile2, setShowFile2] = useState(false);
+    const [showFile3, setShowFile3] = useState(false);
+
+// State for the actual files
+    const [file1, setFile1] = useState<File | null>(null);
+    const [file2, setFile2] = useState<File | null>(null);
+    const [file3, setFile3] = useState<File | null>(null);
+
     return (
         <div>
             <Card className="  bg-white border-transparent mb-4 max-h-fit  ">
@@ -426,13 +425,39 @@ export default function InputCard(){
                                         <div className="flex items-center gap-3">
                                             <RadioGroupItem value="file_upload" id="r2" />
                                             <Label htmlFor="r2">Upload Data</Label>
-                                            {uploadedFile && (
-                                                <span className="text-xs text-primary font-medium">
-                                                    {uploadedFile.name}
-                                                </span>
-                                            )}
                                         </div>
-                                        {experimentSource=="file_upload" && <div className="grid grid-cols sm:grid-cols-2 gap-2">
+                                        {experimentSource=="file_upload" && <div className="grid grid-cols  gap-2">
+                                            {experimentSource === "file_upload" && (
+                                                <div className="space-y-4 border-t pt-4">
+                                                    <Label className="text-sm font-semibold">Required Data Files</Label>
+
+                                                    <div className="grid grid-cols-1  gap-4">
+                                                        {/* File 1 */}
+                                                        <div className="flex items-center gap-2">
+                                                            <Button variant="outline" onClick={() => setShowFile1(true)} className="w-full">
+                                                                {file1 ? "Change across wind time history" : "Upload across wind time history"}
+                                                            </Button>
+                                                            {file1 && <span className="text-[10px]  text-blue-500">{file1.name}</span>}
+                                                        </div>
+
+                                                        {/* File 2 */}
+                                                        <div className="flex items-center gap-2">
+                                                            <Button variant="outline" onClick={() => setShowFile2(true)} className="w-full">
+                                                                {file2 ? "Change along wind time history" : "Upload along wind time history"}
+                                                            </Button>
+                                                            {file2 && <span className="text-[10px]  text-blue-500">{file2.name}</span>}
+                                                        </div>
+
+                                                        {/* File 3 */}
+                                                        <div className="flex items-center gap-2">
+                                                            <Button variant="outline" onClick={() => setShowFile3(true)} className="w-full">
+                                                                {file3 ? "Change Torsion Wind Time History" : "Upload torsion wind time history"}
+                                                            </Button>
+                                                            {file3 && <span className="text-[10px]  text-blue-500">{file3.name}</span>}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
                                             <div className="space-y-2">
                                                 <Label htmlFor="experimentalMeanSpeed">U_H_expt (m/s)</Label>
                                                 <Input
@@ -476,7 +501,7 @@ export default function InputCard(){
                             <Button
                                 className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
                                 onClick={handleSubmit}
-                                disabled={!(analyticalSelected || (experimentalSelected && (uploadedFile !== null)))}
+                                // disabled={!(analyticalSelected || (experimentalSelected && (uploadedFile !== null)))}
                             >
                                 Submit
                             </Button>
@@ -488,10 +513,30 @@ export default function InputCard(){
 
 
                 <FileUploadDialog
-                    open={showFileUpload}
-                    onOpenChange={setShowFileUpload}
-                    onFileSelect={handleFileSelect}
+                    open={showFile1}
+                    onOpenChange={setShowFile1}
+                    onFileSelect={async (file) => { setFile1(file); setShowFile1(false);
+                        const parsedData = await parseFile(file);
+                        setCSVData(parsedData);
+                    }}
                 />
+                <FileUploadDialog
+                    open={showFile2}
+                    onOpenChange={setShowFile2}
+                    onFileSelect={async (file) => { setFile2(file); setShowFile2(false);
+                        const parsedData = await parseFile(file);
+                        setCSVData(parsedData);
+                    }}
+                />
+                <FileUploadDialog
+                    open={showFile3}
+                    onOpenChange={setShowFile3}
+                    onFileSelect={async (file) => { setFile3(file); setShowFile3(false);
+                        const parsedData = await parseFile(file);
+                        setCSVData(parsedData);
+                    }}
+                />
+
             </Card>
             <div className="flex items-center justify-between">
                 <Button
@@ -503,7 +548,7 @@ export default function InputCard(){
                 <Button
                     className="w-fit px-3 py-2 text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
                     onClick={handleSubmit}
-                    disabled={!(analyticalSelected || (experimentalSelected && (uploadedFile !== null)))}
+                    disabled={!(analyticalSelected || (experimentalSelected && (file1 !== null) && (file2 !== null) && (file3 !== null)))}
                 >
                     Submit
                 </Button>
