@@ -50,7 +50,7 @@ export const OutputBuildingContext = createContext<OutputBuildingContextInterfac
 
 export const OutputBuildingContextProvider = ({children}: {children: React.ReactNode})=>{
 
-    const {width,height,depth,meanSpeed,damping,totalFloors,terrain,Tone,experimentalMeanSpeed, experimentalFrequency, csvData, setNormalizedExperimentalFrequencies, buildingDensity} = useInputBuildingContext();
+    const {width,height,depth,meanSpeed,damping,totalFloors,terrain,Tone,experimentalMeanSpeed, experimentalFrequency, setNormalizedExperimentalFrequencies, buildingDensity, mxData,mzData,myData} = useInputBuildingContext();
 
     const [torsionPsds, setTorsionPsds] = useState<number[]>([]);
     const [acrossPsds, setAcrossPsds] = useState<number[]>([]);
@@ -78,14 +78,10 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
     }, [width, depth, height, meanSpeed, totalFloors, damping])
 
     const handleExperimentalCalculation = useCallback(async ()=>{
-        const Mx : number[] = [];
-        const Mz : number[] = [];
-        const My: number[] = [];
-        csvData.map(val => {
-            Mx.push(val.MX)
-            My.push(val.MY)
-            Mz.push(val.MZ)
-        })
+        const Mx : number[] = mxData;
+        const My : number[] = myData;
+        const Mz: number[] = mzData;
+
 
         if (window.pywebview?.api?.compute) {
             // DESKTOP MODE: Call Python
@@ -135,7 +131,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
 
 
 
-    },[width,height,experimentalMeanSpeed,experimentalFrequency,csvData])
+    },[width,height,experimentalMeanSpeed,experimentalFrequency,mxData,myData,mzData])
 
     return (
         <OutputBuildingContext.Provider value={{

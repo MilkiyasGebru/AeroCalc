@@ -30,7 +30,7 @@ import {TooltipContent, Tooltip, TooltipTrigger, TooltipProvider} from "@radix-u
 const parseFile = (file: File): Promise<any[]> => {
     return new Promise((resolve, reject) => {
         Papa.parse(file, {
-            header: true,
+            // header: true,
             dynamicTyping: true,
             complete: (results:any) => resolve(results.data),
             error: (error:any) => reject(error),
@@ -46,10 +46,10 @@ export default function InputCard(){
     // Part-1
     const {width, height,depth,totalFloors, setWidth, setHeight, setDepth,setTotalFloors } = useInputBuildingContext()
     // Part - 2
-    const {buildingDensity, meanSpeed, Tone, damping, setBuildingDensity, setMeanSpeed, setTone, setDamping, setCSVData} = useInputBuildingContext()
+    const {buildingDensity, meanSpeed, Tone, damping, setBuildingDensity, setMeanSpeed, setTone, setDamping} = useInputBuildingContext()
 
     // Part -3
-    const {experimentalFrequency, experimentalMeanSpeed, setExperimentalMeanSpeed, setExperimentalFrequency} = useInputBuildingContext()
+    const {experimentalFrequency, experimentalMeanSpeed, setExperimentalMeanSpeed, setExperimentalFrequency, setMxData, setMyData, setMzData} = useInputBuildingContext()
     // Handling Submit
     const {handleAnalyticalCalculation,handleExperimentalCalculation, } = useOutputBuildingContext()
 
@@ -517,7 +517,9 @@ export default function InputCard(){
                     onOpenChange={setShowFile1}
                     onFileSelect={async (file) => { setFile1(file); setShowFile1(false);
                         const parsedData = await parseFile(file);
-                        setCSVData(parsedData);
+                        console.log("parsed data is",parsedData)
+                        setMxData(parsedData.map(x => x[0]));
+                        console.log("parsed data is ", parsedData.map(x => x[0]));
                     }}
                 />
                 <FileUploadDialog
@@ -525,16 +527,15 @@ export default function InputCard(){
                     onOpenChange={setShowFile2}
                     onFileSelect={async (file) => { setFile2(file); setShowFile2(false);
                         const parsedData = await parseFile(file);
-                        setCSVData(parsedData);
-                    }}
+                        setMyData(parsedData.map(x => x[0]));                    }}
                 />
                 <FileUploadDialog
                     open={showFile3}
                     onOpenChange={setShowFile3}
                     onFileSelect={async (file) => { setFile3(file); setShowFile3(false);
                         const parsedData = await parseFile(file);
-                        setCSVData(parsedData);
-                    }}
+                        console.log("parsed data is",parsedData)
+                        setMzData(parsedData.map(x => x[0]));                    }}
                 />
 
             </Card>
