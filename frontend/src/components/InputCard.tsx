@@ -118,324 +118,362 @@ export default function InputCard(){
         setStep(s => s - 1)
     }
     return (
-        <Card className="  bg-white border-transparent mb-4 max-h-fit">
-            {step == 0 && <>
-                <CardHeader>
-                    <CardTitle className="flex gap-2 items-center text-xl">
-                        <Calculator className="w-5 h-5 text-blue-300"/>
-                        Geometry Input Parameters
-                    </CardTitle>
-                    <CardDescription>
-                        Enter building geometery dimensions
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <div className="grid grid-cols sm:grid-cols-2 gap-2">
-                        <div className="space-y-2">
-                            <Label htmlFor="width">Width (m)</Label>
-                            <Input
-                                id="width"
-                                type="number"
-                                value={width}
-                                onChange={(e) => setWidth(parseFloat(e.target.value))}
-                                className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="height">Height (m)</Label>
-                            <Input
-                                id="height"
-                                type="number"
-                                value={height}
-                                onChange={(e) => setHeight(parseFloat(e.target.value))}
-                                className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="depth">Depth (m)</Label>
-                            <Input
-                                id="depth"
-                                type="number"
-                                value={depth}
-                                onChange={(e) => setDepth(parseFloat(e.target.value))}
-                                className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="NFloors">Number of Floors</Label>
-                            <Input
-                                id="NFloors"
-                                type="number"
-                                value={totalFloors}
-                                onChange={(e) => setTotalFloors(parseFloat(e.target.value))}
-                                className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
-                            />
-                        </div>
-
-                    </div>
-
-                    <div className="flex gap-2">
-                        <Button
-                            className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
-                            onClick={handlePrev}
-                            disabled={true}
-                        >
-                            Prev
-                        </Button>
-                        <Button
-                            className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
-                            onClick={handleNext}
-                        >
-                            Next
-                        </Button>
-
-                    </div>
-                    <RectangleWithArrow width={width} height={depth} />
-                </CardContent>
-            </>}
-            {step == 1 && <>
-                <CardHeader>
-                    <CardTitle className="flex gap-2 items-center text-xl">
-                        <Calculator className="w-5 h-5 text-blue-300"/>
-                        Dynamic Property Input Parameters
-                    </CardTitle>
-                    <CardDescription>
-                    Enter the dynamic properites
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <div className="grid grid-cols sm:grid-cols-2 gap-2">
-
-                        <div className="space-y-2">
-                            <Label htmlFor="density">Building Density (Kg/m<sup>3</sup>)</Label>
-                            <Input
-                                id="density"
-                                type="number"
-                                value={buildingDensity}
-                                onChange={(e) => setBuildingDensity(parseFloat(e.target.value))}
-                                className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
-                            />
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="damping">Damping</Label>
-                            <Input
-                                id="damping"
-                                type="number"
-                                value={damping}
-                                onChange={(e) => setDamping(parseFloat(e.target.value))}
-                                className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="Fundamental Period">Fundamental Period (sec)</Label>
-                            <Input
-                                id="Tone"
-                                type="number"
-                                value={Tone}
-                                onChange={(e) => setTone(parseFloat(e.target.value))}
-                                className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
-                            />
-                        </div>
-
-                    </div>
-                    <div className="flex gap-2">
-                        <Button
-                            className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
-                            onClick={handlePrev}
-                        >
-                            Prev
-                        </Button>
-                        <Button
-                            className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
-                            onClick={handleNext}
-                        >
-                            Next
-                        </Button>
-
-                    </div>
-
-                </CardContent>
-            </>}
-            {step == 2 && <>
-                <CardHeader>
-                    <CardTitle className="flex gap-2 items-center text-xl">
-                        <Calculator className="w-5 h-5 text-blue-300"/>
-                        Wind Parameters
-                    </CardTitle>
-                    <CardDescription>
-                        Enter the wind properites
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <div className="grid grid-cols sm:grid-cols-2 gap-2">
-
-
-                        <div className="space-y-2">
-                            <Label htmlFor="mean_velocity">Mean Speed at 10meters at 10 years (m/s)</Label>
-                            <Input
-                                id="mean_velocity"
-                                type="number"
-                                value={meanSpeed}
-                                onChange={(e) => setMeanSpeed(parseFloat(e.target.value))}
-                                className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
-                            />
-                        </div>
-                        <div>
-                            <Label htmlFor="terrain">Terrain Type</Label>
-                            <Select value={terrain} onValueChange={setTerrain}>
-                                <SelectTrigger id="terrain" className="w-full max-w-48 border-transparent bg-[hsl(210,20%,98%)]">
-                                    <SelectValue placeholder="Open" />
-                                </SelectTrigger>
-                                <SelectContent className="bg-[hsl(210,20%,98%)]">
-                                    <SelectGroup>
-                                        <SelectLabel>Terrain</SelectLabel>
-                                        <SelectItem value="open" className="hover:bg-white">open</SelectItem>
-                                        <SelectItem value="rough" className="hover:bg-white">rough</SelectItem>
-
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                    </div>
-                    <MeanSpeedGraph graph_data={graphData} current_point={{height: height, speed: meanSpeed * coefficient ** 0.5}}/>
-
-
-                    <div className="flex gap-2">
-                        <Button
-                            className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
-                            onClick={handlePrev}
-                        >
-                            Prev
-                        </Button>
-                        <Button
-                            className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
-                            onClick={handleNext}
-                        >
-                            Next
-                        </Button>
-
-                    </div>
-
-                </CardContent>
-            </>}
-            {step == 3 && <>
-                <CardHeader>
-                    <CardTitle className="flex gap-2 items-center text-xl">
-                        <Calculator className="w-5 h-5 text-blue-300"/>
-                        Aerodynamic
-                    </CardTitle>
-                    <CardDescription>
-                        Choose how you want to perform the calculation
-                    </CardDescription>
-
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <div className="grid grid-cols gap-2">
-
-
-                        <div className="space-y-2 ">
-                            <Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">
-                                <Checkbox id="analytical-checkbox" name="terms-checkbox" checked={analyticalSelected} onCheckedChange={(checked)=>setAnalyticalSelected(checked==true)} />
-
-                                <FieldContent>
-                                    <Label htmlFor="analytical-checkbox">Analytical Calculation</Label>
-                                    <FieldDescription>
-                                        Use percise mathematical formulas
-                                    </FieldDescription>
-                                </FieldContent>
-                            </Field>
-                            <Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">
-                                <Checkbox id="experimental-checkbox" name="terms-checkbox" checked={experimentalSelected} onCheckedChange={(checked)=>setExperimentalSelected(checked===true)} />
-
-                                <FieldContent>
-                                    <Label htmlFor="experimental-checkbox">Experimental Calculation</Label>
-                                    <FieldDescription>
-                                        Use available experimental data from our database or file upload
-                                    </FieldDescription>
-                                </FieldContent>
-                            </Field>
-                        </div>
-
-
-                        { experimentalSelected &&
-                            <div className="space-y-2">
-                                <h2>Data Source</h2>
-                                <RadioGroup value={experimentSource} onValueChange={(value)=>handleExperimentSelection(value)} className="w-fit">
-                                    <div className="flex items-center gap-3">
-                                        <RadioGroupItem value="database" id="r1" disabled={true} />
-                                        <Label htmlFor="r1">Database</Label>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <RadioGroupItem value="file_upload" id="r2" />
-                                        <Label htmlFor="r2">Upload Data</Label>
-                                        {uploadedFile && (
-                                            <span className="text-xs text-primary font-medium">
-                                                {uploadedFile.name}
-                                            </span>
-                                        )}
-                                    </div>
-                                    {experimentSource=="file_upload" && <div className="grid grid-cols sm:grid-cols-2 gap-2">
-                                        <div className="space-y-2">
-                                            <Label htmlFor="experimentalMeanSpeed">U_H_expt (m/s)</Label>
-                                            <Input
-                                                id="experimentalMeanSpeed"
-                                                type="number"
-                                                value={experimentalMeanSpeed}
-                                                onChange={(e) => setExperimentalMeanSpeed(parseFloat(e.target.value))}
-                                                className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <Label htmlFor="experimentalFrequency">f_expt</Label>
-                                            <Input
-                                                id="experimentalFrequency"
-                                                type="number"
-                                                value={experimentalFrequency}
-                                                onChange={(e) => setExperimentalFrequency(parseFloat(e.target.value))}
-                                                className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
-                                            />
-                                        </div>
-
-
-                                    </div>}
-
-                                </RadioGroup>
-
+        <div>
+            <Card className="  bg-white border-transparent mb-4 max-h-fit  ">
+                {step == 0 && <>
+                    <CardHeader>
+                        <CardTitle className="flex gap-2 items-center justify-center text-xl ">
+                            <Calculator className="w-5 h-5 text-blue-300"/>
+                            User Input 1
+                        </CardTitle>
+                        <CardDescription className="text-center">
+                            Building Geometry
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="grid gap-2 space-y-3 p-4">
+                            <div className="flex items-center justify-center mx-auto w-full">
+                                <Label htmlFor="width" className="w-1/5">Width (m):</Label>
+                                <Input
+                                    id="width"
+                                    type="number"
+                                    value={width}
+                                    onChange={(e) => setWidth(parseFloat(e.target.value))}
+                                    className=" font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0 w-5/6 md:w-1/3"
+                                />
                             </div>
-                        }
+                            <div className="flex items-center justify-center mx-auto w-full">
+                                <Label htmlFor="height" className="w-1/5">Height (m):</Label>
+                                <Input
+                                    id="height"
+                                    type="number"
+                                    value={height}
+                                    onChange={(e) => setHeight(parseFloat(e.target.value))}
+                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                />
+                            </div>
+                            <div className=" flex items-center justify-center mx-auto w-full">
+                                <Label htmlFor="depth" className="w-1/5">Depth (m):</Label>
+                                <Input
+                                    id="depth"
+                                    type="number"
+                                    value={depth}
+                                    onChange={(e) => setDepth(parseFloat(e.target.value))}
+                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0 w-5/6 md:w-1/3"
+                                />
+                            </div>
+                            <div className="space-y-2 flex items-center justify-center mx-auto w-full">
+                                <Label htmlFor="NFloors" className="w-1/5">Number of Floors:</Label>
+                                <Input
+                                    id="NFloors"
+                                    type="number"
+                                    value={totalFloors}
+                                    onChange={(e) => setTotalFloors(parseFloat(e.target.value))}
+                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                />
+                            </div>
+
+                        </div>
+
+                        <div className="flex gap-2">
+                            <Button
+                                className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
+                                onClick={handlePrev}
+                                disabled={true}
+                            >
+                                Prev
+                            </Button>
+                            <Button
+                                className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
+                                onClick={handleNext}
+                            >
+                                Next
+                            </Button>
+
+                        </div>
+                        <RectangleWithArrow width={width} height={depth} />
+                    </CardContent>
+                </>}
+                {step == 1 && <>
+                    <CardHeader>
+                        <CardTitle className="flex gap-2 items-center justify-center text-xl">
+                            <Calculator className="w-5 h-5 text-blue-300"/>
+                            User Input 2
+                        </CardTitle>
+                        <CardDescription className="text-center">
+                        Dynamic Property
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="grid gap-2">
+
+                            <div className="space-y-2 flex items-center justify-center mx-auto w-full">
+                                <Label htmlFor="density" className="w-1/2">Building Density (Kg/m<sup>3</sup>):</Label>
+                                <Input
+                                    id="density"
+                                    type="number"
+                                    value={buildingDensity}
+                                    onChange={(e) => setBuildingDensity(parseFloat(e.target.value))}
+                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3 text-center"
+                                />
+                            </div>
+
+                            <div className=" flex items-center justify-center mx-auto w-full">
+                                <Label htmlFor="damping" className="w-1/2">Damping:</Label>
+                                <Input
+                                    id="damping"
+                                    type="number"
+                                    value={damping}
+                                    onChange={(e) => setDamping(parseFloat(e.target.value))}
+                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                />
+                            </div>
+                            <div className="space-y-2 flex items-center justify-center mx-auto w-full">
+                                <Label htmlFor="Fundamental Period" className="w-1/2">Fundamental Period in along-wind direction (sec)</Label>
+                                <Input
+                                    id="Tone"
+                                    type="number"
+                                    value={Tone}
+                                    onChange={(e) => setTone(parseFloat(e.target.value))}
+                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                />
+                            </div>
+                            <div className="space-y-2 flex items-center justify-center mx-auto w-full">
+                                <Label htmlFor="Fundamental Period" className="w-1/2">Fundamental Period in across-wind direction (sec)</Label>
+                                <Input
+                                    id="Tone"
+                                    type="number"
+                                    value={Tone}
+                                    onChange={(e) => setTone(parseFloat(e.target.value))}
+                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                />
+                            </div>
+                            <div className="space-y-2 flex items-center justify-center mx-auto w-full">
+                                <Label htmlFor="Fundamental Period" className="w-1/2">Fundamental Period in torsion (sec)</Label>
+                                <Input
+                                    id="Tone"
+                                    type="number"
+                                    value={Tone}
+                                    onChange={(e) => setTone(parseFloat(e.target.value))}
+                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                />
+                            </div>
+
+                        </div>
+                        <div className="flex gap-2">
+                            <Button
+                                className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
+                                onClick={handlePrev}
+                            >
+                                Prev
+                            </Button>
+                            <Button
+                                className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
+                                onClick={handleNext}
+                            >
+                                Next
+                            </Button>
+
+                        </div>
+
+                    </CardContent>
+                </>}
+                {step == 2 && <>
+                    <CardHeader>
+                        <CardTitle className="flex gap-2 items-center text-xl">
+                            <Calculator className="w-5 h-5 text-blue-300"/>
+                            Wind Parameters
+                        </CardTitle>
+                        <CardDescription>
+                            Enter the wind properites
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="grid grid-cols sm:grid-cols-2 gap-2">
 
 
-                    </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="mean_velocity">Mean Speed at 10meters at 10 years (m/s)</Label>
+                                <Input
+                                    id="mean_velocity"
+                                    type="number"
+                                    value={meanSpeed}
+                                    onChange={(e) => setMeanSpeed(parseFloat(e.target.value))}
+                                    className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
+                                />
+                            </div>
+                            <div>
+                                <Label htmlFor="terrain">Terrain Type</Label>
+                                <Select value={terrain} onValueChange={setTerrain}>
+                                    <SelectTrigger id="terrain" className="w-full max-w-48 border-transparent bg-[hsl(210,20%,98%)]">
+                                        <SelectValue placeholder="Open" />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-[hsl(210,20%,98%)]">
+                                        <SelectGroup>
+                                            <SelectLabel>Terrain</SelectLabel>
+                                            <SelectItem value="open" className="hover:bg-white">open</SelectItem>
+                                            <SelectItem value="rough" className="hover:bg-white">rough</SelectItem>
+
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
+                        </div>
+                        <MeanSpeedGraph graph_data={graphData} current_point={{height: height, speed: meanSpeed * coefficient ** 0.5}}/>
 
 
-                    <div className="flex gap-2">
-                        <Button
-                            className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
-                            onClick={handlePrev}
-                        >
-                            Prev
-                        </Button>
-                        <Button
-                            className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
-                            onClick={handleSubmit}
-                            disabled={!(analyticalSelected || (experimentalSelected && (uploadedFile !== null)))}
-                        >
-                            Submit
-                        </Button>
+                        <div className="flex gap-2">
+                            <Button
+                                className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
+                                onClick={handlePrev}
+                            >
+                                Prev
+                            </Button>
+                            <Button
+                                className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
+                                onClick={handleNext}
+                            >
+                                Next
+                            </Button>
 
-                    </div>
+                        </div>
 
-                </CardContent>
-            </>}
+                    </CardContent>
+                </>}
+                {step == 3 && <>
+                    <CardHeader>
+                        <CardTitle className="flex gap-2 items-center text-xl">
+                            <Calculator className="w-5 h-5 text-blue-300"/>
+                            Aerodynamic
+                        </CardTitle>
+                        <CardDescription>
+                            Choose how you want to perform the calculation
+                        </CardDescription>
+
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="grid grid-cols gap-2">
 
 
-            <FileUploadDialog
-                open={showFileUpload}
-                onOpenChange={setShowFileUpload}
-                onFileSelect={handleFileSelect}
-            />
-        </Card>
+                            <div className="space-y-2 ">
+                                <Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">
+                                    <Checkbox id="analytical-checkbox" name="terms-checkbox" checked={analyticalSelected} onCheckedChange={(checked)=>setAnalyticalSelected(checked==true)} />
+
+                                    <FieldContent>
+                                        <Label htmlFor="analytical-checkbox">Analytical Calculation</Label>
+                                        <FieldDescription>
+                                            Use percise mathematical formulas
+                                        </FieldDescription>
+                                    </FieldContent>
+                                </Field>
+                                <Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">
+                                    <Checkbox id="experimental-checkbox" name="terms-checkbox" checked={experimentalSelected} onCheckedChange={(checked)=>setExperimentalSelected(checked===true)} />
+
+                                    <FieldContent>
+                                        <Label htmlFor="experimental-checkbox">Experimental Calculation</Label>
+                                        <FieldDescription>
+                                            Use available experimental data from our database or file upload
+                                        </FieldDescription>
+                                    </FieldContent>
+                                </Field>
+                            </div>
+
+
+                            { experimentalSelected &&
+                                <div className="space-y-2">
+                                    <h2>Data Source</h2>
+                                    <RadioGroup value={experimentSource} onValueChange={(value)=>handleExperimentSelection(value)} className="w-fit">
+                                        <div className="flex items-center gap-3">
+                                            <RadioGroupItem value="database" id="r1" disabled={true} />
+                                            <Label htmlFor="r1">Database</Label>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <RadioGroupItem value="file_upload" id="r2" />
+                                            <Label htmlFor="r2">Upload Data</Label>
+                                            {uploadedFile && (
+                                                <span className="text-xs text-primary font-medium">
+                                                    {uploadedFile.name}
+                                                </span>
+                                            )}
+                                        </div>
+                                        {experimentSource=="file_upload" && <div className="grid grid-cols sm:grid-cols-2 gap-2">
+                                            <div className="space-y-2">
+                                                <Label htmlFor="experimentalMeanSpeed">U_H_expt (m/s)</Label>
+                                                <Input
+                                                    id="experimentalMeanSpeed"
+                                                    type="number"
+                                                    value={experimentalMeanSpeed}
+                                                    onChange={(e) => setExperimentalMeanSpeed(parseFloat(e.target.value))}
+                                                    className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label htmlFor="experimentalFrequency">f_expt</Label>
+                                                <Input
+                                                    id="experimentalFrequency"
+                                                    type="number"
+                                                    value={experimentalFrequency}
+                                                    onChange={(e) => setExperimentalFrequency(parseFloat(e.target.value))}
+                                                    className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
+                                                />
+                                            </div>
+
+
+                                        </div>}
+
+                                    </RadioGroup>
+
+                                </div>
+                            }
+
+
+                        </div>
+
+
+                        <div className="flex gap-2">
+                            <Button
+                                className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
+                                onClick={handlePrev}
+                            >
+                                Prev
+                            </Button>
+                            <Button
+                                className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
+                                onClick={handleSubmit}
+                                disabled={!(analyticalSelected || (experimentalSelected && (uploadedFile !== null)))}
+                            >
+                                Submit
+                            </Button>
+
+                        </div>
+
+                    </CardContent>
+                </>}
+
+
+                <FileUploadDialog
+                    open={showFileUpload}
+                    onOpenChange={setShowFileUpload}
+                    onFileSelect={handleFileSelect}
+                />
+            </Card>
+            <div className="flex items-center justify-between">
+                <Button
+                    className="w-fit px-3 py-2 text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
+                    onClick={handlePrev}
+                >
+                    Prev
+                </Button>
+                <Button
+                    className="w-fit px-3 py-2 text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
+                    onClick={handleSubmit}
+                    disabled={!(analyticalSelected || (experimentalSelected && (uploadedFile !== null)))}
+                >
+                    Submit
+                </Button>
+            </div>
+        </div>
+
     )
 }
