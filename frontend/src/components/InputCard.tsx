@@ -210,7 +210,7 @@ export default function InputCard(){
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="grid gap-2">
+                        <div className="grid gap-4">
 
                             <div className="space-y-2 flex items-center justify-center mx-auto w-full">
                                 <Label htmlFor="density" className="w-1/2">Building Density (Kg/m<sup>3</sup>):</Label>
@@ -280,8 +280,10 @@ export default function InputCard(){
                             </Button>
 
                         </div>
+                        <RectangleWithArrow width={width} height={depth} />
 
                     </CardContent>
+
                 </>}
                 {step == 2 && <>
                     <CardHeader>
