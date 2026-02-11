@@ -25,6 +25,9 @@ import {FileUploadDialog} from "@/components/FileUploadDialog.tsx";
 import {useInputBuildingContext} from "@/contexts/useInputBuildingContext.ts";
 import {useOutputBuildingContext} from "@/contexts/useOutputBuildingContext.ts";
 import {TooltipContent, Tooltip, TooltipTrigger, TooltipProvider} from "@radix-ui/react-tooltip";
+import MGraphs from "@/components/MGraphs.tsx";
+import PSDGraph from "@/components/PSDGraph.tsx";
+import ResultsCard from "@/components/ResultsCard.tsx";
 
 
 const parseFile = (file: File): Promise<any[]> => {
@@ -49,10 +52,12 @@ export default function InputCard(){
     const {buildingDensity, meanSpeed, Tone, damping, setBuildingDensity, setMeanSpeed, setTone, setDamping} = useInputBuildingContext()
 
     // Part -3
-    const {experimentalFrequency, experimentalMeanSpeed, setExperimentalMeanSpeed, setExperimentalFrequency, setMxData, setMyData, setMzData} = useInputBuildingContext()
+    const {experimentalFrequency, experimentalMeanSpeed, setExperimentalMeanSpeed, setExperimentalFrequency, setMxData, setMyData, setMzData, mxData, myData, mzData} = useInputBuildingContext()
     // Handling Submit
     const {handleAnalyticalCalculation,handleExperimentalCalculation, } = useOutputBuildingContext()
 
+    // final Part
+    const {acrossPsds, torsionPsds, experimentalAcrossPsds, experimentalTorsionPsds, experimentalAlongPsds} = useOutputBuildingContext()
     const [step, setStep] = useState(0);
     const [terrain, setTerrain] = useState<string>("open")
     const [analyticalSelected, setAnalyticalSelected] = useState<boolean>(false)
@@ -119,7 +124,7 @@ export default function InputCard(){
 
     return (
         <div>
-            <Card className="  bg-white border-transparent mb-4 max-h-fit  ">
+            <Card className=" bg-white border-transparent mb-4 max-h-fit  ">
                 {step == 0 && <>
                     <CardHeader>
                         <CardTitle className="flex gap-2 items-center justify-center text-xl ">
@@ -391,7 +396,7 @@ export default function InputCard(){
 
 
                             <div className="space-y-2 ">
-                            <Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">
+                                <Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">
                                     <Checkbox id="analytical-checkbox" name="terms-checkbox" checked={analyticalSelected} onCheckedChange={(checked)=>setAnalyticalSelected(checked==true)} />
 
                                     <FieldContent>
@@ -500,24 +505,49 @@ export default function InputCard(){
                             </Button>
                             <Button
                                 className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
-                                onClick={handleSubmit}
+                                onClick={handleNext}
                                 // disabled={!(analyticalSelected || (experimentalSelected && (uploadedFile !== null)))}
                             >
-                                Submit
+                                Next
                             </Button>
 
                         </div>
 
                     </CardContent>
                 </>}
+                {step == 4 && experimentalSelected &&
+
+                    <div className="grid  gap-2">
+                        {(mxData.length > 0) && <MGraphs graph_data={{"val": mxData, "Mtype": "MX"}}/>}
+                        {(myData.length > 0) && <MGraphs graph_data={{"val": myData, "Mtype": "MY"}}/>}
+                        {(mzData.length > 0) && <MGraphs graph_data={{"val": mzData, "Mtype": "MZ"}}/>}
+
+                </div>}
+                {((step == 5 && experimentalSelected) || (step == 4 && !experimentalSelected)) &&
+                    <div className="w-full grid lg:grid-cols-2 gap-3 mx-auto bg-red-700">
+                        <div className="w-full bg-white rounded-md border-transparent">
+                            <PSDGraph psds={acrossPsds} experimentalPsds={experimentalAcrossPsds} graphType="Across"/>
+                        </div>
+                        <div className="w-full bg-white rounded-md border-transparent">
+                            <PSDGraph psds={torsionPsds} experimentalPsds={experimentalTorsionPsds}
+                                      graphType="Torsion"/>
+                        </div>
+                        <div className="w-full bg-white rounded-md border-transparent">
+                            <PSDGraph psds={[]} experimentalPsds={experimentalAlongPsds} graphType="Along"/>
+                        </div>
+                    </div>}
+
+                {((step == 6) || (step == 5 && !experimentalSelected)) && <ResultsCard/>}
 
 
                 <FileUploadDialog
                     open={showFile1}
                     onOpenChange={setShowFile1}
-                    onFileSelect={async (file) => { setFile1(file); setShowFile1(false);
+                    onFileSelect={async (file) => {
+                        setFile1(file);
+                        setShowFile1(false);
                         const parsedData = await parseFile(file);
-                        console.log("parsed data is",parsedData)
+                        console.log("parsed data is", parsedData)
                         setMxData(parsedData.map(x => x[0]));
                         console.log("parsed data is ", parsedData.map(x => x[0]));
                     }}
@@ -552,6 +582,9 @@ export default function InputCard(){
                     disabled={!(analyticalSelected || (experimentalSelected && (file1 !== null) && (file2 !== null) && (file3 !== null)))}
                 >
                     Submit
+                </Button>
+                <Button onClick={handleNext}>
+                    next
                 </Button>
             </div>
         </div>
