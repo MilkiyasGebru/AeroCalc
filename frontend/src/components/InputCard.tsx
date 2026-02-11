@@ -144,7 +144,7 @@ export default function InputCard(){
                                     type="number"
                                     value={width}
                                     onChange={(e) => setWidth(parseFloat(e.target.value))}
-                                    className=" font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0 w-5/6 md:w-1/3"
+                                    className=" text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0 w-5/6 md:w-1/3"
                                 />
                             </div>
                             <div className="flex items-center justify-center mx-auto w-full">
@@ -154,7 +154,7 @@ export default function InputCard(){
                                     type="number"
                                     value={height}
                                     onChange={(e) => setHeight(parseFloat(e.target.value))}
-                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
                                 />
                             </div>
                             <div className=" flex items-center justify-center mx-auto w-full">
@@ -164,7 +164,7 @@ export default function InputCard(){
                                     type="number"
                                     value={depth}
                                     onChange={(e) => setDepth(parseFloat(e.target.value))}
-                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0 w-5/6 md:w-1/3"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0 w-5/6 md:w-1/3"
                                 />
                             </div>
                             <div className="space-y-2 flex items-center justify-center mx-auto w-full">
@@ -174,7 +174,7 @@ export default function InputCard(){
                                     type="number"
                                     value={totalFloors}
                                     onChange={(e) => setTotalFloors(parseFloat(e.target.value))}
-                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
                                 />
                             </div>
 
@@ -230,7 +230,7 @@ export default function InputCard(){
                                     type="number"
                                     value={damping}
                                     onChange={(e) => setDamping(parseFloat(e.target.value))}
-                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
                                 />
                             </div>
                             <div className="space-y-2 flex items-center justify-center mx-auto w-full">
@@ -240,7 +240,7 @@ export default function InputCard(){
                                     type="number"
                                     value={Tone}
                                     onChange={(e) => setTone(parseFloat(e.target.value))}
-                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
                                 />
                             </div>
                             <div className="space-y-2 flex items-center justify-center mx-auto w-full">
@@ -250,7 +250,7 @@ export default function InputCard(){
                                     type="number"
                                     value={Tone}
                                     onChange={(e) => setTone(parseFloat(e.target.value))}
-                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
                                 />
                             </div>
                             <div className="space-y-2 flex items-center justify-center mx-auto w-full">
@@ -260,7 +260,7 @@ export default function InputCard(){
                                     type="number"
                                     value={Tone}
                                     onChange={(e) => setTone(parseFloat(e.target.value))}
-                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
                                 />
                             </div>
 
@@ -307,7 +307,7 @@ export default function InputCard(){
                                     type="number"
                                     value={meanSpeed}
                                     onChange={(e) => setMeanSpeed(parseFloat(e.target.value))}
-                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
                                 />
                             </div>
                             <div className="space-y-2 flex items-center justify-center mx-auto w-full">
@@ -360,7 +360,7 @@ export default function InputCard(){
                                 type="number"
                                 value={meanSpeed}
                                 onChange={(e) => setMeanSpeed(parseFloat(e.target.value))}
-                                className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
                             />
                         </div>
 
