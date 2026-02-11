@@ -6,7 +6,7 @@ export const RectangleWithArrow = ({ width = 200, height = 300 }) => {
         <div className="flex flex-row-reverse gap-2 items-center mt-12 justify-center overflow-x-auto ">
             {/* Container for Rectangle and Labels */}
             <div
-                className="relative border-2 border-slate-800 bg-slate-50 rounded-sm min-w-[200px]"
+                className="relative border-2 border-transparent  rounded-sm min-w-[200px] bg-orange-200"
                 style={{height: `${300}px`, width: `${Math.max(Math.min(height, width) / Math.max(height, width) * 300,100)}px`}}
             >
 
