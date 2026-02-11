@@ -1,13 +1,13 @@
-export const RectangleWithArrow = ({ width = 200, height = 300 }) => {
+export const RectangleWithArrow = ({ width = 100, height = 150 }) => {
     const arrowLength = 60;
-    console.log("Width is ",(Math.max(Math.min(height, width) / Math.max(height, width) * 300,100)), width, height);
+    console.log("Width is ",(Math.max(Math.min(height, width) / Math.max(height, width) * 150,50)), width, height,Math.max(Math.min(height, width) / Math.max(height, width) * 150,50));
 
     return (
         <div className="flex flex-row-reverse gap-2 items-center mt-12 justify-center overflow-x-auto ">
             {/* Container for Rectangle and Labels */}
             <div
-                className="relative border-2 border-transparent  rounded-sm min-w-[200px] bg-orange-200"
-                style={{height: `${300}px`, width: `${Math.max(Math.min(height, width) / Math.max(height, width) * 300,100)}px`}}
+                className="relative border-2 border-transparent  rounded-sm  bg-orange-200"
+                style={{height: `${150}px`, width: `${Math.max(Math.min(height, width) / Math.max(height, width) * 150,50)}px`}}
             >
 
                 {/* The Rectangle Content */}
