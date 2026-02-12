@@ -14,7 +14,6 @@ import Papa from "papaparse";
 import {
     Field,
     FieldContent,
-    FieldDescription,
 } from "@/components/ui/field"
 interface IMeanSpeedData {
     height: number;
@@ -28,6 +27,7 @@ import {TooltipContent, Tooltip, TooltipTrigger, TooltipProvider} from "@radix-u
 import MGraphs from "@/components/MGraphs.tsx";
 import PSDGraph from "@/components/PSDGraph.tsx";
 import ResultsCard from "@/components/ResultsCard.tsx";
+import {InternalDatabaseDialog} from "@/components/InternalDatabaseDialog.tsx";
 
 
 const parseFile = (file: File): Promise<any[]> => {
@@ -41,11 +41,24 @@ const parseFile = (file: File): Promise<any[]> => {
     });
 };
 
+const parseUrl = (url: string): Promise<any[]> => {
+    return new Promise((resolve, reject) => {
+        Papa.parse(url, {
+            download: true,
+            header: true,
+            dynamicTyping: true,
+            complete: (results:any) => resolve(results.data),
+            error: (error:any) => reject(error),
+        });
+    });
+};
+
 
 
 
 export default function InputCard(){
 
+    const [checking, setChecking] = useState<string>("")
     // Part-1
     const {width, height,depth,totalFloors, setWidth, setHeight, setDepth,setTotalFloors } = useInputBuildingContext()
     // Part - 2
@@ -61,26 +74,10 @@ export default function InputCard(){
     const [step, setStep] = useState(0);
     const [terrain, setTerrain] = useState<string>("open")
     const [analyticalSelected, setAnalyticalSelected] = useState<boolean>(false)
-    const [experimentalSelected, setExperimentalSelected] = useState<boolean>(false)
-    const [experimentSource, setExperimentSource] = useState<string>("");
-    const handleExperimentSelection = (value : string)=>{
-        if (value == "database"){
-            setExperimentSource(value)
-        }
-        else {
-            setExperimentSource(value)
-        }
-    }
-    const handleSubmit = async ()=>{
-        if (analyticalSelected){
-            handleAnalyticalCalculation()
-        }
 
-        if (  experimentalSelected){
-            handleExperimentalCalculation()
-        }
+    const [showInternalDialog, setShowInternalDialog] = useState(false);
 
-    }
+
 
     const [graphData, setGraphData] = useState<IMeanSpeedData[]>([])
 
@@ -106,8 +103,44 @@ export default function InputCard(){
     }, [terrain, height, meanSpeed]);
 
     const handleNext = ()=>{
-        setStep(s => s + 1)
+
+        if (step == 3 && checking !== "internal_database"){
+            if (analyticalSelected){
+                handleAnalyticalCalculation()
+            }
+            if (checking === "external_database"){
+                handleExperimentalCalculation(mxData, myData, mzData)
+            }
+        }
+
+        if (step == 3 && checking === "internal_database"){
+            setShowInternalDialog(true);
+        }
+        else{
+            setStep(s => s + 1)
+
+        }
     }
+
+    const confirmInternalDbSelection = (option: string) => {
+        parseUrl(option).then(result => {
+            const Mx : number[] = [];
+            const Mz : number[] = [];
+            const My: number[] = [];
+            result.map(val => {
+                Mx.push(val.MX)
+                My.push(val.MY)
+                Mz.push(val.MZ)
+            })
+            setMxData(Mx)
+            setMyData(My)
+            setMzData(Mz)
+            handleExperimentalCalculation(Mx, My, Mz)
+        })
+        setShowInternalDialog(false);
+        setStep(s => s + 1); // Now move to the next step
+    };
+
     const handlePrev = ()=>{
         setStep(s => s - 1)
     }
@@ -180,22 +213,22 @@ export default function InputCard(){
 
                         </div>
 
-                        <div className="flex gap-2">
-                            <Button
-                                className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
-                                onClick={handlePrev}
-                                disabled={true}
-                            >
-                                Prev
-                            </Button>
-                            <Button
-                                className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
-                                onClick={handleNext}
-                            >
-                                Next
-                            </Button>
+                        {/*<div className="flex gap-2">*/}
+                        {/*    <Button*/}
+                        {/*        className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"*/}
+                        {/*        onClick={handlePrev}*/}
+                        {/*        disabled={true}*/}
+                        {/*    >*/}
+                        {/*        Prev*/}
+                        {/*    </Button>*/}
+                        {/*    <Button*/}
+                        {/*        className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"*/}
+                        {/*        onClick={handleNext}*/}
+                        {/*    >*/}
+                        {/*        Next*/}
+                        {/*    </Button>*/}
 
-                        </div>
+                        {/*</div>*/}
                         <RectangleWithArrow width={width} height={depth} />
                     </CardContent>
                 </>}
@@ -265,21 +298,21 @@ export default function InputCard(){
                             </div>
 
                         </div>
-                        <div className="flex gap-2">
-                            <Button
-                                className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
-                                onClick={handlePrev}
-                            >
-                                Prev
-                            </Button>
-                            <Button
-                                className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
-                                onClick={handleNext}
-                            >
-                                Next
-                            </Button>
+                        {/*<div className="flex gap-2">*/}
+                        {/*    <Button*/}
+                        {/*        className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"*/}
+                        {/*        onClick={handlePrev}*/}
+                        {/*    >*/}
+                        {/*        Prev*/}
+                        {/*    </Button>*/}
+                        {/*    <Button*/}
+                        {/*        className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"*/}
+                        {/*        onClick={handleNext}*/}
+                        {/*    >*/}
+                        {/*        Next*/}
+                        {/*    </Button>*/}
 
-                        </div>
+                        {/*</div>*/}
                         <RectangleWithArrow width={width} height={depth} />
 
                     </CardContent>
@@ -364,21 +397,21 @@ export default function InputCard(){
                             />
                         </div>
 
-                        <div className="flex gap-2">
-                            <Button
-                                className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
-                                onClick={handlePrev}
-                            >
-                                Prev
-                            </Button>
-                            <Button
-                                className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
-                                onClick={handleNext}
-                            >
-                                Next
-                            </Button>
+                        {/*<div className="flex gap-2">*/}
+                        {/*    <Button*/}
+                        {/*        className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"*/}
+                        {/*        onClick={handlePrev}*/}
+                        {/*    >*/}
+                        {/*        Prev*/}
+                        {/*    </Button>*/}
+                        {/*    <Button*/}
+                        {/*        className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"*/}
+                        {/*        onClick={handleNext}*/}
+                        {/*    >*/}
+                        {/*        Next*/}
+                        {/*    </Button>*/}
 
-                        </div>
+                        {/*</div>*/}
 
                     </CardContent>
                 </>}
@@ -402,43 +435,51 @@ export default function InputCard(){
                                     <Checkbox id="analytical-checkbox" name="terms-checkbox" checked={analyticalSelected} onCheckedChange={(checked)=>setAnalyticalSelected(checked==true)} />
 
                                     <FieldContent>
-                                        <Label htmlFor="analytical-checkbox">Analytical Calculation</Label>
-                                        <FieldDescription>
-                                            Use percise mathematical formulas
-                                        </FieldDescription>
+                                        <Label htmlFor="analytical-checkbox">analytical equations for base moment PSD</Label>
+                                        {/*<FieldDescription>*/}
+                                        {/*    Use percise mathematical formulas*/}
+                                        {/*</FieldDescription>*/}
                                     </FieldContent>
                                 </Field>
-                                <Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">
-                                    <Checkbox id="experimental-checkbox" name="terms-checkbox" checked={experimentalSelected} onCheckedChange={(checked)=>setExperimentalSelected(checked===true)} />
+                                {/*<Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">*/}
+                                {/*    <Checkbox id="experimental-checkbox" name="terms-checkbox" checked={experimentalSelected} onCheckedChange={(checked)=>setExperimentalSelected(checked===true)} />*/}
 
-                                    <FieldContent>
-                                        <Label htmlFor="experimental-checkbox">Experimental Calculation</Label>
-                                        <FieldDescription>
-                                            Use available experimental data from our database or file upload
-                                        </FieldDescription>
-                                    </FieldContent>
-                                </Field>
+                                {/*    <FieldContent>*/}
+                                {/*        <Label htmlFor="experimental-checkbox">Experimental Calculation</Label>*/}
+                                {/*        <FieldDescription>*/}
+                                {/*            Use available experimental data from our database or file upload*/}
+                                {/*        </FieldDescription>*/}
+                                {/*    </FieldContent>*/}
+                                {/*</Field>*/}
+
+                                <RadioGroup value={checking} onValueChange={setChecking}>
+                                    <Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">
+                                        <RadioGroupItem id="internal-database" value="internal_database"    />
+
+                                        <FieldContent>
+                                            <Label htmlFor="internal-database">Access the wind tunnel experiment database</Label>
+                                        </FieldContent>
+                                    </Field>
+                                    <Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">
+                                        <RadioGroupItem id="external-database" value="external_database"   />
+
+                                        <FieldContent>
+                                            <Label htmlFor="external-database">Upload wind tunnel experiment data</Label>
+                                        </FieldContent>
+                                    </Field>
+                                </RadioGroup>
+
                             </div>
 
 
-                            { experimentalSelected &&
+                            { checking === "external_database" &&
                                 <div className="space-y-2">
-                                    <h2>Data Source</h2>
-                                    <RadioGroup value={experimentSource} onValueChange={(value)=>handleExperimentSelection(value)} className="w-fit">
-                                        <div className="flex items-center gap-3">
-                                            <RadioGroupItem value="database" id="r1" disabled={true} />
-                                            <Label htmlFor="r1">Database</Label>
-                                        </div>
-                                        <div className="flex items-center gap-3">
-                                            <RadioGroupItem value="file_upload" id="r2" />
-                                            <Label htmlFor="r2">Upload Data</Label>
-                                        </div>
-                                        {experimentSource=="file_upload" && <div className="grid grid-cols  gap-2">
-                                            {experimentSource === "file_upload" && (
-                                                <div className="space-y-4 border-t pt-4">
+
+                                         <div className="grid grid-cols  gap-2">
+                                             <div className="space-y-4 border-t pt-4">
                                                     <Label className="text-sm font-semibold">Required Data Files</Label>
 
-                                                    <div className="grid grid-cols-1  gap-4">
+                                                    <div className="grid grid-cols-2  gap-4">
                                                         {/* File 1 */}
                                                         <div className="flex items-center gap-2">
                                                             <Button variant="outline" onClick={() => setShowFile1(true)} className="w-full">
@@ -464,8 +505,7 @@ export default function InputCard(){
                                                         </div>
                                                     </div>
                                                 </div>
-                                            )}
-                                            <div className="space-y-2">
+                                             <div className="space-y-2">
                                                 <Label htmlFor="experimentalMeanSpeed">U_H_expt (m/s)</Label>
                                                 <Input
                                                     id="experimentalMeanSpeed"
@@ -475,7 +515,7 @@ export default function InputCard(){
                                                     className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
                                                 />
                                             </div>
-                                            <div className="space-y-2">
+                                             <div className="space-y-2">
                                                 <Label htmlFor="experimentalFrequency">f_expt</Label>
                                                 <Input
                                                     id="experimentalFrequency"
@@ -487,9 +527,8 @@ export default function InputCard(){
                                             </div>
 
 
-                                        </div>}
+                                        </div>
 
-                                    </RadioGroup>
 
                                 </div>
                             }
@@ -498,26 +537,26 @@ export default function InputCard(){
                         </div>
 
 
-                        <div className="flex gap-2">
-                            <Button
-                                className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
-                                onClick={handlePrev}
-                            >
-                                Prev
-                            </Button>
-                            <Button
-                                className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
-                                onClick={handleNext}
-                                // disabled={!(analyticalSelected || (experimentalSelected && (uploadedFile !== null)))}
-                            >
-                                Next
-                            </Button>
-
-                        </div>
+                        {/*<div className="flex gap-2">*/}
+                        {/*    <Button*/}
+                        {/*        className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"*/}
+                        {/*        onClick={handlePrev}*/}
+                        {/*    >*/}
+                        {/*        Prev*/}
+                        {/*    </Button>*/}
+                        {/*    <Button*/}
+                        {/*        className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"*/}
+                        {/*        onClick={handleNext}*/}
+                        {/*        // disabled={!(analyticalSelected || (experimentalSelected && (uploadedFile !== null)))}*/}
+                        {/*    >*/}
+                        {/*        Next*/}
+                        {/*    </Button>*/}
+                        {/**/}
+                        {/*</div>*/}
 
                     </CardContent>
                 </>}
-                {step == 4 && experimentalSelected &&
+                {step == 4 && checking !== "" &&
 
                     <div className="grid  gap-2">
                         {(mxData.length > 0) && <MGraphs graph_data={{"val": mxData, "Mtype": "MX"}}/>}
@@ -525,8 +564,8 @@ export default function InputCard(){
                         {(mzData.length > 0) && <MGraphs graph_data={{"val": mzData, "Mtype": "MZ"}}/>}
 
                 </div>}
-                {((step == 5 && experimentalSelected) || (step == 4 && !experimentalSelected)) &&
-                    <div className="w-full grid lg:grid-cols-2 gap-3 mx-auto bg-red-700">
+                {((step == 5 && checking !== "") || (step == 4 && checking === "")) &&
+                    <div className="w-full grid lg:grid-cols-3 gap-3 mx-auto">
                         <div className="w-full bg-white rounded-md border-transparent">
                             <PSDGraph psds={acrossPsds} experimentalPsds={experimentalAcrossPsds} graphType="Across"/>
                         </div>
@@ -539,7 +578,7 @@ export default function InputCard(){
                         </div>
                     </div>}
 
-                {((step == 6) || (step == 5 && !experimentalSelected)) && <ResultsCard/>}
+                {((step == 6) || (step == 5 && checking === "")) && <ResultsCard/>}
 
 
                 <FileUploadDialog
@@ -570,23 +609,24 @@ export default function InputCard(){
                         setMzData(parsedData.map(x => x[0]));                    }}
                 />
 
+                {showInternalDialog &&   <InternalDatabaseDialog open={showInternalDialog} onOpenChange={setShowInternalDialog} onConfirm={confirmInternalDbSelection} />}
+
+
             </Card>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between ">
                 <Button
-                    className="w-fit px-3 py-2 text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
+                    className="w-fit px-3 py-2 text-center flex justify-center hover:cursor-pointer bg-white text-black !bg-opacity-100 "
                     onClick={handlePrev}
+                    disabled={step == 0}
                 >
                     Prev
                 </Button>
                 <Button
-                    className="w-fit px-3 py-2 text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"
-                    onClick={handleSubmit}
-                    disabled={!(analyticalSelected || (experimentalSelected && (file1 !== null) && (file2 !== null) && (file3 !== null)))}
+                    className="w-fit px-3 py-2 text-center flex justify-center hover:cursor-pointer bg-white text-black !bg-opacity-100 "
+                    onClick={handleNext}
+                    disabled={step == 3 && !(analyticalSelected || checking !== "")}
                 >
-                    Submit
-                </Button>
-                <Button onClick={handleNext}>
-                    next
+                    {((step == 6) || (step == 5 && checking === ""))? "Done":"Next"}
                 </Button>
             </div>
         </div>
