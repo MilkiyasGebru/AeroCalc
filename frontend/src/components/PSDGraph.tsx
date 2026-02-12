@@ -1,4 +1,4 @@
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import {frequencies} from "../../CONSTANTS.ts";
 import {useInputBuildingContext} from "@/contexts/useInputBuildingContext.ts";
 
@@ -31,11 +31,11 @@ export default function PSDGraph(props : PSDGraphInterface) {
             experimentalPsd: expFreqIndex !== -1? experimentalPsds[expFreqIndex]: null,
         })
     }
-
+    const title : string = props.graphType === "Across"? "Across-wind base moment spectrum" : props.graphType === "Along"?  "Along-wind base moment spectrum" :  "Torsion base moment spectrum"
     return (
         <>
         { (psds.length > 0 || experimentalPsds.length>0) && <LineChart
-            style={{ width: '90%', maxWidth: '1400px', height: '100%', maxHeight: '70vh', aspectRatio: 1.618 }}
+            style={{ width: '90%', maxWidth: '1400px', height: '100%', minHeight: '350px', minWidth:'350px', aspectRatio: 1 }}
             responsive
             data={graph_data}
             margin={{
@@ -46,7 +46,17 @@ export default function PSDGraph(props : PSDGraphInterface) {
             }}
         >
 
-            <CartesianGrid strokeDasharray="3 3" />
+            {/*<CartesianGrid strokeDasharray="3 3" />*/}
+
+            <XAxis
+                orientation="top"
+                height={40}
+                xAxisId="title"
+                label={{ value: title, position: 'center', dy: -10 }}
+                axisLine={false}
+                tick={false}
+            />
+
             <XAxis dataKey="frequency" scale="log"  type="number" domain={['auto', 'auto']} // Or ['dataMin', 'dataMax']
                    allowDataOverflow={true}
                    label={{ value: 'fB/UH', position: 'insideBottom', offset: 0 }}
