@@ -113,7 +113,7 @@ export default function InputCard(){
             return
         }
 
-        if (step == 3 && checking !== "internal_database"){
+        if (step == 3 ){
             if (analyticalSelected){
                 handleAnalyticalCalculation()
             }
