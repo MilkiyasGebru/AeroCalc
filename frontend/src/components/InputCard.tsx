@@ -565,7 +565,7 @@ export default function InputCard(){
 
                 </div>}
                 {((step == 5 && checking !== "") || (step == 4 && checking === "")) &&
-                    <div className="w-full grid lg:grid-cols-3 gap-3 mx-auto">
+                    <div className="w-full grid lg:grid-cols-2 gap-3 mx-auto">
                         <div className="w-full bg-white rounded-md border-transparent">
                             <PSDGraph psds={acrossPsds} experimentalPsds={experimentalAcrossPsds} graphType="Across"/>
                         </div>
