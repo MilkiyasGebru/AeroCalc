@@ -108,6 +108,9 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
             console.log("new",calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency))
             // setCSVData(csvData)
             const [x,y]:number[] = CalculateFD(width, height, depth, meanSpeed,Tone, totalFloors, damping, frequencies, experi_across_psds, psd, buildingDensity)
+            const [_,z]:number[] = CalculateFD(width, height, depth, meanSpeed,Tone, totalFloors, damping, frequencies, along_psds, psd, buildingDensity)
+
+            setExperimentalAccelartionYDirection(z)
             //
             setExperimentalVr(x)
             setExperimentalAr(y)
