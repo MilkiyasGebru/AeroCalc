@@ -104,6 +104,14 @@ export default function InputCard(){
 
     const handleNext = ()=>{
 
+        if ((step == 6) || (step == 5 && checking === "")){
+            setStep(0)
+            setMzData([])
+            setMxData([])
+            setMyData([])
+            setChecking("")
+        }
+
         if (step == 3 && checking !== "internal_database"){
             if (analyticalSelected){
                 handleAnalyticalCalculation()
