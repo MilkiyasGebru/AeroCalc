@@ -42,7 +42,7 @@ interface OutputBuildingContextInterface {
     setExperimentalAr: (val: number)=> void;
     setExperimentalVr: (val: number)=> void;
     handleAnalyticalCalculation : () => void;
-    handleExperimentalCalculation : () => void;
+    handleExperimentalCalculation : (Mx: number[], My: number[], Mz: number[]) => void;
 }
 
 
@@ -50,7 +50,7 @@ export const OutputBuildingContext = createContext<OutputBuildingContextInterfac
 
 export const OutputBuildingContextProvider = ({children}: {children: React.ReactNode})=>{
 
-    const {width,height,depth,meanSpeed,damping,totalFloors,terrain,Tone,experimentalMeanSpeed, experimentalFrequency, setNormalizedExperimentalFrequencies, buildingDensity, mxData,mzData,myData} = useInputBuildingContext();
+    const {width,height,depth,meanSpeed,damping,totalFloors,terrain,Tone,experimentalMeanSpeed, experimentalFrequency, setNormalizedExperimentalFrequencies, buildingDensity} = useInputBuildingContext();
 
     const [torsionPsds, setTorsionPsds] = useState<number[]>([]);
     const [acrossPsds, setAcrossPsds] = useState<number[]>([]);
@@ -77,10 +77,10 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         setTorsionPsds(torsion_psds)
     }, [width, depth, height, meanSpeed, totalFloors, damping])
 
-    const handleExperimentalCalculation = useCallback(async ()=>{
-        const Mx : number[] = mxData;
-        const My : number[] = myData;
-        const Mz: number[] = mzData;
+    const handleExperimentalCalculation = useCallback(async (Mx:number[], My:number[], Mz:number[])=>{
+        // const Mx : number[] = mxData;
+        // const My : number[] = myData;
+        // const Mz: number[] = mzData;
 
 
         if (window.pywebview?.api?.compute) {
@@ -131,7 +131,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
 
 
 
-    },[width,height,experimentalMeanSpeed,experimentalFrequency,mxData,myData,mzData])
+    },[width,height,experimentalMeanSpeed,experimentalFrequency])
 
     return (
         <OutputBuildingContext.Provider value={{
