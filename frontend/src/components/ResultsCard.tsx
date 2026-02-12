@@ -12,7 +12,7 @@ import {
 
 
 export default function ResultsCard() {
-    const {ar, vr, experimentalAr, experimentalVr, accelartionYDirection} = useOutputBuildingContext()
+    const {ar, vr, experimentalAr, experimentalVr, accelartionYDirection, experimentalAccelartionYDirection} = useOutputBuildingContext()
 
     return (
         // <TableCaption>Building dynamic response</TableCaption>
@@ -28,18 +28,19 @@ export default function ResultsCard() {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                <TableRow>
+                {(ar !== null) && <TableRow>
                     <TableCell className="font-medium">Analytical</TableCell>
-                    <TableCell>{ar}</TableCell>
-                    <TableCell>{ar}</TableCell>
-                    <TableCell className="text-right">{vr}</TableCell>
-                </TableRow>
-                <TableRow>
+                    <TableCell className="text-center">{ar?.toFixed(2)}</TableCell>
+                    <TableCell className="text-center">{accelartionYDirection?.toFixed(2)}</TableCell>
+                    <TableCell className="text-center">{vr?.toFixed(2)}</TableCell>
+                </TableRow>}
+                {(experimentalAr !== null) && <TableRow>
                     <TableCell className="font-medium">Experimental</TableCell>
-                    <TableCell>{experimentalAr}</TableCell>
-                    <TableCell>{accelartionYDirection}</TableCell>
-                    <TableCell className="text-right">{experimentalVr}</TableCell>
-                </TableRow>
+                    <TableCell className="text-center">{experimentalAr?.toFixed(2)}</TableCell>
+                    <TableCell className="text-center">{experimentalAccelartionYDirection?.toFixed(2)}</TableCell>
+                    <TableCell className="text-center">{experimentalVr?.toFixed(2)}</TableCell>
+                </TableRow>}
+
             </TableBody>
         </Table>
         </>
