@@ -3,7 +3,6 @@ import {useOutputBuildingContext} from "@/contexts/useOutputBuildingContext.ts";
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
@@ -16,9 +15,10 @@ export default function ResultsCard() {
     const {ar, vr, experimentalAr, experimentalVr, accelartionYDirection} = useOutputBuildingContext()
 
     return (
+        // <TableCaption>Building dynamic response</TableCaption>
         <>
-        <Table>
-            <TableCaption>Building dynamic response</TableCaption>
+        <p className="text-center m-4">Building dynamic response</p>
+        <Table className="p-4">
             <TableHeader>
                 <TableRow>
                     <TableHead className="w-[100px]">   </TableHead>

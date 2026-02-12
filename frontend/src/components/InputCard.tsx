@@ -110,6 +110,7 @@ export default function InputCard(){
             setMxData([])
             setMyData([])
             setChecking("")
+            return
         }
 
         if (step == 3 && checking !== "internal_database"){
