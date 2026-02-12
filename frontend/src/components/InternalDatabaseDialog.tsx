@@ -34,7 +34,7 @@ export function InternalDatabaseDialog({ open, onOpenChange, onConfirm }: Intern
 
     useEffect(() => {
         console.log("In internal database dialog");
-        fetch("http://localhost:8080/", {
+        fetch("https://aerocalc-szin.onrender.com/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
