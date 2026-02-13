@@ -1,4 +1,4 @@
-import {CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
+import { Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
 
 interface IGraph {
     val: number[];
@@ -24,22 +24,24 @@ export default function MGraphs({graph_data}:{graph_data: IGraph}) {
                 }}
             >
 
-                <CartesianGrid strokeDasharray="3 3" />
+                {/*<CartesianGrid strokeDasharray="3 3" />*/}
                 <XAxis
+                    stroke="#000000"
                     orientation="top"
                     height={40}
                     xAxisId="title"
-                    label={{ value: title, position: 'center', dy: -10 }}
+                    label={{ value: title, position: 'center', dy: -10, style: { fill: '#000000', fontWeight: "normal" } }}
                     axisLine={false}
                     tick={false}
                 />
                 <XAxis     // Or ['dataMin', 'dataMax']
                        allowDataOverflow={true}
-                       // label={{ value: '', position: 'insideBottom', offset: 0 }}
+                       stroke="#000000"
                        tick={false}
                        tickLine={false}
                 />
                 <YAxis width="auto"  type="number" domain={['auto', 'auto']}
+                       stroke="#000000"
                        label={{
                            value: y_axis_title,
                            angle: -90,
