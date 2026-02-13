@@ -3,7 +3,7 @@ export const RectangleWithArrow = ({ width = 100, height = 150 }) => {
     console.log("Width is ",(Math.max(Math.min(height, width) / Math.max(height, width) * 150,50)), width, height,Math.max(Math.min(height, width) / Math.max(height, width) * 150,50));
 
     return (
-        <div className="flex flex-row-reverse gap-2 items-center mt-12 justify-center overflow-x-auto ">
+        <div className="flex flex-row-reverse gap-2 items-center mt-6 justify-center overflow-x-auto">
             {/* Container for Rectangle and Labels */}
             <div
                 className="relative border-2 border-transparent  rounded-sm  bg-orange-200"

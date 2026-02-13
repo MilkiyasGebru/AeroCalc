@@ -298,10 +298,10 @@ export default function InputCard(){
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="grid grid-cols gap-2">
+                        <div className="flex flex-col gap-2 mx-auto w-5/6 justify-start">
 
 
-                            <div className="space-y-2 flex items-center justify-center mx-auto w-full">
+                            <div className="space-y-2 flex items-center ">
                                 <Label htmlFor="mean_velocity" className="w-1/2">Mean Speed at 10meters at 10 years
                                     (m/s)</Label>
                                 <Input
@@ -312,7 +312,7 @@ export default function InputCard(){
                                     className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
                                 />
                             </div>
-                            <div className="space-y-2 flex items-center justify-center mx-auto w-full">
+                            <div className="space-y-2 flex items-center  ">
                                 <Label htmlFor="terrain" className="w-1/2">Terrain Type:</Label>
                                 <Select value={terrain} onValueChange={setTerrain}>
                                     <SelectTrigger id="terrain"
@@ -330,15 +330,15 @@ export default function InputCard(){
                                 </Select>
                             </div>
 
-                        </div>
-                        <div className="grid grid-cols-4 mx-auto w-full">
-                            <div className="flex items-center justify-center gap-2">
+
+                        <div className=" grid grid-cols-4">
+                            <div className="flex items-center gap-1">
                                 Wind Speed Profile
                                 <TooltipProvider>
                                 <Tooltip key="bottom">
                                     <TooltipTrigger asChild>
                                         <div className="flex gap-1">
-                                            <p className="font-semibold text-blue-300 w-full hover:cursor-pointer">i:</p>
+                                            <p className="font-semibold text-blue-300 w-full hover:cursor-pointer"> i:</p>
                                         </div>
 
                                     </TooltipTrigger>
@@ -354,7 +354,7 @@ export default function InputCard(){
                             <MeanSpeedGraph graph_data={graphData}
                                             current_point={{height: height, speed: meanSpeed * coefficient ** 0.5}}/>
                         </div>
-                        <div className="space-y-2 flex items-center justify-center mx-auto w-full">
+                        <div className="space-y-2 flex items-center mt-6 ">
                             <Label htmlFor="mean_velocity" className="w-1/2">Mean Speed at roof meters at 10 years
                                 (m/s)</Label>
                             <Input
@@ -364,6 +364,7 @@ export default function InputCard(){
                                 onChange={(e) => setMeanSpeed(parseFloat(e.target.value))}
                                 className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
                             />
+                        </div>
                         </div>
                     </CardContent>
                 </>}
