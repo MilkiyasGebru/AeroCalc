@@ -69,7 +69,7 @@ export const InputBuildingContextProvider = ({children}: {children: React.ReactN
     const [myData, setMyData] = useState<number[]>([]);
     const [mzData, setMzData] = useState<number[]>([]);
     const [experimentalMeanSpeed, setExperimentalMeanSpeed] = useState<number>(1);
-    const [experimentalFrequency, setExperimentalFrequency] = useState<number>(0.18312429715297);
+    const [experimentalFrequency, setExperimentalFrequency] = useState<number>(0.183);
     const [normalizedExperimentalFrequencies, setNormalizedExperimentalFrequencies] = useState<number[]>([]);
     const [userMeanSpeed, setUserMeanSpeed] = useState<number>(30)
     return (

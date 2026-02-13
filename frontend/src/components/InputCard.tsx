@@ -450,7 +450,7 @@ export default function InputCard(){
                                                     id="experimentalMeanSpeed"
                                                     type="number"
                                                     value={experimentalMeanSpeed}
-                                                    onChange={(e) => setExperimentalMeanSpeed(parseFloat(e.target.value))}
+                                                    onChange={(e) => setExperimentalMeanSpeed(Number(parseFloat(e.target.value).toFixed(3)))}
                                                     className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
                                                 />
                                             </div>
@@ -460,7 +460,7 @@ export default function InputCard(){
                                                     id="experimentalFrequency"
                                                     type="number"
                                                     value={experimentalFrequency}
-                                                    onChange={(e) => setExperimentalFrequency(parseFloat(e.target.value))}
+                                                    onChange={(e) => setExperimentalFrequency(Number(parseFloat(e.target.value).toFixed(3)))}
                                                     className="font-mono bg-[hsl(210,20%,98%)] border-transparent w-5/6 md:w-full"
                                                 />
                                             </div>
