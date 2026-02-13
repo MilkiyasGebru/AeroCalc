@@ -35,7 +35,7 @@ export default function PSDGraph(props : PSDGraphInterface) {
     return (
         <>
         { (psds.length > 0 || experimentalPsds.length>0) && <LineChart
-            style={{ width: '90%', maxWidth: '1400px', height: '100%', minHeight: '350px', minWidth:'350px', aspectRatio: 1 }}
+            style={{ width: '90%', maxWidth: '1400px', height: '100%', maxHeight: '250px', minWidth:'350px', aspectRatio: 1 }}
             responsive
             data={graph_data}
             margin={{
@@ -52,7 +52,7 @@ export default function PSDGraph(props : PSDGraphInterface) {
                 orientation="top"
                 height={40}
                 xAxisId="title"
-                label={{ value: title, position: 'center', dy: -10 }}
+                label={{ value: title, position: 'center', dy: -10,style: { fill: '#000000', fontWeight: "normal", fontSize:17 }, }}
                 axisLine={false}
                 tick={false}
             />
@@ -91,8 +91,8 @@ export default function PSDGraph(props : PSDGraphInterface) {
                 )}
             />
             <Legend />
-            <Line name={`${props.graphType} psd`} type="basis" dot={false} dataKey="psd" connectNulls={true} stroke={props.graphType !== "Across"?"#fff222":"#af7875"} />
-            <Line name={`Experimental ${props.graphType} psd`} type="basis" dot={false} dataKey="experimentalPsd" connectNulls={true} stroke={props.graphType !== "Across"? "#aaa23d":"#ff4d4f"}  />
+            <Line name="Analytical" type="basis" dot={false} dataKey="psd" connectNulls={true} stroke={props.graphType !== "Across"?"#fff222":"#af7875"} />
+            <Line name="Experimental" type="basis" dot={false} dataKey="experimentalPsd" connectNulls={true} stroke={props.graphType !== "Across"? "#aaa23d":"#ff4d4f"}  />
             {/*<Line type="monotone" dot={false} dataKey="experimental_across_psd" stroke="#ff4d4f" />*/}
             {/*<Line type="monotone" dot={false} dataKey="experimental_torsion_psd" stroke="#ffd666" />*/}
 
