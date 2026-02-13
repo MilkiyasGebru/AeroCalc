@@ -173,50 +173,52 @@ export default function InputCard(){
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="grid gap-2 space-y-3 p-4">
-                            <div className="flex items-center justify-center mx-auto w-full">
-                                <Label htmlFor="width" className="w-1/5">Width (m):</Label>
+                        <div className="flex flex-col gap-2 space-y-3 p-4 w-1/2 mx-auto">
+                            <div className="flex items-center justify-start  ">
+                                <Label htmlFor="width" className="w-2/5">Width (m):</Label>
                                 <Input
                                     id="width"
                                     type="number"
                                     value={width}
                                     onChange={(e) => setWidth(parseFloat(e.target.value))}
-                                    className=" text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0 w-5/6 md:w-1/6"
+                                    className=" text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0 w-5/6 md:w-2/6"
                                 />
                             </div>
-                            <div className="flex items-center justify-center mx-auto w-full">
-                                <Label htmlFor="height" className="w-1/5">Height (m):</Label>
+                            <div className="flex items-center justify-start">
+                                <Label htmlFor="height" className="w-2/5">Height (m):</Label>
                                 <Input
                                     id="height"
                                     type="number"
                                     value={height}
                                     onChange={(e) => setHeight(parseFloat(e.target.value))}
-                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-2/6"
                                 />
                             </div>
-                            <div className=" flex items-center justify-center mx-auto w-full">
-                                <Label htmlFor="depth" className="w-1/5">Depth (m):</Label>
+                            <div className=" flex items-center justify-start ">
+                                <Label htmlFor="depth" className="w-2/5">Depth (m):</Label>
                                 <Input
                                     id="depth"
                                     type="number"
                                     value={depth}
                                     onChange={(e) => setDepth(parseFloat(e.target.value))}
-                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0 w-5/6 md:w-1/6"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0 w-5/6 md:w-2/6"
                                 />
                             </div>
-                            <div className="space-y-2 flex items-center justify-center mx-auto w-full">
-                                <Label htmlFor="NFloors" className="w-1/5">Number of Floors:</Label>
+                            <div className="space-y-2 flex items-center justify-start ">
+                                <Label htmlFor="NFloors" className="w-2/5">Number of Floors:</Label>
                                 <Input
                                     id="NFloors"
                                     type="number"
                                     value={totalFloors}
                                     onChange={(e) => setTotalFloors(parseFloat(e.target.value))}
-                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-2/6"
                                 />
+                            </div>
+                            <div className="space-y-2 flex items-center justify-start ">
+                                <RectangleWithArrow width={width} height={depth} />
                             </div>
 
                         </div>
-                        <RectangleWithArrow width={width} height={depth} />
                     </CardContent>
                 </>}
                 {step == 1 && <>
@@ -226,62 +228,65 @@ export default function InputCard(){
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="grid gap-4">
+                        <div className="grid gap-4 mx-auto w-1/2">
 
-                            <div className="space-y-2 flex items-center justify-center mx-auto w-full">
-                                <Label htmlFor="density" className="w-1/2">Building Density (Kg/m<sup>3</sup>):</Label>
+                            <div className="space-y-2 flex items-center justify-center">
+                                <Label htmlFor="density" className="w-full">Building Density (Kg/m<sup>3</sup>):</Label>
                                 <Input
                                     id="density"
                                     type="number"
                                     value={buildingDensity}
                                     onChange={(e) => setBuildingDensity(parseFloat(e.target.value))}
-                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6 text-center"
+                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-2/6 text-center"
                                 />
                             </div>
 
-                            <div className=" flex items-center justify-center mx-auto w-full">
-                                <Label htmlFor="damping" className="w-1/2">Damping:</Label>
+                            <div className=" flex items-center justify-center ">
+                                <Label htmlFor="damping" className="w-full">Damping:</Label>
                                 <Input
                                     id="damping"
                                     type="number"
                                     value={damping}
                                     onChange={(e) => setDamping(parseFloat(e.target.value))}
-                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-2/6"
                                 />
                             </div>
-                            <div className="space-y-2 flex items-center justify-center mx-auto w-full">
-                                <Label htmlFor="Fundamental Period" className="w-1/2">Fundamental Period in along-wind direction (sec)</Label>
+                            <div className="space-y-2 flex items-center justify-center ">
+                                <Label htmlFor="Fundamental Period" className="w-full">Fundamental Period in along-wind direction (sec)</Label>
                                 <Input
                                     id="Tone"
                                     type="number"
                                     value={Tone}
                                     onChange={(e) => setTone(parseFloat(e.target.value))}
-                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-2/6"
                                 />
                             </div>
-                            <div className="space-y-2 flex items-center justify-center mx-auto w-full">
-                                <Label htmlFor="Fundamental Period" className="w-1/2">Fundamental Period in across-wind direction (sec)</Label>
+                            <div className="space-y-2 flex items-center justify-center ">
+                                <Label htmlFor="Fundamental Period" className="w-full">Fundamental Period in across-wind direction (sec)</Label>
                                 <Input
                                     id="Tone"
                                     type="number"
                                     value={Tone}
                                     onChange={(e) => setTone(parseFloat(e.target.value))}
-                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-2/6"
                                 />
                             </div>
-                            <div className="space-y-2 flex items-center justify-center mx-auto w-full">
-                                <Label htmlFor="Fundamental Period" className="w-1/2">Fundamental Period in torsion (sec)</Label>
+                            <div className="space-y-2 flex items-center justify-center ">
+                                <Label htmlFor="Fundamental Period" className="w-full">Fundamental Period in torsion (sec)</Label>
                                 <Input
                                     id="Tone"
                                     type="number"
                                     value={Tone}
                                     onChange={(e) => setTone(parseFloat(e.target.value))}
-                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-2/6"
                                 />
+                            </div>
+                            <div className=" flex justify-start">
+                                <RectangleWithArrow width={width} height={depth} />
                             </div>
 
                         </div>
-                        <RectangleWithArrow width={width} height={depth} />
+
 
                     </CardContent>
 
