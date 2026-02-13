@@ -64,7 +64,7 @@ export function FileUploadDialog({ open, onOpenChange, onFileSelect }: FileUploa
                 <DialogHeader>
                     <DialogTitle>Upload Data File</DialogTitle>
                     <DialogDescription>
-                        Upload your experimental data file for calculation. CSV is the only supported format. CSV should contain 3 columns: MX, MY, and MZ.
+                        Upload your experimental data file for calculation. CSV is the only supported format. CSV should contain 1 column of data.
                     </DialogDescription>
                 </DialogHeader>
 

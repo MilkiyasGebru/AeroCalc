@@ -418,7 +418,7 @@ export default function InputCard(){
                                              <div className="space-y-4 border-t pt-4">
                                                     <Label className="text-sm font-semibold">Required Data Files</Label>
 
-                                                    <div className="grid grid-cols-2  gap-4">
+                                                    <div className="grid grid-cols  gap-4">
                                                         {/* File 1 */}
                                                         <div className="flex items-center gap-2">
                                                             <Button variant="outline" onClick={() => setShowFile1(true)} className="w-full">
