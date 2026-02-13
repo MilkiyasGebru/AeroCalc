@@ -1,5 +1,4 @@
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card.tsx";
-import {Calculator} from "lucide-react";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {Input} from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {Button} from "@/components/ui/button.tsx";
@@ -217,23 +216,6 @@ export default function InputCard(){
                             </div>
 
                         </div>
-
-                        {/*<div className="flex gap-2">*/}
-                        {/*    <Button*/}
-                        {/*        className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"*/}
-                        {/*        onClick={handlePrev}*/}
-                        {/*        disabled={true}*/}
-                        {/*    >*/}
-                        {/*        Prev*/}
-                        {/*    </Button>*/}
-                        {/*    <Button*/}
-                        {/*        className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"*/}
-                        {/*        onClick={handleNext}*/}
-                        {/*    >*/}
-                        {/*        Next*/}
-                        {/*    </Button>*/}
-
-                        {/*</div>*/}
                         <RectangleWithArrow width={width} height={depth} />
                     </CardContent>
                 </>}
@@ -299,21 +281,6 @@ export default function InputCard(){
                             </div>
 
                         </div>
-                        {/*<div className="flex gap-2">*/}
-                        {/*    <Button*/}
-                        {/*        className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"*/}
-                        {/*        onClick={handlePrev}*/}
-                        {/*    >*/}
-                        {/*        Prev*/}
-                        {/*    </Button>*/}
-                        {/*    <Button*/}
-                        {/*        className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"*/}
-                        {/*        onClick={handleNext}*/}
-                        {/*    >*/}
-                        {/*        Next*/}
-                        {/*    </Button>*/}
-
-                        {/*</div>*/}
                         <RectangleWithArrow width={width} height={depth} />
 
                     </CardContent>
@@ -393,23 +360,6 @@ export default function InputCard(){
                                 className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
                             />
                         </div>
-
-                        {/*<div className="flex gap-2">*/}
-                        {/*    <Button*/}
-                        {/*        className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"*/}
-                        {/*        onClick={handlePrev}*/}
-                        {/*    >*/}
-                        {/*        Prev*/}
-                        {/*    </Button>*/}
-                        {/*    <Button*/}
-                        {/*        className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"*/}
-                        {/*        onClick={handleNext}*/}
-                        {/*    >*/}
-                        {/*        Next*/}
-                        {/*    </Button>*/}
-
-                        {/*</div>*/}
-
                     </CardContent>
                 </>}
                 {step == 3 && <>
@@ -429,21 +379,8 @@ export default function InputCard(){
 
                                     <FieldContent>
                                         <Label htmlFor="analytical-checkbox">Use analytical equations for base moment PSD</Label>
-                                        {/*<FieldDescription>*/}
-                                        {/*    Use percise mathematical formulas*/}
-                                        {/*</FieldDescription>*/}
                                     </FieldContent>
                                 </Field>
-                                {/*<Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">*/}
-                                {/*    <Checkbox id="experimental-checkbox" name="terms-checkbox" checked={experimentalSelected} onCheckedChange={(checked)=>setExperimentalSelected(checked===true)} />*/}
-
-                                {/*    <FieldContent>*/}
-                                {/*        <Label htmlFor="experimental-checkbox">Experimental Calculation</Label>*/}
-                                {/*        <FieldDescription>*/}
-                                {/*            Use available experimental data from our database or file upload*/}
-                                {/*        </FieldDescription>*/}
-                                {/*    </FieldContent>*/}
-                                {/*</Field>*/}
 
                                 <RadioGroup value={checking} onValueChange={setChecking}>
                                     <Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">
@@ -529,23 +466,6 @@ export default function InputCard(){
 
                         </div>
 
-
-                        {/*<div className="flex gap-2">*/}
-                        {/*    <Button*/}
-                        {/*        className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"*/}
-                        {/*        onClick={handlePrev}*/}
-                        {/*    >*/}
-                        {/*        Prev*/}
-                        {/*    </Button>*/}
-                        {/*    <Button*/}
-                        {/*        className="w-full text-center flex justify-center hover:cursor-pointer bg-blue-400 text-white"*/}
-                        {/*        onClick={handleNext}*/}
-                        {/*        // disabled={!(analyticalSelected || (experimentalSelected && (uploadedFile !== null)))}*/}
-                        {/*    >*/}
-                        {/*        Next*/}
-                        {/*    </Button>*/}
-                        {/**/}
-                        {/*</div>*/}
 
                     </CardContent>
                 </>}
