@@ -5,6 +5,7 @@ interface InputBuildingContextInterface {
     height: number;
     depth: number;
     meanSpeed: number;
+    userMeanSpeed: number;
     experimentalMeanSpeed: number;
     buildingDensity: number;
     totalFloors: number;
@@ -39,6 +40,7 @@ interface InputBuildingContextInterface {
     setTalong: (val :number) => void;
     setTtorsion: (val :number) => void;
     setTacross: (val: number)=>void;
+    setUserMeanSpeed: (val: number) => void;
 
 }
 interface IUploadData {
@@ -57,10 +59,10 @@ export const InputBuildingContextProvider = ({children}: {children: React.ReactN
     const [buildingDensity, setBuildingDensity] = useState<number>(150);
     const [totalFloors, setTotalFloors] = useState<number>(100);
     const [damping, setDamping] = useState<number>(0.15);
-    const [Tone, setTone] = useState<number>(6.127169106);
-    const [Tacross, setTacross] = useState<number>(6.127169106);
-    const [Talong, setTalong] = useState<number>(6.127169106);
-    const [Ttorsion, setTtorsion] = useState<number>(6.127169106);
+    const [Tone, setTone] = useState<number>(6.127);
+    const [Tacross, setTacross] = useState<number>(6.127);
+    const [Talong, setTalong] = useState<number>(6.127);
+    const [Ttorsion, setTtorsion] = useState<number>(6.127);
     const [terrain, setTerrain] = useState<string>("open");
     const [csvData, setCSVData] = useState<IUploadData[]>([]);
     const [mxData, setMxData] = useState<number[]>([]);
@@ -69,12 +71,14 @@ export const InputBuildingContextProvider = ({children}: {children: React.ReactN
     const [experimentalMeanSpeed, setExperimentalMeanSpeed] = useState<number>(1);
     const [experimentalFrequency, setExperimentalFrequency] = useState<number>(0.18312429715297);
     const [normalizedExperimentalFrequencies, setNormalizedExperimentalFrequencies] = useState<number[]>([]);
+    const [userMeanSpeed, setUserMeanSpeed] = useState<number>(30)
     return (
         <InputBuildingContext.Provider value={{
             width, height, depth, meanSpeed, buildingDensity, totalFloors, damping, Tone, terrain,csvData,experimentalMeanSpeed,experimentalFrequency,
             normalizedExperimentalFrequencies, setNormalizedExperimentalFrequencies,
             mxData,myData,mzData,setMxData,setMyData,setMzData,
             Ttorsion, Tacross, Talong, setTalong, setTtorsion, setTacross,
+            userMeanSpeed, setUserMeanSpeed,
             setExperimentalFrequency,setExperimentalMeanSpeed,setWidth, setHeight, setDepth,setMeanSpeed, setBuildingDensity,setTotalFloors,setDamping,setTerrain,setTone, setCSVData}} >
             {children}
         </InputBuildingContext.Provider>

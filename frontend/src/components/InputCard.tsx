@@ -61,7 +61,7 @@ export default function InputCard(){
     // Part-1
     const {width, height,depth,totalFloors, setWidth, setHeight, setDepth,setTotalFloors } = useInputBuildingContext()
     // Part - 2
-    const {buildingDensity, meanSpeed, Tone, damping, setBuildingDensity, setMeanSpeed, setTone, setDamping} = useInputBuildingContext()
+    const {buildingDensity, meanSpeed,userMeanSpeed, Tone,Talong,Ttorsion,setTtorsion,setTalong, damping, setBuildingDensity, setMeanSpeed, setTone, setDamping,setUserMeanSpeed} = useInputBuildingContext()
 
     // Part -3
     const {experimentalFrequency, experimentalMeanSpeed, setExperimentalMeanSpeed, setExperimentalFrequency, setMxData, setMyData, setMzData, mxData, myData, mzData} = useInputBuildingContext()
@@ -252,7 +252,8 @@ export default function InputCard(){
                                 />
                             </div>
                             <div className="space-y-2 flex items-center justify-center ">
-                                <Label htmlFor="Fundamental Period" className="w-full">Fundamental Period in along-wind direction (sec)</Label>
+                                <Label htmlFor="Fundamental Period" className="w-full">Fundamental Period in across-wind
+                                    direction (sec)</Label>
                                 <Input
                                     id="Tone"
                                     type="number"
@@ -262,27 +263,29 @@ export default function InputCard(){
                                 />
                             </div>
                             <div className="space-y-2 flex items-center justify-center ">
-                                <Label htmlFor="Fundamental Period" className="w-full">Fundamental Period in across-wind direction (sec)</Label>
+                                <Label htmlFor="Fundamental Period" className="w-full">Fundamental Period in along-wind
+                                    direction (sec)</Label>
                                 <Input
                                     id="Tone"
                                     type="number"
-                                    value={Tone}
-                                    onChange={(e) => setTone(Number(parseFloat(e.target.value).toFixed(3)))}
+                                    value={Talong}
+                                    onChange={(e) => setTalong(Number(parseFloat(e.target.value).toFixed(3)))}
                                     className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-2/6"
                                 />
                             </div>
                             <div className="space-y-2 flex items-center justify-center ">
-                                <Label htmlFor="Fundamental Period" className="w-full">Fundamental Period in torsion (sec)</Label>
+                                <Label htmlFor="Fundamental Period" className="w-full">Fundamental Period in torsion
+                                    (sec)</Label>
                                 <Input
                                     id="Tone"
                                     type="number"
-                                    value={Tone}
-                                    onChange={(e) => setTone(Number(parseFloat(e.target.value).toFixed(3)))}
+                                    value={Ttorsion}
+                                    onChange={(e) => setTtorsion(Number(parseFloat(e.target.value).toFixed(3)))}
                                     className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-2/6"
                                 />
                             </div>
                             <div className=" flex justify-start">
-                                <RectangleWithArrow width={width} height={depth} />
+                                <RectangleWithArrow width={width} height={depth}/>
                             </div>
 
                         </div>
@@ -360,8 +363,8 @@ export default function InputCard(){
                             <Input
                                 id="mean_velocity"
                                 type="number"
-                                value={meanSpeed}
-                                onChange={(e) => setMeanSpeed(Number(parseFloat(e.target.value).toFixed(3)))}
+                                value={userMeanSpeed}
+                                onChange={(e) => setUserMeanSpeed(Number(parseFloat(e.target.value).toFixed(3)))}
                                 className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
                             />
                         </div>
