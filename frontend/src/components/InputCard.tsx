@@ -550,7 +550,7 @@ export default function InputCard(){
                 <Button
                     className="w-fit px-3 py-2 text-center flex justify-center hover:cursor-pointer bg-white text-black !bg-opacity-100 "
                     onClick={handleNext}
-                    disabled={step == 3 && !(analyticalSelected || checking !== "")}
+                    disabled={step == 3 && (!(analyticalSelected || checking !== "") || (checking === "external_database" && file1 == null && file2 == null && file3 == null) )}
                 >
                     {((step == 6) || (step == 5 && checking === ""))? "Done":"Next"}
                 </Button>
