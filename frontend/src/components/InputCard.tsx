@@ -316,7 +316,7 @@ export default function InputCard(){
                                 <Label htmlFor="terrain" className="w-1/2">Terrain Type:</Label>
                                 <Select value={terrain} onValueChange={setTerrain}>
                                     <SelectTrigger id="terrain"
-                                                   className="w-1/6 max-w-48 border-transparent bg-[hsl(210,20%,98%)]">
+                                                   className="w-1/6 max-w-48 border-none bg-white">
                                         <SelectValue placeholder="Open"/>
                                     </SelectTrigger>
                                     <SelectContent className="bg-[hsl(210,20%,98%)]">
@@ -484,7 +484,7 @@ export default function InputCard(){
 
                 </div>}
                 {((step == 5 && checking !== "") || (step == 4 && checking === "")) &&
-                    <div className="w-full grid lg:grid-cols-2 gap-3 mx-auto">
+                    <div className="w-full grid  gap-3 mx-auto">
                         <div className="w-full bg-white rounded-md border-transparent">
                             <PSDGraph psds={acrossPsds} experimentalPsds={experimentalAcrossPsds} graphType="Across"/>
                         </div>
