@@ -180,7 +180,7 @@ export default function InputCard(){
                                     id="width"
                                     type="number"
                                     value={width}
-                                    onChange={(e) => setWidth(parseFloat(e.target.value))}
+                                    onChange={(e) => setWidth(Number(parseFloat(e.target.value).toFixed(3)))}
                                     className=" text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0 w-5/6 md:w-2/6"
                                 />
                             </div>
@@ -190,7 +190,7 @@ export default function InputCard(){
                                     id="height"
                                     type="number"
                                     value={height}
-                                    onChange={(e) => setHeight(parseFloat(e.target.value))}
+                                    onChange={(e) => setHeight(Number(parseFloat(e.target.value).toFixed(3)))}
                                     className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-2/6"
                                 />
                             </div>
@@ -200,7 +200,7 @@ export default function InputCard(){
                                     id="depth"
                                     type="number"
                                     value={depth}
-                                    onChange={(e) => setDepth(parseFloat(e.target.value))}
+                                    onChange={(e) => setDepth(Number(parseFloat(e.target.value).toFixed(3)))}
                                     className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0 w-5/6 md:w-2/6"
                                 />
                             </div>
@@ -236,7 +236,7 @@ export default function InputCard(){
                                     id="density"
                                     type="number"
                                     value={buildingDensity}
-                                    onChange={(e) => setBuildingDensity(parseFloat(e.target.value))}
+                                    onChange={(e) => setBuildingDensity(Number(parseFloat(e.target.value).toFixed(3)))}
                                     className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-2/6 text-center"
                                 />
                             </div>
@@ -247,7 +247,7 @@ export default function InputCard(){
                                     id="damping"
                                     type="number"
                                     value={damping}
-                                    onChange={(e) => setDamping(parseFloat(e.target.value))}
+                                    onChange={(e) => setDamping(Number(parseFloat(e.target.value).toFixed(3)))}
                                     className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-2/6"
                                 />
                             </div>
@@ -257,7 +257,7 @@ export default function InputCard(){
                                     id="Tone"
                                     type="number"
                                     value={Tone}
-                                    onChange={(e) => setTone(parseFloat(e.target.value))}
+                                    onChange={(e) => setTone(Number(parseFloat(e.target.value).toFixed(3)))}
                                     className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-2/6"
                                 />
                             </div>
@@ -267,7 +267,7 @@ export default function InputCard(){
                                     id="Tone"
                                     type="number"
                                     value={Tone}
-                                    onChange={(e) => setTone(parseFloat(e.target.value))}
+                                    onChange={(e) => setTone(Number(parseFloat(e.target.value).toFixed(3)))}
                                     className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-2/6"
                                 />
                             </div>
@@ -277,7 +277,7 @@ export default function InputCard(){
                                     id="Tone"
                                     type="number"
                                     value={Tone}
-                                    onChange={(e) => setTone(parseFloat(e.target.value))}
+                                    onChange={(e) => setTone(Number(parseFloat(e.target.value).toFixed(3)))}
                                     className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-2/6"
                                 />
                             </div>
@@ -308,7 +308,7 @@ export default function InputCard(){
                                     id="mean_velocity"
                                     type="number"
                                     value={meanSpeed}
-                                    onChange={(e) => setMeanSpeed(parseFloat(e.target.value))}
+                                    onChange={(e) => setMeanSpeed(Number(parseFloat(e.target.value).toFixed(3)))}
                                     className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
                                 />
                             </div>
@@ -361,7 +361,7 @@ export default function InputCard(){
                                 id="mean_velocity"
                                 type="number"
                                 value={meanSpeed}
-                                onChange={(e) => setMeanSpeed(parseFloat(e.target.value))}
+                                onChange={(e) => setMeanSpeed(Number(parseFloat(e.target.value).toFixed(3)))}
                                 className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
                             />
                         </div>
@@ -484,15 +484,19 @@ export default function InputCard(){
 
                 </div>}
                 {((step == 5 && checking !== "") || (step == 4 && checking === "")) &&
-                    <div className="w-full grid  gap-3 mx-auto">
-                        <div className="w-full bg-white rounded-md border-transparent">
+                    <div className="w-full flex flex-col gap-6 bg-transparent  mx-auto">
+                        <p className="text-center text-2xl">Aerodynamic base moment PSDs</p>
+                        <div className="w-full bg-white rounded-md">
                             <PSDGraph psds={acrossPsds} experimentalPsds={experimentalAcrossPsds} graphType="Across"/>
                         </div>
-                        <div className="w-full bg-white rounded-md border-transparent">
+                        <hr className="w-4/5 mx-auto opacity-40"/>
+                        <div className="w-full bg-white rounded-md">
                             <PSDGraph psds={torsionPsds} experimentalPsds={experimentalTorsionPsds}
                                       graphType="Torsion"/>
                         </div>
-                        <div className="w-full bg-white rounded-md border-transparent">
+                        <hr className="w-4/5 mx-auto opacity-40"/>
+
+                        <div className="w-full bg-white rounded-md">
                             <PSDGraph psds={[]} experimentalPsds={experimentalAlongPsds} graphType="Along"/>
                         </div>
                     </div>}
