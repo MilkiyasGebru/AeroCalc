@@ -170,12 +170,8 @@ export default function InputCard(){
                 {step == 0 && <>
                     <CardHeader>
                         <CardTitle className="flex gap-2 items-center justify-center text-xl ">
-                            <Calculator className="w-5 h-5 text-blue-300"/>
-                            User Input 1
+                            User Input 1 : Building Geometry
                         </CardTitle>
-                        <CardDescription className="text-center">
-                            Building Geometry
-                        </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="grid gap-2 space-y-3 p-4">
@@ -186,7 +182,7 @@ export default function InputCard(){
                                     type="number"
                                     value={width}
                                     onChange={(e) => setWidth(parseFloat(e.target.value))}
-                                    className=" text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0 w-5/6 md:w-1/3"
+                                    className=" text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0 w-5/6 md:w-1/6"
                                 />
                             </div>
                             <div className="flex items-center justify-center mx-auto w-full">
@@ -196,7 +192,7 @@ export default function InputCard(){
                                     type="number"
                                     value={height}
                                     onChange={(e) => setHeight(parseFloat(e.target.value))}
-                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
                                 />
                             </div>
                             <div className=" flex items-center justify-center mx-auto w-full">
@@ -206,7 +202,7 @@ export default function InputCard(){
                                     type="number"
                                     value={depth}
                                     onChange={(e) => setDepth(parseFloat(e.target.value))}
-                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0 w-5/6 md:w-1/3"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0 w-5/6 md:w-1/6"
                                 />
                             </div>
                             <div className="space-y-2 flex items-center justify-center mx-auto w-full">
@@ -216,7 +212,7 @@ export default function InputCard(){
                                     type="number"
                                     value={totalFloors}
                                     onChange={(e) => setTotalFloors(parseFloat(e.target.value))}
-                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
                                 />
                             </div>
 
@@ -244,12 +240,8 @@ export default function InputCard(){
                 {step == 1 && <>
                     <CardHeader>
                         <CardTitle className="flex gap-2 items-center justify-center text-xl">
-                            <Calculator className="w-5 h-5 text-blue-300"/>
-                            User Input 2
+                            User Input 2: Dynamic Property
                         </CardTitle>
-                        <CardDescription className="text-center">
-                        Dynamic Property
-                        </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="grid gap-4">
@@ -261,7 +253,7 @@ export default function InputCard(){
                                     type="number"
                                     value={buildingDensity}
                                     onChange={(e) => setBuildingDensity(parseFloat(e.target.value))}
-                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3 text-center"
+                                    className="font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6 text-center"
                                 />
                             </div>
 
@@ -272,7 +264,7 @@ export default function InputCard(){
                                     type="number"
                                     value={damping}
                                     onChange={(e) => setDamping(parseFloat(e.target.value))}
-                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
                                 />
                             </div>
                             <div className="space-y-2 flex items-center justify-center mx-auto w-full">
@@ -282,7 +274,7 @@ export default function InputCard(){
                                     type="number"
                                     value={Tone}
                                     onChange={(e) => setTone(parseFloat(e.target.value))}
-                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
                                 />
                             </div>
                             <div className="space-y-2 flex items-center justify-center mx-auto w-full">
@@ -292,7 +284,7 @@ export default function InputCard(){
                                     type="number"
                                     value={Tone}
                                     onChange={(e) => setTone(parseFloat(e.target.value))}
-                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
                                 />
                             </div>
                             <div className="space-y-2 flex items-center justify-center mx-auto w-full">
@@ -302,7 +294,7 @@ export default function InputCard(){
                                     type="number"
                                     value={Tone}
                                     onChange={(e) => setTone(parseFloat(e.target.value))}
-                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
                                 />
                             </div>
 
@@ -330,12 +322,8 @@ export default function InputCard(){
                 {step == 2 && <>
                     <CardHeader>
                         <CardTitle className="flex gap-2 items-center justify-center text-xl">
-                            <Calculator className="w-5 h-5 text-blue-300"/>
-                            User Input 3
+                            User Input 3: Load Wind Climate
                         </CardTitle>
-                        <CardDescription>
-                            Load Wind Climate
-                        </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="grid grid-cols gap-2">
@@ -349,14 +337,14 @@ export default function InputCard(){
                                     type="number"
                                     value={meanSpeed}
                                     onChange={(e) => setMeanSpeed(parseFloat(e.target.value))}
-                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                    className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
                                 />
                             </div>
                             <div className="space-y-2 flex items-center justify-center mx-auto w-full">
                                 <Label htmlFor="terrain" className="w-1/2">Terrain Type:</Label>
                                 <Select value={terrain} onValueChange={setTerrain}>
                                     <SelectTrigger id="terrain"
-                                                   className="w-full max-w-48 border-transparent bg-[hsl(210,20%,98%)]">
+                                                   className="w-1/6 max-w-48 border-transparent bg-[hsl(210,20%,98%)]">
                                         <SelectValue placeholder="Open"/>
                                     </SelectTrigger>
                                     <SelectContent className="bg-[hsl(210,20%,98%)]">
@@ -371,9 +359,9 @@ export default function InputCard(){
                             </div>
 
                         </div>
-                        <div className="grid grid-cols-4">
+                        <div className="grid grid-cols-4 mx-auto w-full">
                             <div className="flex items-center justify-center gap-2">
-                                Wind Speed
+                                Wind Speed Profile
                                 <TooltipProvider>
                                 <Tooltip key="bottom">
                                     <TooltipTrigger asChild>
@@ -402,7 +390,7 @@ export default function InputCard(){
                                 type="number"
                                 value={meanSpeed}
                                 onChange={(e) => setMeanSpeed(parseFloat(e.target.value))}
-                                className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/3"
+                                className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-1/6"
                             />
                         </div>
 
@@ -427,12 +415,8 @@ export default function InputCard(){
                 {step == 3 && <>
                     <CardHeader>
                         <CardTitle className="flex gap-2 items-center text-xl">
-                            <Calculator className="w-5 h-5 text-blue-300"/>
-                            Aerodynamic
+                            Aerodynamic response calculator
                         </CardTitle>
-                        <CardDescription>
-                            Choose how you want to perform the calculation
-                        </CardDescription>
 
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -444,7 +428,7 @@ export default function InputCard(){
                                     <Checkbox id="analytical-checkbox" name="terms-checkbox" checked={analyticalSelected} onCheckedChange={(checked)=>setAnalyticalSelected(checked==true)} />
 
                                     <FieldContent>
-                                        <Label htmlFor="analytical-checkbox">analytical equations for base moment PSD</Label>
+                                        <Label htmlFor="analytical-checkbox">Use analytical equations for base moment PSD</Label>
                                         {/*<FieldDescription>*/}
                                         {/*    Use percise mathematical formulas*/}
                                         {/*</FieldDescription>*/}
