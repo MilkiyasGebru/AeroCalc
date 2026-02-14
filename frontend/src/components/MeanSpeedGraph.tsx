@@ -26,15 +26,15 @@ export default function MeanSpeedGraph({graph_data, current_point}: {graph_data:
 
                 <XAxis dataKey="speed"   type="number" stroke="#000000" domain={['auto', 'auto']} // Or ['dataMin', 'dataMax']
                        allowDataOverflow={true}
-                       label={{ value: 'Wind Speed (m/s)', position: 'insideBottom', offset: -3,style: { fill: '#000000', fontWeight: "normal", fontSize:17 } }}
+                       label={{ value: 'Wind Speed (m/s)', position: 'insideBottom', offset: -3,style: { fill: '#000000', fontWeight: "normal", fontSize:14 } }}
                 />
                 <YAxis width="auto"  type="number" domain={['auto', 'auto']} stroke="#000000"
                        label={{
                            value: 'Height (m)',
                            angle: -90,
                            position: 'insideLeft',
-                           style: { textAnchor: 'middle',fill: '#000000', fontWeight: "normal", fontSize:17 },
-                           offset: 20
+                           style: { textAnchor: 'middle',fill: '#000000', fontWeight: "normal", fontSize:14 },
+                           offset: 10
                        }}
                 />
                 <Tooltip
