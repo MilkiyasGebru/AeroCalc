@@ -1,6 +1,5 @@
 export const RectangleWithArrow = ({ width = 100, height = 150 }) => {
     const arrowLength = 60;
-    console.log("Width is ",(Math.max(Math.min(height, width) / Math.max(height, width) * 150,50)), width, height,Math.max(Math.min(height, width) / Math.max(height, width) * 150,50));
 
     return (
         <div className="flex flex-row-reverse gap-2 items-center mt-6 justify-center overflow-x-auto">
