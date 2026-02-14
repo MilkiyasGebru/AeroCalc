@@ -92,6 +92,16 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
             setExperimentalAcrossPsds(acrossResult.psd)
             setNormalizedExperimentalFrequencies(acrossResult.normalizedFrequency)
             setExperimentalTorsionPsds(torsionResult.psd)
+
+            const along_psds : number[] = calculate_experimental_psd_normalized(My,width,height,experimentalMeanSpeed,experimentalFrequency).psd
+            setExperimentalAlongPsds(along_psds)
+            const [x,y]:number[] = CalculateFD(width, height, depth, meanSpeed,Tone, totalFloors, damping, frequencies, acrossResult.psd, torsionResult.psd, buildingDensity)
+            const [_,z]:number[] = CalculateFD(width, height, depth, meanSpeed,Tone, totalFloors, damping, frequencies, along_psds, torsionResult.psd, buildingDensity)
+
+            setExperimentalAccelartionYDirection(z)
+            //
+            setExperimentalVr(x)
+            setExperimentalAr(y)
         } else {
             // WEB MODE: Fallback to Local JavaScript
             const experi_across_psds : number[] = calculate_experimental_psd_normalized(Mx,width,height,experimentalMeanSpeed,experimentalFrequency).psd
