@@ -51,7 +51,7 @@ export const RectangleWithArrow = ({ width = 100, height = 150 }) => {
                 />
             </svg>
             <div
-                className="text-xs font-black text-blue-600 uppercase "
+                className="text-sm   "
             >
                 Wind Angle of Attack
             </div>
