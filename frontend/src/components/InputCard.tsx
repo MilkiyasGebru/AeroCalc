@@ -336,7 +336,8 @@ export default function InputCard(){
 
                         <div className=" grid grid-cols-4">
                             <div className="flex items-center gap-1">
-                                Wind Speed Profile
+                                <p className="text-sm">Wind Speed Profile</p>
+
                                 <TooltipProvider>
                                 <Tooltip key="bottom">
                                     <TooltipTrigger asChild>
