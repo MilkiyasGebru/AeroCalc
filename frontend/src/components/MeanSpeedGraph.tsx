@@ -13,7 +13,7 @@ export default function MeanSpeedGraph({graph_data, current_point}: {graph_data:
     return (
         <div className="col-span-3">
             <LineChart
-                style={{ width: '90%', maxWidth: '1400px', height: '100%', maxHeight: '70vh', aspectRatio: 1.618 }}
+                style={{ width: '90%', maxWidth: '250px', height: '100%', maxHeight: '40vh', aspectRatio: 0.8 }}
                 responsive
                 data={graph_data}
                 margin={{
@@ -33,7 +33,7 @@ export default function MeanSpeedGraph({graph_data, current_point}: {graph_data:
                            value: 'Height (m)',
                            angle: -90,
                            position: 'insideLeft',
-                           style: { textAnchor: 'middle',fill: '#000000', fontWeight: "normal", fontSize:14 },
+                           style: { textAnchor: 'middle',fill: '#000000', fontWeight: "normal", fontSize:15 },
                            offset: 10
                        }}
                 />
