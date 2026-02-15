@@ -75,7 +75,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         setAr(y)
         setAcrossPsds(across_psds)
         setTorsionPsds(torsion_psds)
-    }, [width, depth, height, meanSpeed, totalFloors, damping])
+    }, [width, depth, height, meanSpeed, totalFloors, damping, terrain])
 
     const handleExperimentalCalculation = useCallback(async (Mx:number[], My:number[], Mz:number[])=>{
         // const Mx : number[] = mxData;
