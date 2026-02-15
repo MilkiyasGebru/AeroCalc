@@ -59,7 +59,7 @@ export default function InputCard(){
 
     const [checking, setChecking] = useState<string>("")
     // Part-1
-    const {width, height,depth,totalFloors, setWidth, setHeight, setDepth,setTotalFloors } = useInputBuildingContext()
+    const {width, height,depth,totalFloors, setWidth, setHeight, setDepth,setTotalFloors, terrain, setTerrain } = useInputBuildingContext()
     // Part - 2
     const {buildingDensity, meanSpeed,userMeanSpeed, Tone,Talong,Ttorsion,setTtorsion,setTalong, damping, setBuildingDensity, setMeanSpeed, setTone, setDamping,setUserMeanSpeed} = useInputBuildingContext()
 
@@ -71,7 +71,7 @@ export default function InputCard(){
     // final Part
     const {acrossPsds, torsionPsds, experimentalAcrossPsds, experimentalTorsionPsds, experimentalAlongPsds} = useOutputBuildingContext()
     const [step, setStep] = useState(0);
-    const [terrain, setTerrain] = useState<string>("open")
+    // const [terrain, setTerrain] = useState<string>("open")
     const [analyticalSelected, setAnalyticalSelected] = useState<boolean>(false)
 
     const [showInternalDialog, setShowInternalDialog] = useState(false);
@@ -83,6 +83,7 @@ export default function InputCard(){
     const coefficient = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
 
     useEffect(() => {
+        console.log("Terrain is ", terrain)
         const handler: number | undefined = setTimeout(()=>{
             const MaxHeight: number = height * 1.5;
             const graph_data = [];
@@ -346,9 +347,9 @@ export default function InputCard(){
                                         </div>
 
                                     </TooltipTrigger>
-                                    < TooltipContent side="bottom">
-                                        <div className="border rounded max-w-[200px] bg-white opacity-100 px-2 py-2">
-                                            “The wind profile is developed based on the dynamic wind load calculation procedure in NBC 2025”
+                                    < TooltipContent side="bottom" className=" !text-black z-50 ">
+                                        <div className="border rounded max-w-[200px] bg-white text-md px-2 py-2">
+                                            The wind profile is developed based on the dynamic wind load calculation procedure in NBC 2025.
                                         </div>
                                     </TooltipContent>
                                 </Tooltip>
