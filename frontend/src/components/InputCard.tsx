@@ -297,7 +297,7 @@ export default function InputCard(){
                 {step == 2 && <>
                     <CardHeader>
                         <CardTitle className="flex gap-2 items-center justify-center text-xl">
-                            User Input 3: Load Wind Climate
+                            User Input 3: Local Wind Climate
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
