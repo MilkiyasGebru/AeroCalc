@@ -490,17 +490,17 @@ export default function InputCard(){
                 {((step == 5 && checking !== "") || (step == 4 && checking === "")) &&
                     <div className="w-full flex flex-col gap-6 bg-transparent  mx-auto">
                         <p className="text-center text-2xl">Aerodynamic base moment PSDs</p>
-                        <div className="w-full bg-white rounded-md">
+                        <div className="w-full bg-white flex justify-center rounded-md">
                             <PSDGraph psds={acrossPsds} experimentalPsds={experimentalAcrossPsds} graphType="Across"/>
                         </div>
                         <hr className="w-4/5 mx-auto opacity-40"/>
-                        <div className="w-full bg-white rounded-md">
+                        <div className="w-full bg-white rounded-md flex justify-center">
                             <PSDGraph psds={torsionPsds} experimentalPsds={experimentalTorsionPsds}
                                       graphType="Torsion"/>
                         </div>
                         <hr className="w-4/5 mx-auto opacity-40"/>
 
-                        <div className="w-full bg-white rounded-md">
+                        <div className="w-full bg-white rounded-md flex justify-center">
                             <PSDGraph psds={[]} experimentalPsds={experimentalAlongPsds} graphType="Along"/>
                         </div>
                     </div>}

@@ -50,7 +50,8 @@ export default function PSDGraph(props : PSDGraphInterface) {
     return (
         <>
         { (psds.length > 0 || experimentalPsds.length>0) && <LineChart
-            style={{ width: '90%', maxWidth: '1400px', height: '100%', maxHeight: '270px', minWidth:'350px', aspectRatio: 1 }}
+            style={{ maxWidth: '500px', minWidth:'350px', aspectRatio: 1 }}
+
             responsive
             data={graph_data}
             margin={{
