@@ -374,7 +374,7 @@ export default function InputCard(){
                 </>}
                 {step == 3 && <>
                     <CardHeader>
-                        <CardTitle className="flex gap-2 items-center text-xl">
+                        <CardTitle className="flex gap-2 items-center justify-center text-xl">
                             Aerodynamic response calculator
                         </CardTitle>
 
