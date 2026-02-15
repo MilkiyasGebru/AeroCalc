@@ -8,6 +8,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import {CardHeader, CardTitle} from "@/components/ui/card.tsx";
 
 
 
@@ -17,7 +18,11 @@ export default function ResultsCard() {
     return (
         // <TableCaption>Building dynamic response</TableCaption>
         <>
-        <p className="text-center m-4">Building dynamic response</p>
+            <CardHeader>
+                <CardTitle className="flex gap-2 items-center justify-center text-xl ">
+                    Building dynamic response
+                </CardTitle>
+            </CardHeader>
         <Table className="p-4">
             <TableHeader>
                 <TableRow>
