@@ -1,6 +1,8 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import {frequencies} from "../../CONSTANTS.ts";
 import {useInputBuildingContext} from "@/contexts/useInputBuildingContext.ts";
+import 'katex/dist/katex.min.css';
+import { InlineMath } from 'react-katex';
 
 
 
@@ -29,7 +31,52 @@ const SuperscriptLogTick = ({ x, y, payload }: any) => {
         </g>
     );
 };
+interface CustomYLabelProps {
+    viewBox?: {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+    };
+}
 
+const CustomYLabel = (props: CustomYLabelProps) => {
+    // const { x, y, height } = viewBox;
+    const { viewBox } = props;
+    const x = viewBox?.x || 0;
+    const y = viewBox?.y || 0;
+    const height = viewBox?.height || 0;
+    const cx = x - 60;
+    const cy = y + height / 2;
+
+    return (
+        <g transform={`translate(${cx},${cy}) rotate(-90)`}>
+            <foreignObject width={200} height={20} x={-100} y={90}>
+                <div style={{ textAlign: "center", }} className="text-sm">
+                    <InlineMath math={"f S_M(f) / (0.5\\rho  U_H^2 B H^2)^2 "} />
+                </div>
+            </foreignObject>
+        </g>
+    );
+};
+const CustomXLabel = (props: CustomYLabelProps) => {
+    const { viewBox } = props;
+    const x = viewBox?.x || 0;
+    const y = viewBox?.y || 0;
+    const height = viewBox?.height || 0;
+    const cx = x - 60;
+    const cy = y + height / 2;
+
+    return (
+        <g transform={`translate(${cx},${cy}) `}>
+            <foreignObject width={200} height={20} x={100} y={0}>
+                <div style={{ textAlign: "center" }} className="z-50 text-sm">
+                    <InlineMath math={" \\\\ fB/UH"} />
+                </div>
+            </foreignObject>
+        </g>
+    );
+};
 export default function PSDGraph(props : PSDGraphInterface) {
     const { psds, experimentalPsds} = props;
     const {normalizedExperimentalFrequencies} = useInputBuildingContext()
@@ -50,7 +97,7 @@ export default function PSDGraph(props : PSDGraphInterface) {
     return (
         <>
         { (psds.length > 0 || experimentalPsds.length>0) && <LineChart
-            style={{ maxWidth: '500px', minWidth:'350px', aspectRatio: 1 }}
+            style={{ maxWidth: '500px', minWidth:'500px', aspectRatio: 1 }}
 
             responsive
             data={graph_data}
@@ -58,7 +105,7 @@ export default function PSDGraph(props : PSDGraphInterface) {
                 top: 5,
                 right: 5,
                 left: 0,
-                bottom: 5,
+                bottom: 25,
             }}
         >
 
@@ -75,7 +122,9 @@ export default function PSDGraph(props : PSDGraphInterface) {
 
             <XAxis dataKey="frequency" scale="log"  type="number" domain={['auto', 'auto']} // Or ['dataMin', 'dataMax']
                    allowDataOverflow={true}
-                   label={{ value: 'fB/UH', position: 'insideBottom', offset: -2 }}
+
+                   // label={{ value: 'fB/UH', position: 'insideBottom', offset: -2 }}
+                label={<CustomXLabel />}
                    // tickFormatter={(value:number)=> {
                    //     const exp: number = Math.floor(Math.log10(value))
                    //     return <text>10 <tspan > {exp}</tspan> <text/>
@@ -86,16 +135,18 @@ export default function PSDGraph(props : PSDGraphInterface) {
                    stroke="#000000"
                    tickMargin={10}
                    // domain={[0.0001, 10]}
-                   ticks={[0.0001, 0.001, 0.01, 0.1, 1, 10]}
+                   ticks={[  0.01, 0.1, 1, 10]}
             />
-            <YAxis width="auto" scale="log"  type="number"
-                   label={{
-                       value: 'f S_M(f) / (0.5 ρ U_H^2 B H^2)^2',
-                       angle: -90,
-                       position: 'insideLeft',
-                       style: { textAnchor: 'middle' },
-                       offset: 8
-                   }}
+            <YAxis width={100} scale="log"  type="number"
+                   // label={{
+                   //     value: 'f S_M(f) / (0.5 ρ U_H^2 B H^2)^2',
+                   //     angle: -90,
+                   //     position: 'insideLeft',
+                   //     style: { textAnchor: 'middle' },
+                   //     offset: 8
+                   // }}
+                   label={<CustomYLabel  />}
+
                    // tickFormatter={(value:number)=> {
                    //     return value.toExponential(2)
                    // }}
