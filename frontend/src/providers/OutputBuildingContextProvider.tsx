@@ -50,7 +50,7 @@ export const OutputBuildingContext = createContext<OutputBuildingContextInterfac
 
 export const OutputBuildingContextProvider = ({children}: {children: React.ReactNode})=>{
 
-    const {width,height,depth,meanSpeed,damping,totalFloors,terrain,Tone,experimentalMeanSpeed, experimentalFrequency, setNormalizedExperimentalFrequencies, buildingDensity} = useInputBuildingContext();
+    const {width,height,depth,meanSpeed,damping,totalFloors,terrain,Talong,Ttorsion, Tacross,experimentalMeanSpeed, experimentalFrequency, setNormalizedExperimentalFrequencies, buildingDensity} = useInputBuildingContext();
 
     const [torsionPsds, setTorsionPsds] = useState<number[]>([]);
     const [acrossPsds, setAcrossPsds] = useState<number[]>([]);
@@ -65,67 +65,75 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
     const [experimentalAccelartionYDirection, setExperimentalAccelartionYDirection] = useState<number | null>(null)
     const [experimentalAlongPsds, setExperimentalAlongPsds] = useState<number[]>([])
     const handleAnalyticalCalculation = useCallback(()=>{
-
-        const c = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
-        let across_psds: number[] = CalculateAcrossPsdResponse(Math.max(width,depth),height,Math.min(width,depth),frequencies)
-        let torsion_psds: number[] = CalculateTorsionPsdResponse(Math.max(width,depth),height,Math.min(width,depth),meanSpeed*c**0.5,frequencies)
-        setAccelartionYDirection(CalculateAlong(Math.max(width, depth), height, Math.min(width,depth), meanSpeed*c**0.5,Tone,damping,frequencies,buildingDensity))
-        const [x,y]:number[] = CalculateFD(Math.max(width,depth), height, Math.min(width,depth), meanSpeed*c**0.5,Tone, totalFloors, damping, frequencies, across_psds, torsion_psds, buildingDensity)
-        setVr(x)
-        setAr(y)
-        setAcrossPsds(across_psds)
-        setTorsionPsds(torsion_psds)
+        if (height != null && width != null && depth != null && totalFloors != null && damping != null && meanSpeed != null && Talong != null && Ttorsion != null && Tacross != null && buildingDensity != null){
+            const c = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
+            let across_psds: number[] = CalculateAcrossPsdResponse(Math.max(width,depth),height,Math.min(width,depth),frequencies)
+            let torsion_psds: number[] = CalculateTorsionPsdResponse(Math.max(width,depth),height,Math.min(width,depth),meanSpeed*c**0.5,frequencies)
+            setAccelartionYDirection(CalculateAlong(Math.max(width, depth), height, Math.min(width,depth), meanSpeed*c**0.5,Talong,damping,frequencies,buildingDensity))
+            const [x,__]:number[] = CalculateFD(Math.max(width,depth), height, Math.min(width,depth), meanSpeed*c**0.5,Ttorsion, totalFloors, damping, frequencies, across_psds, torsion_psds, buildingDensity)
+            const [_,y]:number[] = CalculateFD(Math.max(width,depth), height, Math.min(width,depth), meanSpeed*c**0.5,Tacross, totalFloors, damping, frequencies, across_psds, torsion_psds, buildingDensity)
+            setVr(x)
+            setAr(y)
+            setAcrossPsds(across_psds)
+            setTorsionPsds(torsion_psds)
+        }
     }, [width, depth, height, meanSpeed, totalFloors, damping, terrain])
 
     const handleExperimentalCalculation = useCallback(async (Mx:number[], My:number[], Mz:number[])=>{
         // const Mx : number[] = mxData;
         // const My : number[] = myData;
         // const Mz: number[] = mzData;
+        if (height != null && width != null && depth != null && meanSpeed != null && totalFloors != null && damping != null && buildingDensity != null && Talong != null && Ttorsion != null && Tacross != null) {
 
+            if (window.pywebview?.api?.compute) {
+                // DESKTOP MODE: Call Python
+                console.log("Using Python for calculation...");
 
-        if (window.pywebview?.api?.compute) {
-            // DESKTOP MODE: Call Python
-            console.log("Using Python for calculation...");
-            const acrossResult = await window.pywebview.api.compute(Mx,width, height, experimentalMeanSpeed, experimentalFrequency);
-            const torsionResult = await window.pywebview.api.compute(Mz,width, depth, experimentalMeanSpeed, experimentalFrequency);
-            console.log(acrossResult.normalizedFrequency)
-            setExperimentalAcrossPsds(acrossResult.psd)
-            setNormalizedExperimentalFrequencies(acrossResult.normalizedFrequency)
-            setExperimentalTorsionPsds(torsionResult.psd)
+                const acrossResult = await window.pywebview.api.compute(Mx, width, height, experimentalMeanSpeed, experimentalFrequency);
+                const torsionResult = await window.pywebview.api.compute(Mz, width, depth, experimentalMeanSpeed, experimentalFrequency);
+                console.log(acrossResult.normalizedFrequency)
+                setExperimentalAcrossPsds(acrossResult.psd)
+                setNormalizedExperimentalFrequencies(acrossResult.normalizedFrequency)
+                setExperimentalTorsionPsds(torsionResult.psd)
 
-            const along_psds : number[] = calculate_experimental_psd_normalized(My,width,height,experimentalMeanSpeed,experimentalFrequency).psd
-            setExperimentalAlongPsds(along_psds)
-            const [x,y]:number[] = CalculateFD(width, height, depth, meanSpeed,Tone, totalFloors, damping, frequencies, acrossResult.psd, torsionResult.psd, buildingDensity)
-            const [_,z]:number[] = CalculateFD(width, height, depth, meanSpeed,Tone, totalFloors, damping, frequencies, along_psds, torsionResult.psd, buildingDensity)
+                const along_psds: number[] = calculate_experimental_psd_normalized(My, width, height, experimentalMeanSpeed, experimentalFrequency).psd
+                setExperimentalAlongPsds(along_psds)
+                const [x, _]: number[] = CalculateFD(width, height, depth, meanSpeed, Ttorsion, totalFloors, damping, frequencies, acrossResult.psd, torsionResult.psd, buildingDensity)
+                const [__, y]: number[] = CalculateFD(width, height, depth, meanSpeed, Tacross, totalFloors, damping, frequencies, acrossResult.psd, torsionResult.psd, buildingDensity)
+                const [___, z]: number[] = CalculateFD(width, height, depth, meanSpeed, Talong, totalFloors, damping, frequencies, along_psds, torsionResult.psd, buildingDensity)
 
-            setExperimentalAccelartionYDirection(z)
-            //
-            setExperimentalVr(x)
-            setExperimentalAr(y)
-        } else {
-            // WEB MODE: Fallback to Local JavaScript
-            const experi_across_psds : number[] = calculate_experimental_psd_normalized(Mx,width,height,experimentalMeanSpeed,experimentalFrequency).psd
-            setExperimentalAcrossPsds(experi_across_psds)
+                setExperimentalAccelartionYDirection(z)
+                //
+                setExperimentalVr(x)
+                setExperimentalAr(y)
+            } else {
+                // WEB MODE: Fallback to Local JavaScript
+                const experi_across_psds: number[] = calculate_experimental_psd_normalized(Mx, width, height, experimentalMeanSpeed, experimentalFrequency).psd
+                setExperimentalAcrossPsds(experi_across_psds)
 
-            const {psd, normalizedFrequency} = calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency)
-            console.log("Normalized Frequency is ", normalizedFrequency)
-            // const  : number[] = calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency)
-            setExperimentalTorsionPsds(psd)
-            const along_psds : number[] = calculate_experimental_psd_normalized(My,width,height,experimentalMeanSpeed,experimentalFrequency).psd
-            setExperimentalAlongPsds(along_psds)
-            // console.log("Normalized ",normalizedFrequency)
-            setNormalizedExperimentalFrequencies(normalizedFrequency)
-            console.log("new",calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency))
-            // setCSVData(csvData)
-            const [x,y]:number[] = CalculateFD(width, height, depth, meanSpeed,Tone, totalFloors, damping, frequencies, experi_across_psds, psd, buildingDensity)
-            const [_,z]:number[] = CalculateFD(width, height, depth, meanSpeed,Tone, totalFloors, damping, frequencies, along_psds, psd, buildingDensity)
+                const {
+                    psd,
+                    normalizedFrequency
+                } = calculate_experimental_psd_normalized(Mz, width, depth, experimentalMeanSpeed, experimentalFrequency)
+                console.log("Normalized Frequency is ", normalizedFrequency)
+                // const  : number[] = calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency)
+                setExperimentalTorsionPsds(psd)
+                const along_psds: number[] = calculate_experimental_psd_normalized(My, width, height, experimentalMeanSpeed, experimentalFrequency).psd
+                setExperimentalAlongPsds(along_psds)
+                // console.log("Normalized ",normalizedFrequency)
+                setNormalizedExperimentalFrequencies(normalizedFrequency)
+                console.log("new", calculate_experimental_psd_normalized(Mz, width, depth, experimentalMeanSpeed, experimentalFrequency))
+                // setCSVData(csvData)
+                const [x, _]: number[] = CalculateFD(width, height, depth, meanSpeed, Ttorsion, totalFloors, damping, frequencies, experi_across_psds, psd, buildingDensity)
+                const [__, y]: number[] = CalculateFD(width, height, depth, meanSpeed, Tacross, totalFloors, damping, frequencies, experi_across_psds, psd, buildingDensity)
+                const [___, z]: number[] = CalculateFD(width, height, depth, meanSpeed, Talong, totalFloors, damping, frequencies, along_psds, psd, buildingDensity)
 
-            setExperimentalAccelartionYDirection(z)
-            //
-            setExperimentalVr(x)
-            setExperimentalAr(y)
+                setExperimentalAccelartionYDirection(z)
+                //
+                setExperimentalVr(x)
+                setExperimentalAr(y)
+            }
         }
-
         // const experi_across_psds : number[] = calculate_experimental_psd_normalized(Mx,width,height,experimentalMeanSpeed,experimentalFrequency).psd
         // setExperimentalAcrossPsds(experi_across_psds)
         //
