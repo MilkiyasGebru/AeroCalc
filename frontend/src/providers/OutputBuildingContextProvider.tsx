@@ -83,7 +83,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         // const Mx : number[] = mxData;
         // const My : number[] = myData;
         // const Mz: number[] = mzData;
-        if (height != null && width != null && depth != null && meanSpeed != null && totalFloors != null && damping != null && buildingDensity != null && Talong != null && Ttorsion != null && Tacross != null) {
+        if (height != null && width != null && depth != null && totalFloors != null && damping != null && meanSpeed != null && Talong != null && Ttorsion != null && Tacross != null && buildingDensity != null) {
 
             if (window.pywebview?.api?.compute) {
                 // DESKTOP MODE: Call Python
@@ -152,7 +152,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
 
 
 
-    },[width,height,experimentalMeanSpeed,experimentalFrequency])
+    },[width, depth, height, meanSpeed, totalFloors, damping, buildingDensity, terrain,Talong, Tacross, Ttorsion,experimentalMeanSpeed,experimentalFrequency])
 
     return (
         <OutputBuildingContext.Provider value={{
