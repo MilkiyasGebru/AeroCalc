@@ -1,19 +1,19 @@
 import React, {createContext, useState} from "react";
 
 interface InputBuildingContextInterface {
-    width: number;
-    height: number;
-    depth: number;
-    meanSpeed: number;
-    userMeanSpeed: number;
+    width: number | undefined;
+    height: number | undefined;
+    depth: number | undefined;
+    meanSpeed: number | undefined;
+    userMeanSpeed: number | undefined;
     experimentalMeanSpeed: number;
-    buildingDensity: number;
-    totalFloors: number;
-    damping: number;
-    Tone: number;
-    Tacross: number;
-    Talong: number;
-    Ttorsion: number;
+    buildingDensity: number | undefined;
+    totalFloors: number | undefined;
+    damping: number | undefined;
+    Tone: number | undefined;
+    Tacross: number | undefined;
+    Talong: number | undefined;
+    Ttorsion: number | undefined;
     experimentalFrequency: number;
     terrain: string;
     normalizedExperimentalFrequencies: number[];
@@ -52,17 +52,17 @@ interface IUploadData {
 export const InputBuildingContext = createContext<InputBuildingContextInterface | undefined>(undefined);
 
 export const InputBuildingContextProvider = ({children}: {children: React.ReactNode}) => {
-    const [width, setWidth] = useState<number>(42);
-    const [height, setHeight] = useState<number>(33.7);
-    const [depth, setDepth] = useState<number>(30);
-    const [meanSpeed, setMeanSpeed] = useState<number>(30);
-    const [buildingDensity, setBuildingDensity] = useState<number>(150);
-    const [totalFloors, setTotalFloors] = useState<number>(100);
-    const [damping, setDamping] = useState<number>(0.15);
-    const [Tone, setTone] = useState<number>(6.127);
-    const [Tacross, setTacross] = useState<number>(6.127);
-    const [Talong, setTalong] = useState<number>(6.127);
-    const [Ttorsion, setTtorsion] = useState<number>(6.127);
+    const [width, setWidth] = useState<number | undefined>(undefined);
+    const [height, setHeight] = useState<number | undefined>(undefined);
+    const [depth, setDepth] = useState<number | undefined>(undefined);
+    const [meanSpeed, setMeanSpeed] = useState<number | undefined>(undefined);
+    const [buildingDensity, setBuildingDensity] = useState<number | undefined>(undefined);
+    const [totalFloors, setTotalFloors] = useState<number | undefined>(undefined);
+    const [damping, setDamping] = useState<number | undefined>(undefined);
+    const [Tone, setTone] = useState<number | undefined>(undefined);
+    const [Tacross, setTacross] = useState<number | undefined>(undefined);
+    const [Talong, setTalong] = useState<number | undefined>(undefined);
+    const [Ttorsion, setTtorsion] = useState<number | undefined>(undefined);
     const [terrain, setTerrain] = useState<string>("open");
     const [csvData, setCSVData] = useState<IUploadData[]>([]);
     const [mxData, setMxData] = useState<number[]>([]);
@@ -71,7 +71,7 @@ export const InputBuildingContextProvider = ({children}: {children: React.ReactN
     const [experimentalMeanSpeed, setExperimentalMeanSpeed] = useState<number>(1);
     const [experimentalFrequency, setExperimentalFrequency] = useState<number>(0.183);
     const [normalizedExperimentalFrequencies, setNormalizedExperimentalFrequencies] = useState<number[]>([]);
-    const [userMeanSpeed, setUserMeanSpeed] = useState<number>(30)
+    const [userMeanSpeed, setUserMeanSpeed] = useState<number | undefined>(undefined)
     return (
         <InputBuildingContext.Provider value={{
             width, height, depth, meanSpeed, buildingDensity, totalFloors, damping, Tone, terrain,csvData,experimentalMeanSpeed,experimentalFrequency,
