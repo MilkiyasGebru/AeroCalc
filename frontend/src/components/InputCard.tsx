@@ -62,7 +62,6 @@ export default function InputCard(){
     const {width, height,depth,totalFloors, setWidth, setHeight, setDepth,setTotalFloors, terrain, setTerrain } = useInputBuildingContext()
     // Part - 2
     const {buildingDensity, meanSpeed,userMeanSpeed, Tacross,Talong,Ttorsion,setTtorsion,setTalong, damping, setBuildingDensity, setMeanSpeed, setTacross, setDamping,setUserMeanSpeed} = useInputBuildingContext()
-
     // Part -3
     const {experimentalFrequency, experimentalMeanSpeed, setExperimentalMeanSpeed, setExperimentalFrequency, setMxData, setMyData, setMzData, mxData, myData, mzData} = useInputBuildingContext()
     // Handling Submit
@@ -83,10 +82,8 @@ export default function InputCard(){
     if (height !== undefined && meanSpeed !== undefined) {
         coefficient = (terrain == "open") ? (height / 10) ** 0.28 : 0.5 * ((height / 12.7) ** 0.5);
     }
-    console.log("Height is ", height)
 
     useEffect(() => {
-        console.log("Terrain is ", terrain)
         const handler: number | undefined = setTimeout(()=>{
             if (Number.isFinite(height)  && Number.isFinite(meanSpeed) && height != undefined && meanSpeed != undefined ) {
                 console.log("Coefficient is ",coefficient, height, meanSpeed)
@@ -367,10 +364,10 @@ export default function InputCard(){
                                             current_point={{height: height? height:0, speed: meanSpeed? meanSpeed * coefficient ** 0.5:0}}/>
                         </div>
                         <div className="space-y-2 flex items-center mt-6 ">
-                            <Label htmlFor="mean_velocity" className="w-1/2">Mean Speed at roof meters at 10 years
+                            <Label htmlFor="user_mean_velocity" className="w-1/2">Mean Speed at roof meters at 10 years
                                 (m/s)</Label>
                             <Input
-                                id="mean_velocity"
+                                id="user_mean_velocity"
                                 type="number"
                                 value={userMeanSpeed}
                                 onChange={(e) => setUserMeanSpeed(Number(parseFloat(e.target.value).toFixed(3)))}
