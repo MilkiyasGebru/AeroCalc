@@ -61,7 +61,7 @@ export default function InputCard(){
     // Part-1
     const {width, height,depth,totalFloors, setWidth, setHeight, setDepth,setTotalFloors, terrain, setTerrain } = useInputBuildingContext()
     // Part - 2
-    const {buildingDensity, meanSpeed,userMeanSpeed, Tone,Talong,Ttorsion,setTtorsion,setTalong, damping, setBuildingDensity, setMeanSpeed, setTone, setDamping,setUserMeanSpeed} = useInputBuildingContext()
+    const {buildingDensity, meanSpeed,userMeanSpeed, Tacross,Talong,Ttorsion,setTtorsion,setTalong, damping, setBuildingDensity, setMeanSpeed, setTacross, setDamping,setUserMeanSpeed} = useInputBuildingContext()
 
     // Part -3
     const {experimentalFrequency, experimentalMeanSpeed, setExperimentalMeanSpeed, setExperimentalFrequency, setMxData, setMyData, setMzData, mxData, myData, mzData} = useInputBuildingContext()
@@ -79,24 +79,31 @@ export default function InputCard(){
 
 
     const [graphData, setGraphData] = useState<IMeanSpeedData[]>([])
-
-    const coefficient = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
+    let coefficient =  0;
+    if (height !== undefined && meanSpeed !== undefined) {
+        coefficient = (terrain == "open") ? (height / 10) ** 0.28 : 0.5 * ((height / 12.7) ** 0.5);
+    }
+    console.log("Height is ", height)
 
     useEffect(() => {
         console.log("Terrain is ", terrain)
         const handler: number | undefined = setTimeout(()=>{
-            const MaxHeight: number = height * 1.5;
-            const graph_data = [];
-            let h : number = 0;
-            while (h < MaxHeight){
-                const c = (terrain == "open")? (h/10)**0.28: 0.5*((h/12.7)**0.5);
-                graph_data.push({
-                    height: h,
-                    speed: meanSpeed * c ** 0.5
-                })
-                h += 1;
+            if (Number.isFinite(height)  && Number.isFinite(meanSpeed) && height != undefined && meanSpeed != undefined ) {
+                console.log("Coefficient is ",coefficient, height, meanSpeed)
+                const MaxHeight: number = height * 1.5;
+                const graph_data = [];
+                let h : number = 0;
+                while (h < MaxHeight){
+                    const c = (terrain == "open")? (h/10)**0.28: 0.5*((h/12.7)**0.5);
+                    graph_data.push({
+                        height: h,
+                        speed: meanSpeed * c ** 0.5
+                    })
+                    h += 1;
+                }
+                setGraphData(graph_data)
             }
-            setGraphData(graph_data)
+
         }, 1000)
         return ()=>clearTimeout(handler)
 
@@ -258,8 +265,8 @@ export default function InputCard(){
                                 <Input
                                     id="Tone"
                                     type="number"
-                                    value={Tone}
-                                    onChange={(e) => setTone(Number(parseFloat(e.target.value).toFixed(3)))}
+                                    value={Tacross}
+                                    onChange={(e) => setTacross(Number(parseFloat(e.target.value).toFixed(3)))}
                                     className="text-center font-mono shadow-none rounded-none bg-white border-x-0 border-t-0 border-b-black h-auto p-0  w-5/6 md:w-2/6"
                                 />
                             </div>
@@ -357,7 +364,7 @@ export default function InputCard(){
 
                             </div>
                             <MeanSpeedGraph graph_data={graphData}
-                                            current_point={{height: height, speed: meanSpeed * coefficient ** 0.5}}/>
+                                            current_point={{height: height? height:0, speed: meanSpeed? meanSpeed * coefficient ** 0.5:0}}/>
                         </div>
                         <div className="space-y-2 flex items-center mt-6 ">
                             <Label htmlFor="mean_velocity" className="w-1/2">Mean Speed at roof meters at 10 years
@@ -552,7 +559,9 @@ export default function InputCard(){
                 <Button
                     className="w-fit px-3 py-2 text-center flex justify-center hover:cursor-pointer bg-white text-black !bg-opacity-100 "
                     onClick={handleNext}
-                    disabled={step == 3 && (!(analyticalSelected || checking !== "") || (checking === "external_database" && file1 == null && file2 == null && file3 == null) )}
+                    disabled={(step == 3 && (!(analyticalSelected || checking !== "") || (checking === "external_database" && file1 == null && file2 == null && file3 == null) )) || ((step == 0) && (!Number.isFinite(height) || !Number.isFinite(depth) || !Number.isFinite(width)  || !Number.isFinite(totalFloors) ))
+                    || ((step == 1) && (!Number.isFinite(buildingDensity)  || !Number.isFinite(damping) || !Number.isFinite(Tacross)  || !Number.isFinite(Talong)  || !Number.isFinite(Ttorsion) )) || ((step == 2) && (!Number.isFinite(meanSpeed)))
+                }
                 >
                     {((step == 6) || (step == 5 && checking === ""))? "Done":"Next"}
                 </Button>
