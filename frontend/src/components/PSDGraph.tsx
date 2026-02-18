@@ -83,7 +83,7 @@ export default function PSDGraph(props : PSDGraphInterface) {
     const allFrequencies = Array.from(new Set([...frequencies, ...normalizedExperimentalFrequencies])).sort((a,b)=>a-b)
 
     const graph_data: graph_point[] = []
-    for (let index = 1; index < allFrequencies.length; index++) {
+    for (let index = 0; index < allFrequencies.length; index++) {
         if (allFrequencies[index] <= 0) continue; // CRITICAL: Log scale breaks at 0
         const freqIndex: number = frequencies.indexOf(allFrequencies[index]);
         const expFreqIndex: number = normalizedExperimentalFrequencies.indexOf(allFrequencies[index]);
