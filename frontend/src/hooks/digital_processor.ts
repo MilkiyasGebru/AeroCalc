@@ -53,7 +53,7 @@ function pwelchMatlab(x: number[], fs: number, window:number[]) {
     }
 
     const freqs = psd.map((_, k) => (k * fs) / nfft);
-    console.log("PSD in pwelch", psd)
+    // console.log("PSD in pwelch", psd)
     return { psd, freqs };
 }
 
@@ -63,22 +63,22 @@ function mean(arr: number[]): number {
 
 function normalizePsd(psd_across: number[], f_across: number[], width: number, height: number, UH : number): {
     "psd": number[],
-    "normalizedFrequency": number[],
+    "pwelch_frequencies": number[],
 }{
 
-    const f_normalized: number[] = f_across.map(f => {
-        return f*width/UH
-    });
+    // const f_normalized: number[] = f_across.map(f => {
+    //     return f*width/UH
+    // });
     const psd_across_normalized = f_across.map((f,index)=>{
         return psd_across[index]*f/(0.5*1.2929*UH**2*width*height**2)**2
     })
-    return {"psd": psd_across_normalized, "normalizedFrequency": f_normalized}
+    return {"psd": psd_across_normalized, "pwelch_frequencies": f_across}
 
 }
 
 export function calculate_experimental_psd_normalized(M: number[], width_depth: number, height: number, UH:number, f_expt: number): {
     "psd": number[],
-    "normalizedFrequency": number[],
+    "pwelch_frequencies": number[],
 }{
     const meanM : number = mean(M)
     const window = hamming(3000);
