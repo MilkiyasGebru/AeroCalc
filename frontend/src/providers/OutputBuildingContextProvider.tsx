@@ -68,7 +68,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         if (height != null && width != null && depth != null && totalFloors != null && damping != null && meanSpeed != null && Talong != null && Ttorsion != null && Tacross != null && buildingDensity != null){
             const c = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
             let across_psds: number[] = CalculateAcrossPsdResponse(Math.max(width,depth),height,Math.min(width,depth),frequencies)
-            let torsion_psds: number[] = CalculateTorsionPsdResponse(Math.max(width,depth),height,Math.min(width,depth),meanSpeed*c**0.5,frequencies)
+            let torsion_psds: number[] = CalculateTorsionPsdResponse(Math.max(width,depth),height,Math.min(width,depth), (userMeanSpeed != null && Number.isFinite(userMeanSpeed))? userMeanSpeed:meanSpeed*c**0.5,frequencies)
             setAccelartionYDirection(CalculateAlong(Math.max(width, depth), height, Math.min(width,depth), (userMeanSpeed != null && Number.isFinite(userMeanSpeed))? userMeanSpeed:meanSpeed*c**0.5,Talong,damping,frequencies,buildingDensity))
             const [x,__]:number[] = CalculateFD(Math.max(width,depth), height, Math.min(width,depth), (userMeanSpeed != null && Number.isFinite(userMeanSpeed))? userMeanSpeed:meanSpeed*c**0.5,Ttorsion, totalFloors, damping, frequencies, across_psds, torsion_psds, buildingDensity)
             const [_,y]:number[] = CalculateFD(Math.max(width,depth), height, Math.min(width,depth), (userMeanSpeed != null && Number.isFinite(userMeanSpeed))? userMeanSpeed:meanSpeed*c**0.5,Tacross, totalFloors, damping, frequencies, across_psds, torsion_psds, buildingDensity)
