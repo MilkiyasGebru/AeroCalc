@@ -20,7 +20,7 @@ class Api:
         denominator = (0.5 * 1.2929 * (experimentalMeanSpeed ** 2) * width * (depth ** 2)) ** 2
         pxx_normalized = (pxx * f) / denominator
         # print(normalizedFrequency.tolist()) 0.091562148576485
-        return {"psd": pxx_normalized.tolist(), "normalizedFrequency": normalizedFrequency.tolist()}
+        return {"psd": pxx_normalized.tolist(), "pwelch_frequencies": f.tolist()}
 
 api = Api()
 
