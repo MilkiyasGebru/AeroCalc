@@ -11,7 +11,7 @@ declare global {
     interface Window {
         pywebview: {
             api: {
-                compute(M: number[],width: number,height: number,experimentalMeanSpeed: number,experimentalFrequency: number): Promise<{ psd: number[], normalizedFrequency: number[] }>;
+                compute(M: number[],width: number,height: number,experimentalMeanSpeed: number,experimentalFrequency: number): Promise<{ psd: number[], pwelch_frequencies: number[] }>;
             };
         };
     }
@@ -91,16 +91,24 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
 
                 const acrossResult = await window.pywebview.api.compute(Mx, width, height, experimentalMeanSpeed, experimentalFrequency);
                 const torsionResult = await window.pywebview.api.compute(Mz, width, depth, experimentalMeanSpeed, experimentalFrequency);
-                console.log(acrossResult.normalizedFrequency)
-                setExperimentalAcrossPsds(acrossResult.psd)
-                setNormalizedExperimentalFrequencies(acrossResult.normalizedFrequency)
-                setExperimentalTorsionPsds(torsionResult.psd)
+                // console.log(acrossResult.pwelch_frequencies)
+                let pwelch_frequencies = acrossResult.pwelch_frequencies.slice(1)
+                let across_psds = acrossResult.psd.slice(1)
+                let torsion_psds = torsionResult.psd.slice(1)
 
-                const along_psds: number[] = calculate_experimental_psd_normalized(My, width, height, experimentalMeanSpeed, experimentalFrequency).psd
+                const f_normalized: number[] = pwelch_frequencies.map(f => {
+                    return f*width/experimentalMeanSpeed
+                });
+                setExperimentalAcrossPsds(across_psds)
+                setNormalizedExperimentalFrequencies(f_normalized)
+                setExperimentalTorsionPsds(torsion_psds)
+
+                const alongResult = await window.pywebview.api.compute(My, width, height, experimentalMeanSpeed, experimentalFrequency)
+                let along_psds = alongResult.psd.slice(1)
                 setExperimentalAlongPsds(along_psds)
-                const [x, _]: number[] = CalculateFD(width, height, depth, meanSpeed, Ttorsion, totalFloors, damping, frequencies, acrossResult.psd, torsionResult.psd, buildingDensity)
-                const [__, y]: number[] = CalculateFD(width, height, depth, meanSpeed, Tacross, totalFloors, damping, frequencies, acrossResult.psd, torsionResult.psd, buildingDensity)
-                const [___, z]: number[] = CalculateFD(width, height, depth, meanSpeed, Talong, totalFloors, damping, frequencies, along_psds, torsionResult.psd, buildingDensity)
+                const [x, _]: number[] = CalculateFD(width, height, depth, meanSpeed, Ttorsion, totalFloors, damping, pwelch_frequencies, across_psds, torsion_psds, buildingDensity)
+                const [__, y]: number[] = CalculateFD(width, height, depth, meanSpeed, Tacross, totalFloors, damping, pwelch_frequencies, across_psds, torsion_psds, buildingDensity)
+                const [___, z]: number[] = CalculateFD(width, height, depth, meanSpeed, Talong, totalFloors, damping, pwelch_frequencies, along_psds, torsion_psds, buildingDensity)
 
                 setExperimentalAccelartionYDirection(z)
                 //
@@ -108,25 +116,38 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
                 setExperimentalAr(y)
             } else {
                 // WEB MODE: Fallback to Local JavaScript
-                const experi_across_psds: number[] = calculate_experimental_psd_normalized(Mx, width, height, experimentalMeanSpeed, experimentalFrequency).psd
-                setExperimentalAcrossPsds(experi_across_psds)
-
-                const {
+                let experi_across_psds: number[] = calculate_experimental_psd_normalized(Mx, width, height, experimentalMeanSpeed, experimentalFrequency).psd
+                experi_across_psds = experi_across_psds.slice(1)
+                let {
                     psd,
-                    normalizedFrequency
+                    pwelch_frequencies
                 } = calculate_experimental_psd_normalized(Mz, width, depth, experimentalMeanSpeed, experimentalFrequency)
-                console.log("Normalized Frequency is ", normalizedFrequency)
+
+
+                // console.log("UnNormalized Frequency is ", pwelch_frequencies)
                 // const  : number[] = calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency)
-                setExperimentalTorsionPsds(psd)
-                const along_psds: number[] = calculate_experimental_psd_normalized(My, width, height, experimentalMeanSpeed, experimentalFrequency).psd
+                let along_psds: number[] = calculate_experimental_psd_normalized(My, width, height, experimentalMeanSpeed, experimentalFrequency).psd
+                along_psds = along_psds.slice(1)
                 setExperimentalAlongPsds(along_psds)
                 // console.log("Normalized ",normalizedFrequency)
-                setNormalizedExperimentalFrequencies(normalizedFrequency)
-                console.log("new", calculate_experimental_psd_normalized(Mz, width, depth, experimentalMeanSpeed, experimentalFrequency))
+                pwelch_frequencies = pwelch_frequencies.slice(1)
+                psd = psd.slice(1)
+                setExperimentalTorsionPsds(psd)
+
+                const f_normalized: number[] = pwelch_frequencies.map(f => {
+                    return f*width/experimentalMeanSpeed
+                });
+
+                console.log("Experi Across PSDS is", experi_across_psds)
+                console.log("Frequencies is ", pwelch_frequencies)
+                setExperimentalAcrossPsds(experi_across_psds)
+
+                setNormalizedExperimentalFrequencies(f_normalized)
+                // console.log("new", calculate_experimental_psd_normalized(Mz, width, depth, experimentalMeanSpeed, experimentalFrequency))
                 // setCSVData(csvData)
-                const [x, _]: number[] = CalculateFD(width, height, depth, meanSpeed, Ttorsion, totalFloors, damping, frequencies, experi_across_psds, psd, buildingDensity)
-                const [__, y]: number[] = CalculateFD(width, height, depth, meanSpeed, Tacross, totalFloors, damping, frequencies, experi_across_psds, psd, buildingDensity)
-                const [___, z]: number[] = CalculateFD(width, height, depth, meanSpeed, Talong, totalFloors, damping, frequencies, along_psds, psd, buildingDensity)
+                const [x, _]: number[] = CalculateFD(width, height, depth, meanSpeed, Ttorsion, totalFloors, damping, pwelch_frequencies, experi_across_psds, psd, buildingDensity)
+                const [__, y]: number[] = CalculateFD(width, height, depth, meanSpeed, Tacross, totalFloors, damping, pwelch_frequencies, experi_across_psds, psd, buildingDensity)
+                const [___, z]: number[] = CalculateFD(width, height, depth, meanSpeed, Talong, totalFloors, damping, pwelch_frequencies, along_psds, psd, buildingDensity)
 
                 setExperimentalAccelartionYDirection(z)
                 //
