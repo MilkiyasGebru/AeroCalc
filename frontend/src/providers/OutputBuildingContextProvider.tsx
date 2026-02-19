@@ -89,6 +89,8 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
             if (window.pywebview?.api?.compute) {
                 // DESKTOP MODE: Call Python
                 console.log("Using Python for calculation...");
+                const c = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
+                let speed : number =(userMeanSpeed != null && Number.isFinite(userMeanSpeed))? userMeanSpeed:meanSpeed*c**0.5
 
                 const acrossResult = await window.pywebview.api.compute(Mx, width, height, experimentalMeanSpeed, experimentalFrequency);
                 const torsionResult = await window.pywebview.api.compute(Mz, width, depth, experimentalMeanSpeed, experimentalFrequency);
@@ -107,9 +109,9 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
                 const alongResult = await window.pywebview.api.compute(My, width, height, experimentalMeanSpeed, experimentalFrequency)
                 let along_psds = alongResult.psd.slice(1)
                 setExperimentalAlongPsds(along_psds)
-                const [x, _]: number[] = CalculateFD(width, height, depth, meanSpeed, Ttorsion, totalFloors, damping, pwelch_frequencies, across_psds, torsion_psds, buildingDensity)
-                const [__, y]: number[] = CalculateFD(width, height, depth, meanSpeed, Tacross, totalFloors, damping, pwelch_frequencies, across_psds, torsion_psds, buildingDensity)
-                const [___, z]: number[] = CalculateFD(width, height, depth, meanSpeed, Talong, totalFloors, damping, pwelch_frequencies, along_psds, torsion_psds, buildingDensity)
+                const [x, _]: number[] = CalculateFD(width, height, depth, speed, Ttorsion, totalFloors, damping, pwelch_frequencies, across_psds, torsion_psds, buildingDensity)
+                const [__, y]: number[] = CalculateFD(width, height, depth, speed, Tacross, totalFloors, damping, pwelch_frequencies, across_psds, torsion_psds, buildingDensity)
+                const [___, z]: number[] = CalculateFD(width, height, depth, speed, Talong, totalFloors, damping, pwelch_frequencies, along_psds, torsion_psds, buildingDensity)
 
                 setExperimentalAccelartionYDirection(z)
                 //
