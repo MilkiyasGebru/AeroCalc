@@ -310,7 +310,7 @@ export default function InputCard(){
 
 
                             <div className="space-y-2 flex items-center ">
-                                <Label htmlFor="mean_velocity" className="w-1/2">Mean Speed at 10meters at 10 years
+                                <Label htmlFor="mean_velocity" className="w-1/2">10min mean wind speed at 10m
                                     (m/s)</Label>
                                 <Input
                                     id="mean_velocity"
@@ -364,7 +364,7 @@ export default function InputCard(){
                                             current_point={{height: height? height:0, speed: meanSpeed? meanSpeed * coefficient ** 0.5:0}}/>
                         </div>
                         <div className="space-y-2 flex items-center mt-6 ">
-                            <Label htmlFor="user_mean_velocity" className="w-1/2">Mean Speed at roof meters at 10 years
+                            <Label htmlFor="user_mean_velocity" className="w-1/2">10min mean wind speed at roof
                                 (m/s)</Label>
                             <Input
                                 id="user_mean_velocity"
