@@ -99,6 +99,7 @@ export default function InputCard(){
                     h += 1;
                 }
                 setGraphData(graph_data)
+                setUserMeanSpeed(Number((meanSpeed * coefficient ** 0.5).toFixed(3)))
             }
 
         }, 1000)
