@@ -161,7 +161,9 @@ export default function PSDGraph(props : PSDGraphInterface) {
                     <span className="font-mono font-bold text-slate-500">
                             {typeof value === 'number' ? value.toExponential(2) : value}
                         </span>,
-                    name == `${props.graphType} psd`? `${props.graphType} PSDs`:`Experimental ${props.graphType} PSDs `
+                    name === "Analytical"? `${props.graphType} PSD (Analytical)`
+                        : `Experimental ${props.graphType} PSD`
+                    // name == `${props.graphType}`? `${props.graphType} PSDs`:`Experimental ${props.graphType} PSDs `
 
                 ]}
                 labelFormatter={(label) => (
@@ -171,8 +173,8 @@ export default function PSDGraph(props : PSDGraphInterface) {
                 )}
             />
             <Legend />
-            <Line name="Analytical" type="basis" dot={false} dataKey="psd" connectNulls={true} stroke={props.graphType !== "Across"?"#fff222":"#af7875"} />
-            <Line name="Experimental" type="basis" dot={false} dataKey="experimentalPsd" connectNulls={true} stroke={props.graphType !== "Across"? "#aaa23d":"#ff4d4f"}  />
+            {psds.length > 0  && <Line name="Analytical" type="basis" dot={false} dataKey="psd" connectNulls={true} stroke={props.graphType !== "Across"?"#fff222":"#af7875"} />}
+            {experimentalPsds.length > 0 && <Line name="Experimental" type="basis" dot={false} dataKey="experimentalPsd" connectNulls={true} stroke={props.graphType !== "Across"? "#aaa23d":"#ff4d4f"}  />}
             {/*<Line type="monotone" dot={false} dataKey="experimental_across_psd" stroke="#ff4d4f" />*/}
             {/*<Line type="monotone" dot={false} dataKey="experimental_torsion_psd" stroke="#ffd666" />*/}
 
