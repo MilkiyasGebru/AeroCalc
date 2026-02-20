@@ -32,6 +32,7 @@ export function InternalDatabaseDialog({ open, onOpenChange, onConfirm }: Intern
     const { width, height, depth} = useInputBuildingContext();
     const [options, setOptions] = useState<IResponse[]>([])
     const [loading, setLoading] = useState<boolean>(false)
+    const {setExperimentalFrequency} = useInputBuildingContext()
     console.log("In internal database dialog 2");
 
     useEffect(() => {
@@ -84,7 +85,15 @@ export function InternalDatabaseDialog({ open, onOpenChange, onConfirm }: Intern
                     <Button variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
                     <Button
                         disabled={!value}
-                        onClick={() => onConfirm(value)}
+                        onClick={() => {
+                            onConfirm(value)
+                            let op: IResponse[] = options.filter(option => option.url === value)
+                            if (op.length == 1){
+                                setExperimentalFrequency(op[0].frequency)
+                            }
+                        }
+
+                    }
                         className="bg-blue-400 text-white hover:bg-blue-500"
                     >
                         Confirm Selection
