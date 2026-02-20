@@ -398,22 +398,34 @@ export default function InputCard(){
                                     </FieldContent>
                                 </Field>
 
-                                <RadioGroup value={checking} onValueChange={setChecking}>
+                                <div>
                                     <Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">
-                                        <RadioGroupItem id="internal-database" value="internal_database"    />
-
+                                        {/*<RadioGroupItem id="internal-database" value="internal_database"    />*/}
+                                        <Checkbox id="internal-database" name="internal_database" onClick={()=> {
+                                            if (checking === "internal_database"){
+                                                setChecking("")
+                                            } else {
+                                                setChecking("internal_database")
+                                            }
+                                        }} checked={checking === "internal_database"} />
                                         <FieldContent>
                                             <Label htmlFor="internal-database">Access the wind tunnel experiment database</Label>
                                         </FieldContent>
                                     </Field>
                                     <Field orientation="horizontal" className="border rounded-md p-3 border-gray-200 hover:cursor-pointer">
-                                        <RadioGroupItem id="external-database" value="external_database"   />
-
+                                        {/*<RadioGroupItem id="external-database" value="external_database"   />*/}
+                                        <Checkbox id="external-database" name="external_database" onClick={()=> {
+                                            if (checking === "external_database"){
+                                                setChecking("")
+                                            } else {
+                                                setChecking("external_database")
+                                            }
+                                        }} checked={checking === "external_database"}/>
                                         <FieldContent>
                                             <Label htmlFor="external-database">Upload wind tunnel experiment data</Label>
                                         </FieldContent>
                                     </Field>
-                                </RadioGroup>
+                                </div>
 
                             </div>
 
