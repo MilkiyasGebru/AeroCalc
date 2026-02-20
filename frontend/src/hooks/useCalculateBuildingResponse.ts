@@ -54,10 +54,10 @@ function CalculateVandW( numbers: number[][], alpha_bd: number, IH: number) : Va
 
 }
 
-function CalculateFB(numbers: number[][], number_index: number, frequencies: number[]) : number[]{
+function CalculateFB(numbers: number[][], number_index: number, frequencies: number[], value:number = 3) : number[]{
     return frequencies.map(frequency => {
         const [ c1, c2, c3, c4] = numbers[number_index];
-        const c5 : number = (number_index == 6)?c1:numbers[number_index][4]
+        const c5 : number = (value !== 3)?c1:numbers[number_index][4]
         return c1*frequency/(1+c2*(c5*frequency)**c3)**c4;
     })
 }
@@ -175,6 +175,8 @@ export function CalculateTorsionPsdResponse(width:number, height:number, depth:n
     })
     let numbers : number[][] | null = null;
     let torsion_psd : number[] | null = null;
+    console.log("Alpha H is", alpha_h)
+    console.log("Alphad bd is ", alpha_bd)
     if (alpha_h < 1) {
 
         numbers = [
@@ -224,7 +226,7 @@ export function CalculateTorsionPsdResponse(width:number, height:number, depth:n
         ]
 
         const fs: number[] = f_non_norm.map(frequency => {
-            return 7.3*frequency*width*(1 + 0.38*alpha_bd**(-1.5)**0.89/mean_speed)
+            return 7.3*frequency*width*(1 + 0.38*alpha_bd**(-1.5))**0.89/mean_speed
         })
 
         const {v1, v2, v3, w1, w2, w3} = CalculateVandW(numbers, alpha_bd, IH)
@@ -233,11 +235,9 @@ export function CalculateTorsionPsdResponse(width:number, height:number, depth:n
         //     const [ c1, c2, c3, c4, c5] = numbers![6];
         //     return c1*frequency/(1+c2*(c5*frequency)**c3)**c4;
         // })
-
         const FB: number[] = CalculateFB(numbers, 6, f_non_norm)
         const FV: number[] = CalculateFV(fs, v2, v3)
         const FW: number[] = CalculateFW(f_non_norm, w2, w3)
-
         torsion_psd = FB.map((FB_value, index)=> {
             return (0.035*FB_value + v1*FV[index] + w1*FW[index])*0.05
         })
@@ -259,7 +259,7 @@ export function CalculateTorsionPsdResponse(width:number, height:number, depth:n
 
         const {v1, v2, v3, w1, w2, w3} = CalculateVandW(numbers, alpha_bd, IH);
 
-        const FB: number[] = CalculateFB(numbers, 6, frequencies)
+        const FB: number[] = CalculateFB(numbers, 6, frequencies,1)
         const FV: number[] = CalculateFV(fs, v2, v3)
         const FW: number[] = CalculateFW(frequencies, w2, w3)
 
