@@ -7,7 +7,6 @@ import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigg
 } from "@/components/ui/select"
 import MeanSpeedGraph from "@/components/MeanSpeedGraph.tsx";
 import { Checkbox } from "@/components/ui/checkbox"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {RectangleWithArrow} from "@/components/RectangleWithArrow.tsx";
 import Papa from "papaparse";
 import {
