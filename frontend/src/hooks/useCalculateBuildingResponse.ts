@@ -109,7 +109,8 @@ export function CalculateAcrossPsdResponse(width:number, height:number, depth:nu
     const alpha_h: number = height / (Math.sqrt(width * depth));
 
     let numbers: number[][] | null = null;
-
+    console.log("alpha_h", alpha_h)
+    console.log("alpha_bd", alpha_bd)
     if (alpha_h < 1) {
         numbers = [
 
@@ -130,7 +131,7 @@ export function CalculateAcrossPsdResponse(width:number, height:number, depth:nu
             [0.003, -0.58, 0.000, 1.35, -0.001],
             [0.000, 6.83, -2.19, 0.000, 2.29],
             [0.32, 0.31, -0.73, 0.11, 0.76],
-            [-1.1, 0.07, -0.013, 2.8, 4.65]
+            [-1.14, 0.07, -0.013, 2.8, 4.65]
         ]
     } else if ((alpha_h >= 3) && (alpha_bd < 2.5)) {
         numbers = [
@@ -160,6 +161,11 @@ export function CalculateAcrossPsdResponse(width:number, height:number, depth:nu
     const across_psd: number[] = frequencies.map(frequency => {
         return K1 * (frequency / K2) ** (K4) / (((1 - (frequency / K2) ** 2) ** 2) + K3 ** 2 * (frequency / K2) ** 2)
     })
+    console.log("K1", K1)
+    console.log("K2", K2)
+    console.log("K3", K3)
+    console.log("K4", K4)
+
 
     return across_psd
 }
