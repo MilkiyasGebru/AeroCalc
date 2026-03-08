@@ -9,7 +9,7 @@ while initial_frequency <= final_frequency:
     frequencies.append(initial_frequency)
     initial_frequency += delta_frequency
 
-df = pd.read_csv("experimental_data.csv")
+df = pd.read_csv("smaller_dataset.csv")
 
 def CalculateK(index : float, numbers: List[List[float]], alpha_bd: float, alpha_h: float) -> float:
     return numbers[index][0] * math.pow(alpha_bd, numbers[index][1]) + numbers[index][2]*alpha_h**numbers[index][3] + numbers[index][4];
