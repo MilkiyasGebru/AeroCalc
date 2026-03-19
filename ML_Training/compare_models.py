@@ -19,7 +19,7 @@ def CalculateK(index: float, numbers: List[List[float]], alpha_bd: float, alpha_
     return numbers[index][0] * math.pow(alpha_bd, numbers[index][1]) + numbers[index][2] * alpha_h ** numbers[index][
         3] + numbers[index][4];
 
-
+# This calculates the actual psd response for a given building dimension
 def CalculateAcrossPsdResponse(width: float, height: float, depth: float, frequencies: List[float]) -> List[float]:
     alpha_bd: float = width / depth;
     alpha_h: float = height / (math.sqrt(width * depth));
@@ -75,17 +75,19 @@ def CalculateAcrossPsdResponse(width: float, height: float, depth: float, freque
     return across_psd
 
 # This loads the GBERT model that we trained
-gbert_model = joblib.load("experimental_gradient_boosting_psd_model_two.pkl")
+gbert_model = joblib.load("your_gbrt_model.pkl")
 
 # This uses the sa
-scaler = joblib.load("scaler_six.pkl")
-neural_network_params = joblib.load("dnn_best_hyperparameters_six.pkl")
+scaler = joblib.load("Your_actual_scalar_file.pkl")
+neural_network_params = joblib.load("your_neural_network_hyperparameter.pkl")
 
 neural_network_model = nn.Sequential(
     nn.Linear(3, neural_network_params["n_hidden"]),
     nn.SiLU(),
+    nn.Dropout(neural_network_params["dropout_rate"]),
     nn.Linear(neural_network_params["n_hidden"], neural_network_params["n_hidden"]),
     nn.SiLU(),
+    nn.Dropout(neural_network_params["dropout_rate"]),
     nn.Linear(neural_network_params["n_hidden"], neural_network_params["n_hidden"]),
     nn.SiLU(),
     nn.Linear(neural_network_params["n_hidden"], 1)
@@ -119,13 +121,18 @@ for building, test_type in ([(buildings, "interpolation") for buildings in inter
     alpha_h = height / math.sqrt(depth * width)
     alpha_bd = width / depth
 
+    # Generates the actual psds for the given building dimension
     actual_psds = CalculateAcrossPsdResponse(width, height, depth, frequencies)
 
+    # For each building dimension, there is 5000 frequency point that we take. This generates the 5000 inputs
     X_testing = np.array([[alpha_bd, alpha_h, np.log10(f)] for f in frequencies])
 
+
     gbert_model_predicted_logs = gbert_model.predict(X_testing)
+    # We are predicting the log, and to get the actual result we raise 10 to the value predicted
     gbert_model_predicted_psds = 10 ** gbert_model_predicted_logs
 
+    # For the neural network, we need to scale the input first then transform it to tensor type before
     X_testing_scaled = scaler.transform(X_testing)
     X_testing_tensor = torch.tensor(X_testing_scaled, dtype=torch.float32)
 
@@ -135,15 +142,19 @@ for building, test_type in ([(buildings, "interpolation") for buildings in inter
 
     neural_network_model_predicted_psds = 10 ** neural_network_model_predicted_logs
 
+    # This converts it to numpy array to make calculation easier
     actual_psds_np = np.array(actual_psds)
     actual_logs = np.log10(actual_psds_np)
 
+    # This calculates the root mean squared error on the actual values for the GBRT, and Neural Network
     gbert_rmse = np.sqrt(np.mean((actual_psds_np - gbert_model_predicted_psds) ** 2))
     nn_rmse = np.sqrt(np.mean((actual_psds_np - neural_network_model_predicted_psds) ** 2))
 
+    # This calculates the root mean squared error on the actual values for the GBRT, and Neural Network
     gbert_log_rmse = np.sqrt(np.mean((actual_logs - gbert_model_predicted_logs) ** 2))
     nn_log_rmse = np.sqrt(np.mean((actual_logs - neural_network_model_predicted_logs) ** 2))
 
+    # This calculates the relative mean error
     gbert_mre = np.mean(np.abs(actual_psds_np - gbert_model_predicted_psds) / actual_psds_np)
     nn_mre = np.mean(np.abs(actual_psds_np - neural_network_model_predicted_psds) / actual_psds_np)
 
