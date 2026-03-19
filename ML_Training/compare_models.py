@@ -75,11 +75,11 @@ def CalculateAcrossPsdResponse(width: float, height: float, depth: float, freque
     return across_psd
 
 # This loads the GBERT model that we trained
-gbert_model = joblib.load("your_gbrt_model.pkl")
+gbert_model = joblib.load("original_gradient_boosting_psd_model.pkl")
 
-# This uses the sa
-scaler = joblib.load("Your_actual_scalar_file.pkl")
-neural_network_params = joblib.load("your_neural_network_hyperparameter.pkl")
+# This uses the scalar and hyperparameters used by the neural network during training
+scaler = joblib.load("neural_network_scalar.pkl")
+neural_network_params = joblib.load("neural_network_best_hyperparameters.pkl")
 
 neural_network_model = nn.Sequential(
     nn.Linear(3, neural_network_params["n_hidden"]),
@@ -92,7 +92,8 @@ neural_network_model = nn.Sequential(
     nn.SiLU(),
     nn.Linear(neural_network_params["n_hidden"], 1)
 )
-neural_network_model.load_state_dict(torch.load("dnn_psd_model_six.pth"))
+# This loads the weights of the neurons
+neural_network_model.load_state_dict(torch.load("neural_network_trained_model.pth"))
 
 interpolation_buildings = [
     {"width": 88, "depth": 26, "height": 75}, {"width": 90, "depth": 30, "height": 60},

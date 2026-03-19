@@ -14,3 +14,6 @@ Steps to take to train models:
       1. `scalar.pkl` the scaling used by the neural network for transforming the model
       2. `neural_network_trained_model.pth` the trained model
       3. `neural_network_best_hyperparameters.pkl` the best hyperparameters for fitting the dataset
+4. To compare the models, execute the command: `python compare_models.py`. Make sure :
+   1. To load the GBRT model pkl for the GBRT model
+   2. To load the Scalar, hyperparameters, and neural_network_model for the neural network
