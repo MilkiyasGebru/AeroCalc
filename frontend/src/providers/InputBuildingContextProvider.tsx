@@ -52,17 +52,17 @@ interface IUploadData {
 export const InputBuildingContext = createContext<InputBuildingContextInterface | undefined>(undefined);
 
 export const InputBuildingContextProvider = ({children}: {children: React.ReactNode}) => {
-    const [width, setWidth] = useState<number | undefined>(undefined);
-    const [height, setHeight] = useState<number | undefined>(undefined);
-    const [depth, setDepth] = useState<number | undefined>(undefined);
-    const [meanSpeed, setMeanSpeed] = useState<number | undefined>(undefined);
-    const [buildingDensity, setBuildingDensity] = useState<number | undefined>(undefined);
-    const [totalFloors, setTotalFloors] = useState<number | undefined>(undefined);
-    const [damping, setDamping] = useState<number | undefined>(undefined);
-    const [Tone, setTone] = useState<number | undefined>(undefined);
-    const [Tacross, setTacross] = useState<number | undefined>(undefined);
-    const [Talong, setTalong] = useState<number | undefined>(undefined);
-    const [Ttorsion, setTtorsion] = useState<number | undefined>(undefined);
+    const [width, setWidth] = useState<number | undefined>(117);
+    const [height, setHeight] = useState<number | undefined>(187);
+    const [depth, setDepth] = useState<number | undefined>(28);
+    const [meanSpeed, setMeanSpeed] = useState<number | undefined>(10);
+    const [buildingDensity, setBuildingDensity] = useState<number | undefined>(200);
+    const [totalFloors, setTotalFloors] = useState<number | undefined>(65);
+    const [damping, setDamping] = useState<number | undefined>(0.01);
+    const [Tone, setTone] = useState<number | undefined>(4);
+    const [Tacross, setTacross] = useState<number | undefined>(4);
+    const [Talong, setTalong] = useState<number | undefined>(4);
+    const [Ttorsion, setTtorsion] = useState<number | undefined>(4);
     const [terrain, setTerrain] = useState<string>("open");
     const [csvData, setCSVData] = useState<IUploadData[]>([]);
     const [mxData, setMxData] = useState<number[]>([]);

@@ -28,15 +28,13 @@ interface IResponse {
 
 export function InternalDatabaseDialog({ open, onOpenChange, onConfirm }: InternalDatabaseDialogProps) {
     const [value, setValue] = useState<string>("");
-    // const [loading, setLoading] = useState(true);
     const { width, height, depth} = useInputBuildingContext();
     const [options, setOptions] = useState<IResponse[]>([])
     const [loading, setLoading] = useState<boolean>(false)
     const {setExperimentalFrequency} = useInputBuildingContext()
-    console.log("In internal database dialog 2");
 
     useEffect(() => {
-        console.log("In internal database dialog");
+        if (!open) return;
         setLoading(true);
         fetch("https://aerocalc-szin.onrender.com/", {
             method: "POST",
@@ -51,38 +49,41 @@ export function InternalDatabaseDialog({ open, onOpenChange, onConfirm }: Intern
         }).then(result => {
             return result.json();
         } ).then(json_result => {
-            console.log(json_result);
             setLoading(false)
             setOptions(json_result);
+        }).catch(() => {
+            setLoading(false);
         })
-    }, [open])
+    }, [open, width, height, depth])
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-             <DialogContent className="sm:max-w-[425px] bg-white">
+             <DialogContent className="sm:max-w-[425px] bg-white border-border">
                 <DialogHeader>
-                    <DialogTitle>Internal Wind Database</DialogTitle>
-                    <DialogDescription>
-                        These are the closest buildings to your input.
+                    <DialogTitle className="text-primary font-bold text-xl">Internal Wind Database</DialogTitle>
+                    <DialogDescription className="text-muted-foreground">
+                        Select from the building configurations closest to your input.
                     </DialogDescription>
                 </DialogHeader>
                  {!loading &&
                 <div className="grid gap-4 py-4">
                     <Select onValueChange={setValue}>
-                        <SelectTrigger className="w-full">
+                        <SelectTrigger className="w-full bg-white border-border">
                             <SelectValue placeholder="Select experimental data..." />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="bg-white border-border">
                             {options.map((option: IResponse) => {
-                                return <SelectItem value={option.url}>Width: {option.width}m, Height {option.height}m, Depth:{option.depth}m </SelectItem>
+                                return <SelectItem key={option.url} value={option.url} className="hover:bg-muted cursor-pointer">
+                                    Width: {option.width}m, Height {option.height}m, Depth:{option.depth}m 
+                                </SelectItem>
                             })}
-
                         </SelectContent>
                     </Select>
                 </div>
                  }
-                 {loading && <Loader2 className="animate-spin flex justify-center items-center h-16 w-16 mx-auto" />}
-                <DialogFooter>
-                    <Button variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
+                 {loading && <div className="py-12"><Loader2 className="animate-spin h-12 w-12 mx-auto text-primary" /></div>}
+                <DialogFooter className="gap-2">
+                    <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
                     <Button
                         disabled={!value}
                         onClick={() => {
@@ -91,16 +92,13 @@ export function InternalDatabaseDialog({ open, onOpenChange, onConfirm }: Intern
                             if (op.length == 1){
                                 setExperimentalFrequency(op[0].frequency)
                             }
-                        }
-
-                    }
-                        className="bg-blue-400 text-white hover:bg-blue-500"
+                        }}
+                        className="bg-primary text-white hover:bg-primary/90"
                     >
                         Confirm Selection
                     </Button>
                 </DialogFooter>
             </DialogContent>
-
         </Dialog>
     );
 }

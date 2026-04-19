@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Upload, File, X } from "lucide-react";
+import { Upload, File as FileIcon, X } from "lucide-react";
 import {
     Dialog,
     DialogContent,
@@ -60,21 +60,20 @@ export function FileUploadDialog({ open, onOpenChange, onFileSelect }: FileUploa
 
     return (
         <Dialog open={open} onOpenChange={handleClose}>
-            <DialogContent className="sm:max-w-md bg-white">
+            <DialogContent className="sm:max-w-md bg-white border-border">
                 <DialogHeader>
-                    <DialogTitle>Upload Data File</DialogTitle>
-                    <DialogDescription>
-                        Upload your experimental data file for calculation. CSV is the only supported format. CSV should contain 1 column of data.
+                    <DialogTitle className="text-primary font-bold text-xl">Upload Data File</DialogTitle>
+                    <DialogDescription className="text-muted-foreground">
+                        Upload your experimental data file (CSV format, 1 column).
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className="space-y-4 rounded-md border-gray-200">
+                <div className="space-y-4">
                     <div
                         onDragOver={handleDragOver}
                         onDragLeave={handleDragLeave}
                         onDrop={handleDrop}
-                        className={`
-              relative border-2 border-dashed border-gray-300 rounded-lg p-8 text-center transition-all duration-200`}
+                        className="relative border-2 border-dashed border-border rounded-lg p-8 text-center transition-all duration-200 hover:border-primary/50 bg-muted/20"
                     >
                         <input
                             type="file"
@@ -99,9 +98,9 @@ export function FileUploadDialog({ open, onOpenChange, onFileSelect }: FileUploa
                     </div>
 
                     {selectedFile && (
-                        <div className="flex items-center gap-3 p-3 bg-muted rounded-lg animate-fade-in">
+                        <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg animate-in fade-in slide-in-from-top-2 border border-border">
                             <div className="p-2 rounded bg-primary/10">
-                                <File className="w-4 h-4 text-primary" />
+                                <FileIcon className="w-4 h-4 text-primary" />
                             </div>
                             <div className="flex-1 min-w-0">
                                 <p className="text-sm font-medium truncate">{selectedFile.name}</p>
@@ -111,7 +110,7 @@ export function FileUploadDialog({ open, onOpenChange, onFileSelect }: FileUploa
                             </div>
                             <button
                                 onClick={() => setSelectedFile(null)}
-                                className="p-1 hover:bg-background rounded transition-colors"
+                                className="p-1 hover:bg-white rounded transition-colors"
                             >
                                 <X className="w-4 h-4 text-muted-foreground" />
                             </button>
@@ -122,7 +121,7 @@ export function FileUploadDialog({ open, onOpenChange, onFileSelect }: FileUploa
                         <Button variant="outline" onClick={handleClose}>
                             Cancel
                         </Button>
-                        <Button onClick={handleConfirm} disabled={!selectedFile}>
+                        <Button onClick={handleConfirm} disabled={!selectedFile} className="bg-primary text-white hover:bg-primary/90">
                             Upload & Continue
                         </Button>
                     </div>

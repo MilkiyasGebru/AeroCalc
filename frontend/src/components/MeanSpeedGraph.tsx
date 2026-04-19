@@ -1,69 +1,76 @@
-import { Line, LineChart, ReferenceDot, Tooltip, XAxis, YAxis} from "recharts";
+import { Line, LineChart, ReferenceDot, Tooltip, XAxis, YAxis, ResponsiveContainer} from "recharts";
 
 interface IMeanSpeedGraph {
     speed: number;
     height: number;
 }
 
-
-
-
 export default function MeanSpeedGraph({graph_data, current_point}: {graph_data: IMeanSpeedGraph[], current_point: IMeanSpeedGraph }) {
 
     return (
-        <div className="col-span-3">
+        <ResponsiveContainer width="100%" height="100%">
             <LineChart
-                style={{ width: '90%', maxWidth: '250px', height: '100%', maxHeight: '40vh', aspectRatio: 0.8 }}
-                responsive
                 data={graph_data}
-                margin={{
-                    top: 5,
-                    right: 5,
-                    left: 0,
-                    bottom: 5,
-                }}
+                margin={{ top: 20, right: 30, left: 40, bottom: 40 }}
             >
-
-                <XAxis dataKey="speed"   type="number" stroke="#000000" domain={['auto', 'auto']} // Or ['dataMin', 'dataMax']
-                       allowDataOverflow={true}
-                       label={{ value: 'Wind Speed (m/s)', position: 'insideBottom', offset: -3,style: { fill: '#000000', fontWeight: "normal", fontSize:14 } }}
+                <XAxis 
+                    dataKey="speed"   
+                    type="number" 
+                    stroke="hsl(215.4 16.3% 46.9%)" 
+                    domain={['auto', 'auto']} 
+                    allowDataOverflow={true}
+                    label={{ 
+                        value: 'Wind Speed (m/s)', 
+                        position: 'insideBottom', 
+                        offset: -10,
+                        style: { fill: 'hsl(222.2 84% 4.9%)', fontWeight: "bold", fontSize: 12 } 
+                    }}
+                    tick={{fontSize: 10}}
                 />
-                <YAxis width="auto"  type="number" domain={['auto', 'auto']} stroke="#000000"
-                       label={{
-                           value: 'Height (m)',
-                           angle: -90,
-                           position: 'insideLeft',
-                           style: { textAnchor: 'middle',fill: '#000000', fontWeight: "normal", fontSize:15 },
-                           offset: 10
-                       }}
+                <YAxis 
+                    width={50}  
+                    type="number" 
+                    domain={['auto', 'auto']} 
+                    stroke="hsl(215.4 16.3% 46.9%)"
+                    label={{
+                        value: 'Height (m)',
+                        angle: -90,
+                        position: 'insideLeft',
+                        style: { textAnchor: 'middle', fill: 'hsl(222.2 84% 4.9%)', fontWeight: "bold", fontSize: 12 },
+                        offset: 10
+                    }}
+                    tick={{fontSize: 10}}
                 />
                 <Tooltip
+                    contentStyle={{ backgroundColor: 'white', borderColor: 'hsl(214.3 31.8% 91.4%)', borderRadius: '8px' }}
                     formatter={(value)=> [
-                        <span className="font-mono font-bold text-slate-500">
+                        <span className="font-mono font-bold text-primary">
                             {typeof value === 'number' ? value.toFixed(2) : value}
                         </span>,
                         "Height"
-
                     ]}
                     labelFormatter={(label) => (
-                        <span className="font-mono font-bold text-slate-500">
+                        <span className="font-mono font-bold text-muted-foreground">
                             Speed: {label.toFixed(2)}
                         </span>
-                        )}
-                            />
-                {/*<Legend />*/}
-                <Line type="basis" dataKey="height" dot={false} stroke="#8884d8"/>
+                    )}
+                />
+                <Line 
+                    type="monotone" 
+                    dataKey="height" 
+                    dot={false} 
+                    stroke="hsl(161 94% 30%)" 
+                    strokeWidth={1.5}
+                />
                 <ReferenceDot
                     x={current_point.speed}
                     y={current_point.height}
-                    r={2}
-                    fill="#8884d8"
-                    stroke="red"
-                    strokeWidth={4}
+                    r={5}
+                    fill="hsl(161 94% 30%)"
+                    stroke="white"
+                    strokeWidth={2}
                 />
-
             </LineChart>
-                        </div>
-                        )
-
-                    }
+        </ResponsiveContainer>
+    );
+}

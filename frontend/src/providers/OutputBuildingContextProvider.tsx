@@ -69,6 +69,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
             const c = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
             let speed : number =(userMeanSpeed != null && Number.isFinite(userMeanSpeed))? userMeanSpeed:meanSpeed*c**0.5
             let across_psds: number[] = CalculateAcrossPsdResponse(Math.max(width,depth),height,Math.min(width,depth),frequencies)
+            console.log(across_psds)
             let torsion_psds: number[] = CalculateTorsionPsdResponse(Math.max(width,depth),height,Math.min(width,depth),speed,frequencies)
             setAccelartionYDirection(CalculateAlong(Math.max(width, depth), height, Math.min(width,depth),speed ,Talong,damping,frequencies,buildingDensity))
             const [x,__]:number[] = CalculateFD(Math.max(width,depth), height, Math.min(width,depth), speed,Ttorsion, totalFloors, damping, frequencies, across_psds, torsion_psds, buildingDensity)
