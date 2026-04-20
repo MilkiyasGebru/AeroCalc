@@ -45,11 +45,11 @@ export default function WindClimateCard() {
   return (
     <Card className="bg-card border-border border-t-4 border-t-teal-500 shadow-sm">
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg font-bold text-teal-700">Local Wind Climate</CardTitle>
+        <CardTitle className="text-lg font-bold text-teal-700">Local wind climate</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="terrain">Terrain Type</Label>
+          <Label htmlFor="terrain">Terrain type</Label>
           <Select value={terrain} onValueChange={setTerrain}>
             <SelectTrigger id="terrain" className="bg-background border-border">
               <SelectValue placeholder="Select terrain" />
@@ -65,7 +65,7 @@ export default function WindClimateCard() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="meanSpeed">10min Mean Speed at 10m (m/s)</Label>
+          <Label htmlFor="meanSpeed">10min mean speed at 10m (m/s)</Label>
           <Input
             id="meanSpeed"
             type="number"
@@ -77,7 +77,7 @@ export default function WindClimateCard() {
 
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <Label htmlFor="userMeanSpeed">10min Mean Speed at Roof (m/s)</Label>
+            <Label htmlFor="userMeanSpeed">10min mean speed at roof (m/s)</Label>
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>

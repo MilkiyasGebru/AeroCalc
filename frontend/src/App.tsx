@@ -26,7 +26,7 @@ function App() {
           <header className="border-b border-border bg-card/30 backdrop-blur-md z-10 py-4 px-6 flex-shrink-0">
               <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 w-full">
                   <div>
-                      <h1 className="text-2xl font-bold text-primary">Wind Response Prediction</h1>
+                      <h1 className="text-2xl font-bold text-primary">Wind response prediction</h1>
                       <p className="text-sm text-muted-foreground">McGill Timber Structures Group (TSG)</p>
                   </div>
                   <Button 
@@ -41,31 +41,31 @@ function App() {
 
           {/* Main Content */}
           <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 max-w-[1600px] mx-auto w-full gap-6 p-6 overflow-hidden">
-              
+
               {/* Left Sidebar - Inputs */}
-              <aside className="lg:col-span-4 space-y-6 overflow-y-auto pr-2 custom-scrollbar h-full pb-10">
+              <aside className="lg:col-span-3 space-y-6 overflow-y-auto pr-2 custom-scrollbar h-full pb-10">
                   <div className="flex items-center gap-2 mb-2">
-                      <div className="h-1 w-8 bg-emerald-600 rounded-full"></div>
-                      <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Input Parameters</h2>
+                      <h2 className="text-sm font-bold tracking-wider text-muted-foreground">Input parameters</h2>
                   </div>
-                  
+
                   <GeometryCard />
                   <DynamicPropertiesCard />
                   <WindClimateCard />
                   <ExperimentalCard />
-                  
+
                   <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-lg text-xs text-emerald-700">
                       <p>Ensure all dimensions and site parameters are correctly entered before running the analysis.</p>
                   </div>
               </aside>
 
               {/* Right Panel - Outputs */}
-              <main className="lg:col-span-8 bg-card/10 border border-border rounded-xl flex flex-col h-full overflow-hidden">
+              <main className="lg:col-span-9 bg-card/10 border border-border rounded-xl flex flex-col h-full overflow-hidden">
                   <div className="p-6 h-full overflow-y-auto custom-scrollbar">
                     <OutputTabs />
                   </div>
               </main>
           </div>
+
       </div>
     )
 }

@@ -10,10 +10,10 @@ export default function GeometryCard() {
   return (
     <Card className="bg-card border-border border-t-4 border-t-indigo-500 shadow-sm">
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg font-bold text-indigo-700">Building Geometry</CardTitle>
+        <CardTitle className="text-lg font-bold text-indigo-700">Building geometry</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-4">
           <div className="space-y-2">
             <Label htmlFor="width">Width (m)</Label>
             <Input
@@ -45,7 +45,7 @@ export default function GeometryCard() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="totalFloors">Floors</Label>
+            <Label htmlFor="totalFloors">Number of floors</Label>
             <Input
               id="totalFloors"
               type="number"

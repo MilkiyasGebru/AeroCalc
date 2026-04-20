@@ -95,17 +95,14 @@ export default function PSDGraph(props : PSDGraphInterface) {
     }
     const title : string = props.graphType === "Across"? "Across-wind base moment spectrum" : props.graphType === "Along"?  "Along-wind base moment spectrum" :  "Torsion base moment spectrum"
     
-    const getAnalyticalColor = () => {
-        if (props.graphType === "Across") return "#EA580C";
-        if (props.graphType === "Along") return "#854D0E";
-        return "#CA8A04";
-    };
+    const ANALYTICAL_COLOR = "#EA580C";
+    const EXPERIMENTAL_COLOR = "#0ea5e9";
 
     return (
         <div className="w-full flex flex-col items-center">
             <h3 className="text-lg font-bold text-primary mb-4">{title}</h3>
             { (psds.length > 0 || experimentalPsds.length>0) && (
-                <div className="w-full h-[500px] max-w-[600px] bg-white rounded-lg p-4 border border-border">
+                <div className="w-full aspect-square max-w-[450px] bg-white rounded-lg p-4 border border-border">
                     <ResponsiveContainer width="100%" height="100%">
                         <LineChart
                             data={graph_data}
@@ -137,7 +134,7 @@ export default function PSDGraph(props : PSDGraphInterface) {
                             <Tooltip
                                 contentStyle={{ backgroundColor: 'white', borderColor: 'hsl(214.3 31.8% 91.4%)', borderRadius: '8px' }}
                                 formatter={(value, name)=> [
-                                    <span className="font-mono font-bold" style={{ color: name === "Analytical" ? getAnalyticalColor() : "#0ea5e9" }}>
+                                    <span className="font-mono font-bold" style={{ color: name === "Analytical" ? ANALYTICAL_COLOR : EXPERIMENTAL_COLOR }}>
                                             {typeof value === 'number' ? value.toExponential(2) : value}
                                         </span>,
                                     name === "Analytical"? `${props.graphType} PSD (Analytical)`
@@ -149,7 +146,7 @@ export default function PSDGraph(props : PSDGraphInterface) {
                                         </span>
                                 )}
                             />
-                            <Legend verticalAlign="top" height={36}/>
+                            <Legend verticalAlign="top" height={36} iconType="plainline" />
                             {psds.length > 0  && (
                                 <Line 
                                     name="Analytical" 
@@ -157,7 +154,7 @@ export default function PSDGraph(props : PSDGraphInterface) {
                                     dot={false} 
                                     dataKey="psd" 
                                     connectNulls={true} 
-                                    stroke={getAnalyticalColor()} 
+                                    stroke={ANALYTICAL_COLOR} 
                                     strokeWidth={1.5} 
                                 />
                             )}
@@ -168,7 +165,7 @@ export default function PSDGraph(props : PSDGraphInterface) {
                                     dot={false} 
                                     dataKey="experimentalPsd" 
                                     connectNulls={true} 
-                                    stroke="#0ea5e9" 
+                                    stroke={EXPERIMENTAL_COLOR} 
                                     strokeWidth={1.5} 
                                 />
                             )}

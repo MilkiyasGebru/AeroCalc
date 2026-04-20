@@ -77,7 +77,7 @@ export const RectangleWithArrow: React.FC<RectangleWithArrowProps> = ({ width = 
             y={centerY - 20}
             className="text-[14px] font-black fill-teal-700 tracking-tighter"
           >
-            WIND DIRECTION
+            Wind direction
           </text>
           <text
             x="20"
@@ -96,21 +96,12 @@ export const RectangleWithArrow: React.FC<RectangleWithArrowProps> = ({ width = 
           height={dispAcross}
           fill="url(#woodPattern)"
           stroke="#92400e"
-          strokeWidth="2.5"
-          rx="3"
+          strokeWidth={2.5}
+          rx={3}
         />
-        
-        <text
-          x={centerX}
-          y={centerY}
-          textAnchor="middle"
-          dominantBaseline="middle"
-          className="fill-amber-900/30 text-[11px] font-black uppercase tracking-[0.2em] pointer-events-none"
-        >
-          Building Plan
-        </text>
 
         {/* --- Dimensions --- */}
+
         <g className="text-slate-500">
           {/* Across-Wind Dimension (Vertical in SVG) */}
           <line
@@ -164,9 +155,6 @@ export const RectangleWithArrow: React.FC<RectangleWithArrowProps> = ({ width = 
           <line x1={centerX + dispAlong / 2} y1={centerY + dispAcross / 2} x2={centerX + dispAlong / 2 + 40} y2={centerY + dispAcross / 2} />
         </g>
       </svg>
-      <div className="mt-4 text-[12px] font-bold text-teal-800 bg-teal-50 px-4 py-1.5 rounded-full border border-teal-100 uppercase tracking-wider">
-        Technical Plan View
-      </div>
     </div>
   );
 };

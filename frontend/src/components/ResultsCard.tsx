@@ -1,7 +1,7 @@
 import { useOutputBuildingContext } from "@/contexts/useOutputBuildingContext.ts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Activity, Wind, RotateCw } from "lucide-react";
+import { ArrowRight, Wind, RotateCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ResponseCardProps {
@@ -25,14 +25,14 @@ function ResponseCard({ title, unit, analytical, experimental, icon, colorClass 
             <CardContent className="pt-4">
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
-                        <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold">Analytical</p>
+                        <p className="text-[10px] text-muted-foreground font-bold">Analytical</p>
                         <div className="flex items-baseline gap-1">
                             <span className={cn("text-2xl font-bold", colorClass)}>{analytical?.toFixed(2) ?? "--"}</span>
                             <span className="text-[10px] text-muted-foreground">{unit}</span>
                         </div>
                     </div>
                     <div className="space-y-1 border-l border-border pl-4">
-                        <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold">Experimental</p>
+                        <p className="text-[10px] text-muted-foreground font-bold">Experimental</p>
                         <div className="flex items-baseline gap-1">
                             <span className="text-2xl font-bold text-sky-600">{experimental?.toFixed(2) ?? "--"}</span>
                             <span className="text-[10px] text-muted-foreground">{unit}</span>
@@ -65,13 +65,12 @@ export default function ResultsCard() {
     return (
         <div className="space-y-6">
             <div className="flex items-center gap-2 mb-4">
-                <Activity className="h-5 w-5 text-primary" />
-                <h2 className="text-xl font-bold tracking-tight">Dynamic Response Summary</h2>
+                <h2 className="text-xl font-bold tracking-tight">Dynamic response summary</h2>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <ResponseCard 
-                    title="Across-Wind Acceleration" 
+                    title="Across-wind acceleration" 
                     unit="milli-g" 
                     analytical={ar} 
                     experimental={experimentalAr} 
@@ -79,7 +78,7 @@ export default function ResultsCard() {
                     colorClass="text-[#EA580C]"
                 />
                 <ResponseCard 
-                    title="Along-Wind Acceleration" 
+                    title="Along-wind acceleration" 
                     unit="milli-g" 
                     analytical={accelartionYDirection} 
                     experimental={experimentalAccelartionYDirection} 
@@ -87,7 +86,7 @@ export default function ResultsCard() {
                     colorClass="text-[#854D0E]"
                 />
                 <ResponseCard 
-                    title="Torsion Velocity" 
+                    title="Torsion velocity" 
                     unit="milli-rad/s" 
                     analytical={vr} 
                     experimental={experimentalVr} 

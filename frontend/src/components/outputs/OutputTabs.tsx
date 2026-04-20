@@ -47,10 +47,10 @@ export default function OutputTabs() {
     }, [terrain, height, meanSpeed]);
 
     const tabs = [
-        { id: "overview", label: "Overview" },
-        { id: "spectral", label: "Spectral Analysis" },
-        { id: "history", label: "Time History" },
-        { id: "site", label: "Site & Geometry" },
+        { id: "overview", label: "Dynamic response summary" },
+        { id: "spectral", label: "Spectral analysis" },
+        { id: "history", label: "Time history" },
+        { id: "site", label: "Site & geometry" },
     ];
 
     const hasResults = ar !== null || experimentalAr !== null;
@@ -99,9 +99,11 @@ export default function OutputTabs() {
                             <div className="flex flex-col items-center">
                                 <PSDGraph psds={torsionPsds} experimentalPsds={experimentalTorsionPsds} graphType="Torsion" />
                             </div>
-                            <div className="flex flex-col items-center">
-                                <PSDGraph psds={[]} experimentalPsds={experimentalAlongPsds} graphType="Along" />
-                            </div>
+                            {experimentalAlongPsds.length > 0 && (
+                                <div className="flex flex-col items-center">
+                                    <PSDGraph psds={[]} experimentalPsds={experimentalAlongPsds} graphType="Along" />
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}
@@ -134,7 +136,7 @@ export default function OutputTabs() {
                 {activeTab === "site" && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in duration-500">
                         <div className="flex flex-col space-y-4">
-                            <h3 className="text-lg font-bold text-primary px-2">Building Orientation & Scale</h3>
+                            <h3 className="text-lg font-bold text-primary px-2">Building orientation & scale</h3>
                             <RectangleWithArrow width={width || 0} height={depth || 0} />
                             <p className="px-2 text-sm text-muted-foreground italic">
                                 The diagram automatically rotates to align the largest dimension (B) perpendicular to the wind direction, consistent with the analytical model.
@@ -142,7 +144,7 @@ export default function OutputTabs() {
                         </div>
 
                         <div className="flex flex-col space-y-4">
-                            <h3 className="text-lg font-bold text-primary px-2">Mean Wind Speed Profile</h3>
+                            <h3 className="text-lg font-bold text-primary px-2">Mean wind speed profile</h3>
                             <div className="w-full h-[400px] bg-white rounded-xl border border-border/40 shadow-sm p-4">
                                 <MeanSpeedGraph 
                                     graph_data={graphData} 
