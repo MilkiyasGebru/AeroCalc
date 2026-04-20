@@ -100,13 +100,13 @@ export default function PSDGraph(props : PSDGraphInterface) {
 
     return (
         <div className="w-full flex flex-col items-center">
-            <h3 className="text-lg font-bold text-primary mb-4">{title}</h3>
+            <h3 className="text-lg font-bold text-primary mb-2">{title}</h3>
             { (psds.length > 0 || experimentalPsds.length>0) && (
-                <div className="w-full aspect-square max-w-[450px] bg-white rounded-lg p-4 border border-border">
+                <div className="w-full aspect-square max-w-[450px] bg-white rounded-lg p-2 border border-border">
                     <ResponsiveContainer width="100%" height="100%">
                         <LineChart
                             data={graph_data}
-                            margin={{ top: 20, right: 30, left: 40, bottom: 40 }}
+                            margin={{ top: 10, right: 10, left: 0, bottom: 20 }}
                         >
                             <XAxis 
                                 dataKey="frequency" 
@@ -117,16 +117,16 @@ export default function PSDGraph(props : PSDGraphInterface) {
                                 label={<CustomXLabel />}
                                 tick={<SuperscriptLogTick />}
                                 stroke="hsl(215.4 16.3% 46.9%)"
-                                tickMargin={10}
+                                tickMargin={5}
                                 ticks={[0.01, 0.1, 1, 10]}
                             />
                             <YAxis 
-                                width={100} 
+                                width={80} 
                                 scale="log"  
                                 type="number"
                                 label={<CustomYLabel  />}
                                 tick={<SuperscriptLogTick />}
-                                tickMargin={10}
+                                tickMargin={5}
                                 stroke="hsl(215.4 16.3% 46.9%)"
                                 ticks={[0.000001, 0.00001, 0.0001, 0.001, 0.01]}
                                 domain={[0.000001, 0.02]}
