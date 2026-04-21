@@ -96,6 +96,19 @@ export default function PSDGraph(props : PSDGraphInterface) {
     }
     const title : string = props.graphType === "Across"? "Across-wind base moment spectrum" : props.graphType === "Along"?  "Along-wind base moment spectrum" :  "Torsion base moment spectrum"
 
+    // Dynamically calculate Y-axis range
+    const allValues = [...psds, ...experimentalPsds].filter(v => v > 0);
+    const minVal = allValues.length > 0 ? Math.min(...allValues) : 1e-6;
+    const maxVal = allValues.length > 0 ? Math.max(...allValues) : 1e-2;
+    
+    const minExp = Math.floor(Math.log10(minVal));
+    const maxExp = Math.ceil(Math.log10(maxVal));
+    
+    const yTicks = [];
+    for (let e = minExp; e <= maxExp; e++) {
+        yTicks.push(Math.pow(10, e));
+    }
+
     const ANALYTICAL_COLOR = "#EA580C";
     const EXPERIMENTAL_COLOR = "#0ea5e9";
 
@@ -129,8 +142,8 @@ export default function PSDGraph(props : PSDGraphInterface) {
                                 tick={<SuperscriptLogTick />}
                                 tickMargin={5}
                                 stroke="var(--muted-foreground)"
-                                ticks={[0.000001, 0.00001, 0.0001, 0.001, 0.01]}
-                                domain={[0.000001, 0.02]}
+                                ticks={yTicks}
+                                domain={[Math.pow(10, minExp), Math.pow(10, maxExp)]}
                             />
                             <Tooltip
                                 contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', borderRadius: '8px' }}
