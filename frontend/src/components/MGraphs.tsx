@@ -23,7 +23,7 @@ export default function MGraphs({graph_data}:{graph_data: IGraph}) {
                     >
                         <XAxis     
                             allowDataOverflow={true}
-                            stroke="hsl(215.4 16.3% 46.9%)"
+                            stroke="var(--muted-foreground)"
                             tick={false}
                             tickLine={false}
                         />
@@ -31,18 +31,19 @@ export default function MGraphs({graph_data}:{graph_data: IGraph}) {
                             width={60}  
                             type="number" 
                             domain={['auto', 'auto']}
-                            stroke="hsl(215.4 16.3% 46.9%)"
+                            stroke="var(--muted-foreground)"
                             label={{
                                 value: y_axis_title,
                                 angle: -90,
                                 position: 'insideLeft',
-                                style: { textAnchor: 'middle', fill: 'hsl(215.4 16.3% 46.9%)', fontSize: '12px' },
+                                style: { textAnchor: 'middle', fill: 'var(--muted-foreground)', fontSize: '12px' },
                                 offset: 0
                             }}
-                            tick={{fontSize: 10}}
+                            tick={{fontSize: 10, fill: 'var(--muted-foreground)'}}
                         />
                         <Tooltip
-                            contentStyle={{ backgroundColor: 'white', borderColor: 'hsl(214.3 31.8% 91.4%)', borderRadius: '8px' }}
+                            contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', borderRadius: '8px' }}
+                            itemStyle={{ color: 'var(--foreground)' }}
                             formatter={(value, name)=> [
                                 <span className="font-mono font-bold text-primary">
                                     {typeof value === 'number' ? value.toFixed(2) : value}

@@ -5,13 +5,15 @@ import WindClimateCard from "@/components/inputs/WindClimateCard";
 import ExperimentalCard from "@/components/inputs/ExperimentalCard";
 import OutputTabs from "@/components/outputs/OutputTabs";
 import { Button } from "@/components/ui/button";
-import { Play } from "lucide-react";
+import { Play, Sun, Moon } from "lucide-react";
 import { useOutputBuildingContext } from "@/contexts/useOutputBuildingContext";
 import { useInputBuildingContext } from "@/contexts/useInputBuildingContext";
+import { useTheme } from "@/contexts/ThemeContext";
 
 function App() {
     const { handleAnalyticalCalculation, handleExperimentalCalculation } = useOutputBuildingContext();
     const { mxData, myData, mzData } = useInputBuildingContext();
+    const { theme, toggleTheme } = useTheme();
 
     const runAnalysis = () => {
         handleAnalyticalCalculation();
@@ -25,13 +27,24 @@ function App() {
           {/* Header */}
           <header className="border-b border-border bg-card/30 backdrop-blur-md z-10 py-4 px-6 flex-shrink-0">
               <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 w-full">
-                  <div>
-                      <h1 className="text-2xl font-bold text-primary">Cloud-based platform for wind response prediction of tall mass timber buildings</h1>
-                      <p className="text-sm text-muted-foreground">McGill Timber Structures Group (TSG)</p>
+                  <div className="flex items-center gap-4">
+                      <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={toggleTheme}
+                          className="rounded-full h-10 w-10 shrink-0"
+                          title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+                      >
+                          {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+                      </Button>
+                      <div>
+                          <h1 className="text-2xl font-bold text-primary leading-tight">Cloud-based platform for wind response prediction of tall mass timber buildings</h1>
+                          <p className="text-sm text-muted-foreground">McGill Timber Structures Group (TSG)</p>
+                      </div>
                   </div>
                   <Button 
                       onClick={runAnalysis} 
-                      className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 h-12 text-lg font-bold shadow-lg shadow-emerald-200 transition-all active:scale-95"
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 h-12 text-lg font-bold shadow-lg shadow-emerald-200 dark:shadow-emerald-900/20 transition-all active:scale-95 shrink-0"
                   >
                       <Play className="mr-2 h-5 w-5 fill-current" />
                       Run Analysis
@@ -53,7 +66,7 @@ function App() {
                   <WindClimateCard />
                   <ExperimentalCard />
 
-                  <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-lg text-xs text-emerald-700">
+                  <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-xs text-emerald-700 dark:text-emerald-400">
                       <p>Ensure all dimensions and site parameters are correctly entered before running the analysis.</p>
                   </div>
               </aside>

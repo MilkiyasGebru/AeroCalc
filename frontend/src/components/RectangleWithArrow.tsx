@@ -31,16 +31,16 @@ export const RectangleWithArrow: React.FC<RectangleWithArrowProps> = ({ width = 
   const centerY = viewBoxHeight / 2;
 
   return (
-    <div className="w-full flex flex-col items-center justify-center bg-white rounded-xl p-4 border border-border/40 shadow-sm">
+    <div className="w-full flex flex-col items-center justify-center bg-card rounded-xl p-4 border border-border shadow-sm">
       <svg
         viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
         className="w-full max-w-[450px] h-auto"
       >
         <defs>
           <pattern id="woodPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-            <rect width="20" height="20" fill="#fffcf0" />
-            <path d="M0 10h20M10 0v20" stroke="#fef3c7" strokeWidth="1" />
-            <circle cx="10" cy="10" r="1.5" fill="#fde68a" opacity="0.3" />
+            <rect width="20" height="20" className="fill-orange-50/50 dark:fill-orange-900/20" />
+            <path d="M0 10h20M10 0v20" className="stroke-orange-100 dark:stroke-orange-900/30" strokeWidth="1" />
+            <circle cx="10" cy="10" r="1.5" className="fill-orange-200 dark:fill-orange-800" opacity="0.3" />
           </pattern>
           
           <marker
@@ -61,7 +61,7 @@ export const RectangleWithArrow: React.FC<RectangleWithArrowProps> = ({ width = 
         </defs>
 
         {/* --- Wind Indicator --- */}
-        <g className="text-teal-600">
+        <g className="text-teal-600 dark:text-teal-400">
           <line
             x1="20"
             y1={centerY}
@@ -75,14 +75,14 @@ export const RectangleWithArrow: React.FC<RectangleWithArrowProps> = ({ width = 
           <text
             x="20"
             y={centerY - 20}
-            className="text-[14px] font-black fill-teal-700 tracking-tighter"
+            className="text-[14px] font-black fill-current tracking-tighter"
           >
             Wind direction
           </text>
           <text
             x="20"
             y={centerY + 30}
-            className="text-[11px] fill-teal-600 font-mono font-bold"
+            className="text-[11px] fill-current font-mono font-bold opacity-80"
           >
             Angle of Attack: 0°
           </text>
@@ -95,14 +95,14 @@ export const RectangleWithArrow: React.FC<RectangleWithArrowProps> = ({ width = 
           width={dispAlong}
           height={dispAcross}
           fill="url(#woodPattern)"
-          stroke="#92400e"
+          stroke="var(--primary)"
           strokeWidth={2.5}
           rx={3}
         />
 
         {/* --- Dimensions --- */}
 
-        <g className="text-slate-500">
+        <g className="text-muted-foreground">
           {/* Across-Wind Dimension (Vertical in SVG) */}
           <line
             x1={centerX + dispAlong / 2 + 35}
@@ -119,7 +119,7 @@ export const RectangleWithArrow: React.FC<RectangleWithArrowProps> = ({ width = 
             y={centerY}
             transform={`rotate(90, ${centerX + dispAlong / 2 + 55}, ${centerY})`}
             textAnchor="middle"
-            className="fill-slate-700 text-[13px] font-mono font-bold"
+            className="fill-foreground text-[13px] font-mono font-bold"
           >
             {isWidthLarger ? `B (Width) = ${width}m` : `B (Across) = ${height}m`}
           </text>
@@ -139,14 +139,14 @@ export const RectangleWithArrow: React.FC<RectangleWithArrowProps> = ({ width = 
             x={centerX}
             y={centerY + dispAcross / 2 + 55}
             textAnchor="middle"
-            className="fill-slate-700 text-[13px] font-mono font-bold"
+            className="fill-foreground text-[13px] font-mono font-bold"
           >
             {isWidthLarger ? `D (Depth) = ${height}m` : `D (Along) = ${width}m`}
           </text>
         </g>
 
         {/* Extension Lines */}
-        <g stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" className="text-slate-300">
+        <g stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" className="text-border">
           {/* For D */}
           <line x1={centerX - dispAlong / 2} y1={centerY + dispAcross / 2} x2={centerX - dispAlong / 2} y2={centerY + dispAcross / 2 + 40} />
           <line x1={centerX + dispAlong / 2} y1={centerY + dispAcross / 2} x2={centerX + dispAlong / 2} y2={centerY + dispAcross / 2 + 40} />

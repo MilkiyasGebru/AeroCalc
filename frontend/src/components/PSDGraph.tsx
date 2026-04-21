@@ -22,7 +22,7 @@ const SuperscriptLogTick = ({ x, y, payload }: any) => {
 
     return (
         <g transform={`translate(${x},${y})`}>
-            <text textAnchor="middle" fontSize={12} fill="hsl(215.4 16.3% 46.9%)">
+            <text textAnchor="middle" fontSize={12} fill="var(--muted-foreground)">
                 10
                 <tspan dy="-6" fontSize="10">{exp}</tspan>
             </text>
@@ -50,7 +50,7 @@ const CustomYLabel = (props: CustomYLabelProps) => {
     return (
         <g transform={`translate(${cx},${cy}) rotate(-90)`}>
             <foreignObject width={200} height={20} x={-100} y={90}>
-                <div style={{ textAlign: "center", color: "hsl(215.4 16.3% 46.9%)" }} className="text-sm">
+                <div style={{ textAlign: "center", color: "var(--muted-foreground)" }} className="text-sm">
                     <InlineMath math={"f S_M(f) / (0.5\\rho  U_H^2 B H^2)^2 "} />
                 </div>
             </foreignObject>
@@ -69,7 +69,7 @@ const CustomXLabel = (props: CustomYLabelProps) => {
     return (
         <g transform={`translate(${cx},${cy}) `}>
             <foreignObject width={200} height={20} x={100} y={0}>
-                <div style={{ textAlign: "center", color: "hsl(215.4 16.3% 46.9%)" }} className="z-50 text-sm">
+                <div style={{ textAlign: "center", color: "var(--muted-foreground)" }} className="z-50 text-sm">
                     <InlineMath math={" \\\\ fB/UH"} />
                 </div>
             </foreignObject>
@@ -94,7 +94,7 @@ export default function PSDGraph(props : PSDGraphInterface) {
         })
     }
     const title : string = props.graphType === "Across"? "Across-wind base moment spectrum" : props.graphType === "Along"?  "Along-wind base moment spectrum" :  "Torsion base moment spectrum"
-    
+
     const ANALYTICAL_COLOR = "#EA580C";
     const EXPERIMENTAL_COLOR = "#0ea5e9";
 
@@ -102,7 +102,7 @@ export default function PSDGraph(props : PSDGraphInterface) {
         <div className="w-full flex flex-col items-center">
             <h3 className="text-lg font-bold text-primary mb-2">{title}</h3>
             { (psds.length > 0 || experimentalPsds.length>0) && (
-                <div className="w-full aspect-square max-w-[450px] bg-white rounded-lg p-2 border border-border">
+                <div className="w-full aspect-square max-w-[450px] bg-card rounded-lg p-2 border border-border">
                     <ResponsiveContainer width="100%" height="100%">
                         <LineChart
                             data={graph_data}
@@ -116,7 +116,7 @@ export default function PSDGraph(props : PSDGraphInterface) {
                                 allowDataOverflow={true}
                                 label={<CustomXLabel />}
                                 tick={<SuperscriptLogTick />}
-                                stroke="hsl(215.4 16.3% 46.9%)"
+                                stroke="var(--muted-foreground)"
                                 tickMargin={5}
                                 ticks={[0.01, 0.1, 1, 10]}
                             />
@@ -127,12 +127,12 @@ export default function PSDGraph(props : PSDGraphInterface) {
                                 label={<CustomYLabel  />}
                                 tick={<SuperscriptLogTick />}
                                 tickMargin={5}
-                                stroke="hsl(215.4 16.3% 46.9%)"
+                                stroke="var(--muted-foreground)"
                                 ticks={[0.000001, 0.00001, 0.0001, 0.001, 0.01]}
                                 domain={[0.000001, 0.02]}
                             />
                             <Tooltip
-                                contentStyle={{ backgroundColor: 'white', borderColor: 'hsl(214.3 31.8% 91.4%)', borderRadius: '8px' }}
+                                contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', borderRadius: '8px' }}
                                 formatter={(value, name)=> [
                                     <span className="font-mono font-bold" style={{ color: name === "Analytical" ? ANALYTICAL_COLOR : EXPERIMENTAL_COLOR }}>
                                             {typeof value === 'number' ? value.toExponential(2) : value}
@@ -145,8 +145,7 @@ export default function PSDGraph(props : PSDGraphInterface) {
                                             Frequency: {Number(label).toExponential(2)}
                                         </span>
                                 )}
-                            />
-                            <Legend verticalAlign="top" height={36} iconType="plainline" />
+                            />                            <Legend verticalAlign="top" height={36} iconType="plainline" />
                             {psds.length > 0  && (
                                 <Line 
                                     name="Analytical" 

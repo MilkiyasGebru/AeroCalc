@@ -16,33 +16,34 @@ export default function MeanSpeedGraph({graph_data, current_point}: {graph_data:
                 <XAxis 
                     dataKey="speed"   
                     type="number" 
-                    stroke="hsl(215.4 16.3% 46.9%)" 
+                    stroke="var(--muted-foreground)" 
                     domain={['auto', 'auto']} 
                     allowDataOverflow={true}
                     label={{ 
                         value: 'Wind Speed (m/s)', 
                         position: 'insideBottom', 
                         offset: -10,
-                        style: { fill: 'hsl(222.2 84% 4.9%)', fontWeight: "bold", fontSize: 12 } 
+                        style: { fill: 'var(--foreground)', fontWeight: "bold", fontSize: 12 } 
                     }}
-                    tick={{fontSize: 10}}
+                    tick={{fontSize: 10, fill: 'var(--muted-foreground)'}}
                 />
                 <YAxis 
                     width={50}  
                     type="number" 
                     domain={['auto', 'auto']} 
-                    stroke="hsl(215.4 16.3% 46.9%)"
+                    stroke="var(--muted-foreground)"
                     label={{
                         value: 'Height (m)',
                         angle: -90,
                         position: 'insideLeft',
-                        style: { textAnchor: 'middle', fill: 'hsl(222.2 84% 4.9%)', fontWeight: "bold", fontSize: 12 },
+                        style: { textAnchor: 'middle', fill: 'var(--foreground)', fontWeight: "bold", fontSize: 12 },
                         offset: 10
                     }}
-                    tick={{fontSize: 10}}
+                    tick={{fontSize: 10, fill: 'var(--muted-foreground)'}}
                 />
                 <Tooltip
-                    contentStyle={{ backgroundColor: 'white', borderColor: 'hsl(214.3 31.8% 91.4%)', borderRadius: '8px' }}
+                    contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', borderRadius: '8px', color: 'var(--foreground)' }}
+                    itemStyle={{ color: 'var(--foreground)' }}
                     formatter={(value)=> [
                         <span className="font-mono font-bold text-primary">
                             {typeof value === 'number' ? value.toFixed(2) : value}

@@ -146,7 +146,7 @@ export default function OutputTabs() {
 
                         <div className="flex flex-col space-y-4">
                             <h3 className="text-lg font-bold text-primary px-2">Mean wind speed profile</h3>
-                            <div className="w-full h-[400px] bg-white rounded-xl border border-border/40 shadow-sm p-4">
+                            <div className="w-full h-[400px] bg-card rounded-xl border border-border shadow-sm p-4">
                                 <MeanSpeedGraph 
                                     graph_data={graphData} 
                                     current_point={{

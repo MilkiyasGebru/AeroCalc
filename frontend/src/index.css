@@ -1,38 +1,108 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: hsl(30 20% 98%); /* Slightly warmer background */
-  --color-foreground: hsl(20 40% 10%);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
 
-  --color-card: hsl(0 0% 100%);
-  --color-card-foreground: hsl(20 40% 10%);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
 
-  --color-popover: hsl(0 0% 100%);
-  --color-popover-foreground: hsl(20 40% 10%);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
 
-  --color-primary: hsl(222.2 47.4% 11.2%); /* Deep Slate/Indigo */
-  --color-primary-foreground: hsl(210 40% 98%);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
 
-  --color-secondary: hsl(35 20% 96.1%);
-  --color-secondary-foreground: hsl(35 47.4% 11.2%);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
 
-  --color-muted: hsl(30 20% 94%);
-  --color-muted-foreground: hsl(25 10% 45%);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
 
-  --color-accent: hsl(35 40% 92%);
-  --color-accent-foreground: hsl(35 47.4% 11.2%);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
 
-  --color-destructive: hsl(0 84.2% 60.2%);
-  --color-destructive-foreground: hsl(210 40% 98%);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
 
-  --color-border: hsl(30 20% 88%);
-  --color-input: hsl(30 20% 88%);
-  --color-ring: hsl(35 92% 33%);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 
   /* Direction Specific Colors */
-  --color-across: #EA580C; /* Rich Orange */
-  --color-along: #854D0E;  /* Deep Wood Brown */
-  --color-torsion: #CA8A04; /* Golden Yellow */
+  --color-across: var(--across);
+  --color-along: var(--along);
+  --color-torsion: var(--torsion);
+}
+
+@layer base {
+  :root {
+    --background: hsl(30 20% 98%);
+    --foreground: hsl(20 40% 10%);
+
+    --card: hsl(0 0% 100%);
+    --card-foreground: hsl(20 40% 10%);
+
+    --popover: hsl(0 0% 100%);
+    --popover-foreground: hsl(20 40% 10%);
+
+    --primary: hsl(222.2 47.4% 11.2%);
+    --primary-foreground: hsl(210 40% 98%);
+
+    --secondary: hsl(35 20% 96.1%);
+    --secondary-foreground: hsl(35 47.4% 11.2%);
+
+    --muted: hsl(30 20% 94%);
+    --muted-foreground: hsl(25 10% 45%);
+
+    --accent: hsl(35 40% 92%);
+    --accent-foreground: hsl(35 47.4% 11.2%);
+
+    --destructive: hsl(0 84.2% 60.2%);
+    --destructive-foreground: hsl(210 40% 98%);
+
+    --border: hsl(30 20% 88%);
+    --input: hsl(30 20% 88%);
+    --ring: hsl(35 92% 33%);
+
+    --across: #EA580C;
+    --along: #854D0E;
+    --torsion: #CA8A04;
+  }
+
+  .dark {
+    --background: hsl(222.2 84% 4.9%);
+    --foreground: hsl(210 40% 98%);
+
+    --card: hsl(222.2 84% 4.9%);
+    --card-foreground: hsl(210 40% 98%);
+
+    --popover: hsl(222.2 84% 4.9%);
+    --popover-foreground: hsl(210 40% 98%);
+
+    --primary: hsl(210 40% 98%);
+    --primary-foreground: hsl(222.2 47.4% 11.2%);
+
+    --secondary: hsl(217.2 32.6% 17.5%);
+    --secondary-foreground: hsl(210 40% 98%);
+
+    --muted: hsl(217.2 32.6% 17.5%);
+    --muted-foreground: hsl(215 20.2% 65.1%);
+
+    --accent: hsl(217.2 32.6% 17.5%);
+    --accent-foreground: hsl(210 40% 98%);
+
+    --destructive: hsl(0 62.8% 30.6%);
+    --destructive-foreground: hsl(210 40% 98%);
+
+    --border: hsl(217.2 32.6% 17.5%);
+    --input: hsl(217.2 32.6% 17.5%);
+    --ring: hsl(212.7 26.8% 83.9%);
+
+    --across: #fb923c;
+    --along: #a16207;
+    --torsion: #facc15;
+  }
 }
 
 @layer base {
