@@ -77,7 +77,7 @@ export default function ExperimentalCard() {
             <CardHeader className="pb-2">
                 <CardTitle className="text-lg font-bold text-purple-700">Aerodynamic response</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-2">
                 <div className="space-y-3">
                     <div className="flex items-center space-x-2">
                         <Checkbox 
@@ -85,7 +85,7 @@ export default function ExperimentalCard() {
                             checked={isAnalyticalEnabled} 
                             onCheckedChange={(checked) => setIsAnalyticalEnabled(!!checked)}
                         />
-                        <Label htmlFor="analytical-model" className="cursor-pointer font-bold">Analytical prediction models</Label>
+                        <Label htmlFor="analytical-model" className="cursor-pointer">Analytical prediction models</Label>
                         <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger asChild>
@@ -98,8 +98,8 @@ export default function ExperimentalCard() {
                         </TooltipProvider>
                     </div>
 
-                    <div className="border-t border-border my-2 pt-2">
-                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">Experimental options</p>
+                    <div className=" border-border  pt-1">
+                        {/* <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">Experimental options</p> */}
                         <div className="space-y-3">
                             <div className="flex items-center space-x-2">
                                 <Checkbox
