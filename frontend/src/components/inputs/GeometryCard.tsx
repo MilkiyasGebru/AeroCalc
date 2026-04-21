@@ -20,7 +20,7 @@ export default function GeometryCard() {
               id="width"
               type="number"
               value={width}
-              onChange={(e) => setWidth(Number(parseFloat(e.target.value).toFixed(3)))}
+              onChange={(e) => setWidth(Number(parseFloat(e.target.value).toFixed(2)))}
               className="bg-background border-border"
             />
           </div>
@@ -30,7 +30,7 @@ export default function GeometryCard() {
               id="depth"
               type="number"
               value={depth}
-              onChange={(e) => setDepth(Number(parseFloat(e.target.value).toFixed(3)))}
+              onChange={(e) => setDepth(Number(parseFloat(e.target.value).toFixed(2)))}
               className="bg-background border-border"
             />
           </div>
@@ -40,7 +40,7 @@ export default function GeometryCard() {
               id="height"
               type="number"
               value={height}
-              onChange={(e) => setHeight(Number(parseFloat(e.target.value).toFixed(3)))}
+              onChange={(e) => setHeight(Number(parseFloat(e.target.value).toFixed(2)))}
               className="bg-background border-border"
             />
           </div>

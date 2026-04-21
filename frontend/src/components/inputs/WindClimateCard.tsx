@@ -36,7 +36,7 @@ export default function WindClimateCard() {
           h += 1;
         }
         setGraphData(data);
-        setUserMeanSpeed(Number((meanSpeed * coefficient ** 0.5).toFixed(3)));
+        setUserMeanSpeed(Number((meanSpeed * coefficient ** 0.5).toFixed(2)));
       }
     }, 500);
     return () => clearTimeout(handler);
@@ -65,19 +65,19 @@ export default function WindClimateCard() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="meanSpeed">10min mean speed at 10m (m/s)</Label>
+          <Label htmlFor="meanSpeed">10 minutes average wind speed at 10 m (m/s)</Label>
           <Input
             id="meanSpeed"
             type="number"
             value={meanSpeed}
-            onChange={(e) => setMeanSpeed(Number(parseFloat(e.target.value).toFixed(3)))}
+            onChange={(e) => setMeanSpeed(Number(parseFloat(e.target.value).toFixed(2)))}
             className="bg-background border-border"
           />
         </div>
 
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <Label htmlFor="userMeanSpeed">10min mean speed at roof (m/s)</Label>
+            <Label htmlFor="userMeanSpeed">10 minutes average wind speed at roof (m/s)</Label>
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -93,7 +93,7 @@ export default function WindClimateCard() {
             id="userMeanSpeed"
             type="number"
             value={userMeanSpeed}
-            onChange={(e) => setUserMeanSpeed(Number(parseFloat(e.target.value).toFixed(3)))}
+            onChange={(e) => setUserMeanSpeed(Number(parseFloat(e.target.value).toFixed(2)))}
             className="bg-background border-border"
           />
         </div>

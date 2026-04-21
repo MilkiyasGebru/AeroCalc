@@ -25,7 +25,7 @@ export default function DynamicPropertiesCard() {
               id="density"
               type="number"
               value={buildingDensity}
-              onChange={(e) => setBuildingDensity(Number(parseFloat(e.target.value).toFixed(3)))}
+              onChange={(e) => setBuildingDensity(Number(parseFloat(e.target.value).toFixed(2)))}
               className="bg-background border-border"
             />
           </div>
@@ -35,27 +35,27 @@ export default function DynamicPropertiesCard() {
               id="damping"
               type="number"
               value={damping}
-              onChange={(e) => setDamping(Number(parseFloat(e.target.value).toFixed(3)))}
+              onChange={(e) => setDamping(Number(parseFloat(e.target.value).toFixed(4)))}
               className="bg-background border-border"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="Talong">Fundamental period in along-wind (s)</Label>
+            <Label htmlFor="Talong">Fundamental period in along-wind direction (s)</Label>
             <Input
               id="Talong"
               type="number"
               value={Talong}
-              onChange={(e) => setTalong(Number(parseFloat(e.target.value).toFixed(3)))}
+              onChange={(e) => setTalong(Number(parseFloat(e.target.value).toFixed(2)))}
               className="bg-background border-border"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="Tacross">Fundamental period in across-wind (s)</Label>
+            <Label htmlFor="Tacross">Fundamental period in across-wind direction (s)</Label>
             <Input
               id="Tacross"
               type="number"
               value={Tacross}
-              onChange={(e) => setTacross(Number(parseFloat(e.target.value).toFixed(3)))}
+              onChange={(e) => setTacross(Number(parseFloat(e.target.value).toFixed(2)))}
               className="bg-background border-border"
             />
           </div>
@@ -65,7 +65,7 @@ export default function DynamicPropertiesCard() {
               id="Ttorsion"
               type="number"
               value={Ttorsion}
-              onChange={(e) => setTtorsion(Number(parseFloat(e.target.value).toFixed(3)))}
+              onChange={(e) => setTtorsion(Number(parseFloat(e.target.value).toFixed(2)))}
               className="bg-background border-border"
             />
           </div>

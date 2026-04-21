@@ -26,7 +26,7 @@ function App() {
           <header className="border-b border-border bg-card/30 backdrop-blur-md z-10 py-4 px-6 flex-shrink-0">
               <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 w-full">
                   <div>
-                      <h1 className="text-2xl font-bold text-primary">Wind response prediction</h1>
+                      <h1 className="text-2xl font-bold text-primary">Cloud-based platform for wind response prediction of tall mass timber buildings</h1>
                       <p className="text-sm text-muted-foreground">McGill Timber Structures Group (TSG)</p>
                   </div>
                   <Button 

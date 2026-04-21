@@ -96,18 +96,18 @@ export default function ExperimentalCard() {
                             checked={calcType === "external"} 
                             onCheckedChange={() => setCalcType(calcType === "external" ? "none" : "external")}
                         />
-                        <Label htmlFor="external-upload" className="cursor-pointer">Upload custom time history</Label>
+                        <Label htmlFor="external-upload" className="cursor-pointer">Upload custom Aeodynamic base load timehistory</Label>
                     </div>
                 </div>
 
                 {calcType === "external" && (
                     <div className="pt-2 space-y-4 border-t border-border mt-4">
                         <div className="grid grid-cols-1 gap-2">
-                            <Button variant="outline" size="sm" onClick={() => setShowFile1(true)} className={file1 ? "border-primary text-primary" : ""}>
-                                {file1 ? `Across: ${file1.name}` : "Upload across wind"}
-                            </Button>
                             <Button variant="outline" size="sm" onClick={() => setShowFile2(true)} className={file2 ? "border-primary text-primary" : ""}>
                                 {file2 ? `Along: ${file2.name}` : "Upload along wind"}
+                            </Button>
+                            <Button variant="outline" size="sm" onClick={() => setShowFile1(true)} className={file1 ? "border-primary text-primary" : ""}>
+                                {file1 ? `Across: ${file1.name}` : "Upload across wind"}
                             </Button>
                             <Button variant="outline" size="sm" onClick={() => setShowFile3(true)} className={file3 ? "border-primary text-primary" : ""}>
                                 {file3 ? `Torsion: ${file3.name}` : "Upload torsion wind"}
@@ -124,7 +124,7 @@ export default function ExperimentalCard() {
                                 id="expSpeed"
                                 type="number"
                                 value={experimentalMeanSpeed}
-                                onChange={(e) => setExperimentalMeanSpeed(Number(parseFloat(e.target.value).toFixed(3)))}
+                                onChange={(e) => setExperimentalMeanSpeed(Number(parseFloat(e.target.value).toFixed(2)))}
                                 className="bg-background border-border"
                             />
                         </div>
@@ -134,7 +134,7 @@ export default function ExperimentalCard() {
                                 id="expFreq"
                                 type="number"
                                 value={experimentalFrequency}
-                                onChange={(e) => setExperimentalFrequency(Number(parseFloat(e.target.value).toFixed(3)))}
+                                onChange={(e) => setExperimentalFrequency(Number(parseFloat(e.target.value).toFixed(2)))}
                                 className="bg-background border-border"
                             />
                         </div>

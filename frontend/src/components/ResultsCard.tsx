@@ -70,20 +70,20 @@ export default function ResultsCard() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <ResponseCard 
-                    title="Across-wind acceleration" 
-                    unit="milli-g" 
-                    analytical={ar} 
-                    experimental={experimentalAr} 
-                    icon={<Wind className="h-4 w-4" />}
-                    colorClass="text-[#EA580C]"
-                />
-                <ResponseCard 
                     title="Along-wind acceleration" 
                     unit="milli-g" 
                     analytical={accelartionYDirection} 
                     experimental={experimentalAccelartionYDirection} 
                     icon={<ArrowRight className="h-4 w-4" />}
                     colorClass="text-[#854D0E]"
+                />
+                <ResponseCard 
+                    title="Across-wind acceleration" 
+                    unit="milli-g" 
+                    analytical={ar} 
+                    experimental={experimentalAr} 
+                    icon={<Wind className="h-4 w-4" />}
+                    colorClass="text-[#EA580C]"
                 />
                 <ResponseCard 
                     title="Torsion velocity" 

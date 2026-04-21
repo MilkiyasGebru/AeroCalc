@@ -48,9 +48,10 @@ export default function OutputTabs() {
 
     const tabs = [
         { id: "overview", label: "Dynamic response summary" },
-        { id: "spectral", label: "Spectral analysis" },
-        { id: "history", label: "Time history" },
-        { id: "site", label: "Site & geometry" },
+        { id: "site", label: "Building orientation & wind profile" },
+        { id: "history", label: "Aerodynamic base load timehistory" },
+        { id: "spectral", label: "Aerodynamic base load spectra" },
+        
     ];
 
     const hasResults = ar !== null || experimentalAr !== null;
@@ -93,31 +94,31 @@ export default function OutputTabs() {
                 {activeTab === "spectral" && hasResults && (
                     <div className="space-y-8 animate-in fade-in duration-500">
                         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                            {experimentalAlongPsds.length > 0 && (
+                                <div className="flex flex-col items-center">
+                                    <PSDGraph psds={[]} experimentalPsds={experimentalAlongPsds} graphType="Along" />
+                                </div>
+                            )}
                             <div className="flex flex-col items-center">
                                 <PSDGraph psds={acrossPsds} experimentalPsds={experimentalAcrossPsds} graphType="Across" />
                             </div>
                             <div className="flex flex-col items-center">
                                 <PSDGraph psds={torsionPsds} experimentalPsds={experimentalTorsionPsds} graphType="Torsion" />
                             </div>
-                            {experimentalAlongPsds.length > 0 && (
-                                <div className="flex flex-col items-center">
-                                    <PSDGraph psds={[]} experimentalPsds={experimentalAlongPsds} graphType="Along" />
-                                </div>
-                            )}
                         </div>
                     </div>
                 )}
 
                 {activeTab === "history" && hasResults && (
                     <div className="space-y-6 animate-in fade-in duration-500">
-                        {mxData.length > 0 && (
-                            <Card className="bg-card border-border p-2">
-                                <MGraphs graph_data={{ val: mxData, Mtype: "MX" }} />
-                            </Card>
-                        )}
                         {myData.length > 0 && (
                             <Card className="bg-card border-border p-2">
                                 <MGraphs graph_data={{ val: myData, Mtype: "MY" }} />
+                            </Card>
+                        )}
+                        {mxData.length > 0 && (
+                            <Card className="bg-card border-border p-2">
+                                <MGraphs graph_data={{ val: mxData, Mtype: "MX" }} />
                             </Card>
                         )}
                         {mzData.length > 0 && (
@@ -127,7 +128,7 @@ export default function OutputTabs() {
                         )}
                         {mxData.length === 0 && myData.length === 0 && mzData.length === 0 && (
                             <div className="text-center p-12 text-muted-foreground">
-                                No time history data available. Use experimental data to see these graphs.
+                                No Aerodynamic base load timehistory data available. Use experimental data to see these graphs.
                             </div>
                         )}
                     </div>
