@@ -72,7 +72,7 @@ export default function ExperimentalCard() {
     return (
         <Card className="bg-card border-border border-t-4 border-t-purple-500 shadow-sm">
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg font-bold text-purple-700">Experimental data</CardTitle>
+        <CardTitle className="text-lg font-bold text-purple-700">Aerodynamic response</CardTitle>
       </CardHeader>
             <CardContent className="space-y-4">
                 <div className="space-y-3">
@@ -88,7 +88,7 @@ export default function ExperimentalCard() {
                                 }
                             }}
                         />
-                        <Label htmlFor="internal-db" className="cursor-pointer">Use wind tunnel database</Label>
+                        <Label htmlFor="internal-db" className="cursor-pointer">Wind tunnel database</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                         <Checkbox 
@@ -96,7 +96,7 @@ export default function ExperimentalCard() {
                             checked={calcType === "external"} 
                             onCheckedChange={() => setCalcType(calcType === "external" ? "none" : "external")}
                         />
-                        <Label htmlFor="external-upload" className="cursor-pointer">Upload custom Aeodynamic base load timehistory</Label>
+                        <Label htmlFor="external-upload" className="cursor-pointer">Upload base load time history</Label>
                     </div>
                 </div>
 

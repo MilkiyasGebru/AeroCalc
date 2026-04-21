@@ -137,7 +137,7 @@ export default function OutputTabs() {
                 {activeTab === "site" && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in duration-500">
                         <div className="flex flex-col space-y-4">
-                            <h3 className="text-lg font-bold text-primary px-2">Building orientation & scale</h3>
+                            <h3 className="text-lg font-bold text-primary px-2">Building orientation</h3>
                             <RectangleWithArrow width={width || 0} height={depth || 0} />
                             <p className="px-2 text-sm text-muted-foreground italic">
                                 The diagram automatically rotates to align the largest dimension (B) perpendicular to the wind direction, consistent with the analytical model.
@@ -156,7 +156,7 @@ export default function OutputTabs() {
                                 />
                             </div>
                             <p className="px-2 text-sm text-muted-foreground italic">
-                                NBC 2025 Dynamic wind load calculation procedure.
+                                The wind profile diagram uses the NBC 2025 dynamic wind load calculation procedure.
                             </p>
                         </div>
                     </div>
