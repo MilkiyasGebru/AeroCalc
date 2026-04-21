@@ -52,7 +52,7 @@ export const RectangleWithArrow: React.FC<RectangleWithArrowProps> = ({ width = 
             markerHeight="6"
             orient="auto-start-reverse"
           >
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" />
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#22c55e" />
           </marker>
 
           <marker id="tick" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4">
@@ -61,7 +61,7 @@ export const RectangleWithArrow: React.FC<RectangleWithArrowProps> = ({ width = 
         </defs>
 
         {/* --- Wind Indicator --- */}
-        <g className="text-teal-600 dark:text-teal-400">
+        <g className="text-green-600 dark:text-green-400">
           <line
             x1="20"
             y1={centerY}
@@ -121,7 +121,7 @@ export const RectangleWithArrow: React.FC<RectangleWithArrowProps> = ({ width = 
             textAnchor="middle"
             className="fill-foreground text-[13px] font-mono font-bold"
           >
-            {isWidthLarger ? `B (Width) = ${width}m` : `B (Across) = ${height}m`}
+            {`B (Width) = ${width}m`}
           </text>
 
           {/* Along-Wind Dimension (Horizontal in SVG) */}
@@ -141,7 +141,7 @@ export const RectangleWithArrow: React.FC<RectangleWithArrowProps> = ({ width = 
             textAnchor="middle"
             className="fill-foreground text-[13px] font-mono font-bold"
           >
-            {isWidthLarger ? `D (Depth) = ${height}m` : `D (Along) = ${width}m`}
+            {`D (Depth) = ${height}m`}
           </text>
         </g>
 

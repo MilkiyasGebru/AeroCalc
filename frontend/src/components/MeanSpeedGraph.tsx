@@ -23,9 +23,9 @@ export default function MeanSpeedGraph({graph_data, current_point}: {graph_data:
                         value: 'Wind Speed (m/s)', 
                         position: 'insideBottom', 
                         offset: -10,
-                        style: { fill: 'var(--foreground)', fontWeight: "bold", fontSize: 12 } 
+                        style: { fill: 'var(--foreground)', fontWeight: "bold", fontSize: 15, fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace' } 
                     }}
-                    tick={{fontSize: 10, fill: 'var(--muted-foreground)'}}
+                    tick={{fontSize: 12, fill: 'var(--muted-foreground)'}}
                 />
                 <YAxis 
                     width={50}  
@@ -36,10 +36,10 @@ export default function MeanSpeedGraph({graph_data, current_point}: {graph_data:
                         value: 'Height (m)',
                         angle: -90,
                         position: 'insideLeft',
-                        style: { textAnchor: 'middle', fill: 'var(--foreground)', fontWeight: "bold", fontSize: 12 },
+                        style: { textAnchor: 'middle', fill: 'var(--foreground)', fontWeight: "bold", fontSize: 15, fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace' },
                         offset: 10
                     }}
-                    tick={{fontSize: 10, fill: 'var(--muted-foreground)'}}
+                    tick={{fontSize: 12, fill: 'var(--muted-foreground)'}}
                 />
                 <Tooltip
                     contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', borderRadius: '8px', color: 'var(--foreground)' }}
