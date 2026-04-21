@@ -19,7 +19,7 @@ export default function OutputTabs() {
     const { 
         acrossPsds, torsionPsds, alongPsds,
         experimentalAcrossPsds, experimentalTorsionPsds, experimentalAlongPsds,
-        ar, vr, experimentalAr, experimentalVr
+        ar, experimentalAr
     } = useOutputBuildingContext();
 
     const { mxData, myData, mzData, height, meanSpeed, terrain, width, depth } = useInputBuildingContext();

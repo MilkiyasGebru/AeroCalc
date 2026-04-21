@@ -9,7 +9,7 @@ export const RectangleWithArrow: React.FC<RectangleWithArrowProps> = ({ width = 
   // Logic: The calculation code uses Math.max(width, depth) as the dimension across the wind.
   // This means the wind always hits the side such that the larger dimension is perpendicular to it.
   
-  const isWidthLarger = width >= height;
+  // const isWidthLarger = width >= height;
   
   // We want the dimension PERPENDICULAR to the wind to be the larger one.
   // In our SVG, wind is horizontal (Left to Right), so it hits the VERTICAL side.

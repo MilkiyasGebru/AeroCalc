@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useInputBuildingContext } from "@/contexts/useInputBuildingContext";
-import { RectangleWithArrow } from "@/components/RectangleWithArrow";
+// import { RectangleWithArrow } from "@/components/RectangleWithArrow";
 
 export default function GeometryCard() {
   const { width, height, depth, totalFloors, setWidth, setHeight, setDepth, setTotalFloors } = useInputBuildingContext();

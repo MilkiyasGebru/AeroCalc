@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useInputBuildingContext } from "@/contexts/useInputBuildingContext";
 import { useEffect, useState } from "react";
-import MeanSpeedGraph from "@/components/MeanSpeedGraph";
+// import MeanSpeedGraph from "@/components/MeanSpeedGraph";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
 
@@ -15,7 +15,7 @@ interface IMeanSpeedData {
 
 export default function WindClimateCard() {
   const { height, meanSpeed, setMeanSpeed, terrain, setTerrain, userMeanSpeed, setUserMeanSpeed } = useInputBuildingContext();
-  const [graphData, setGraphData] = useState<IMeanSpeedData[]>([]);
+  const [_, setGraphData] = useState<IMeanSpeedData[]>([]);
 
   const coefficient = (height !== undefined && meanSpeed !== undefined)
     ? (terrain === "open" ? (height / 10) ** 0.28 : 0.5 * ((height / 12.7) ** 0.5))

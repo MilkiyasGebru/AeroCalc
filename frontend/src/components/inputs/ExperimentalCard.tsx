@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
 import { useInputBuildingContext } from "@/contexts/useInputBuildingContext";
-import { useOutputBuildingContext } from "@/contexts/useOutputBuildingContext";
+// import { useOutputBuildingContext } from "@/contexts/useOutputBuildingContext";
 import { useState } from "react";
 import { FileUploadDialog } from "@/components/FileUploadDialog";
 import { InternalDatabaseDialog } from "@/components/InternalDatabaseDialog";
@@ -42,7 +42,7 @@ export default function ExperimentalCard() {
         isAnalyticalEnabled, setIsAnalyticalEnabled
     } = useInputBuildingContext();
 
-    const { handleExperimentalCalculation } = useOutputBuildingContext();
+    // const { handleExperimentalCalculation } = useOutputBuildingContext();
 
     const [calcType, setCalcType] = useState<"none" | "internal" | "external">("none");
     const [showInternalDialog, setShowInternalDialog] = useState(false);

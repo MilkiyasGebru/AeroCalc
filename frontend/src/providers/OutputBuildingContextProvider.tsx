@@ -22,6 +22,7 @@ interface OutputBuildingContextInterface {
     torsionPsds: number[];
     acrossPsds: number[];
     alongPsds: number[];
+    setAlongPsds: (val: number[]) => void;
     ar: number | null;
     vr: number | null;
     accelartionYDirection: number | null;
@@ -56,7 +57,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
     const {
         width, height, depth, meanSpeed, damping, totalFloors, terrain, Talong, Ttorsion, Tacross,
         experimentalMeanSpeed, experimentalFrequency, setNormalizedExperimentalFrequencies, 
-        buildingDensity, userMeanSpeed, isAnalyticalEnabled, mxData, myData, mzData, selectedBuilding
+        buildingDensity, userMeanSpeed, isAnalyticalEnabled, mxData, selectedBuilding
     } = useInputBuildingContext();
 
     const [torsionPsds, setTorsionPsds] = useState<number[]>([]);
