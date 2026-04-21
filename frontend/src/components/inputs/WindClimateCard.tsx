@@ -49,7 +49,7 @@ export default function WindClimateCard() {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="terrain">Terrain type</Label>
+          <Label htmlFor="terrain">Terrain category</Label>
           <Select value={terrain} onValueChange={setTerrain}>
             <SelectTrigger id="terrain" className="bg-background border-border">
               <SelectValue placeholder="Select terrain" />
