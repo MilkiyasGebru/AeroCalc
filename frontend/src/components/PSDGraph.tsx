@@ -131,7 +131,7 @@ export default function PSDGraph(props : PSDGraphInterface) {
                                 label={<CustomXLabel />}
                                 tick={<SuperscriptLogTick />}
                                 stroke="var(--muted-foreground)"
-                                tickMargin={5}
+                                tickMargin={10}
                                 ticks={[0.01, 0.1, 1, 10]}
                             />
                             <YAxis 
@@ -140,7 +140,7 @@ export default function PSDGraph(props : PSDGraphInterface) {
                                 type="number"
                                 label={<CustomYLabel  />}
                                 tick={<SuperscriptLogTick />}
-                                tickMargin={5}
+                                tickMargin={10}
                                 stroke="var(--muted-foreground)"
                                 ticks={yTicks}
                                 domain={[Math.pow(10, minExp), Math.pow(10, maxExp)]}
