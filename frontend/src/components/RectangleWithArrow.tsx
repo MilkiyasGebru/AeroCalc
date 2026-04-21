@@ -82,9 +82,9 @@ export const RectangleWithArrow: React.FC<RectangleWithArrowProps> = ({ width = 
           <text
             x="20"
             y={centerY + 30}
-            className="text-[11px] fill-current font-mono font-bold opacity-80"
+            className="text-[12px] fill-current font-mono font-bold opacity-80"
           >
-            Angle of Attack: 0°
+            Angle of attack: 0°
           </text>
         </g>
 
@@ -121,7 +121,7 @@ export const RectangleWithArrow: React.FC<RectangleWithArrowProps> = ({ width = 
             textAnchor="middle"
             className="fill-foreground text-[13px] font-mono font-bold"
           >
-            {`B (Width) = ${width}m`}
+            {`B (Width) = ${acrossDim}m`}
           </text>
 
           {/* Along-Wind Dimension (Horizontal in SVG) */}
@@ -141,7 +141,7 @@ export const RectangleWithArrow: React.FC<RectangleWithArrowProps> = ({ width = 
             textAnchor="middle"
             className="fill-foreground text-[13px] font-mono font-bold"
           >
-            {`D (Depth) = ${height}m`}
+            {`D (Depth) = ${alongDim}m`}
           </text>
         </g>
 

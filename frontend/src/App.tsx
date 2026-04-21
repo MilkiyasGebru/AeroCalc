@@ -11,7 +11,7 @@ import { useInputBuildingContext } from "@/contexts/useInputBuildingContext";
 import { useTheme } from "@/contexts/ThemeContext";
 
 function App() {
-    const { handleAnalyticalCalculation, handleExperimentalCalculation } = useOutputBuildingContext();
+    const { handleAnalyticalCalculation, handleExperimentalCalculation, clearExperimentalResults } = useOutputBuildingContext();
     const { mxData, myData, mzData } = useInputBuildingContext();
     const { theme, toggleTheme } = useTheme();
 
@@ -19,6 +19,8 @@ function App() {
         handleAnalyticalCalculation();
         if (mxData.length > 0 || myData.length > 0 || mzData.length > 0) {
             handleExperimentalCalculation(mxData, myData, mzData);
+        } else {
+            clearExperimentalResults();
         }
     };
 

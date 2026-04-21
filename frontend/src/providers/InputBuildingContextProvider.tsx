@@ -6,6 +6,8 @@ interface InputBuildingContextInterface {
     depth: number | undefined;
     meanSpeed: number | undefined;
     userMeanSpeed: number | undefined;
+    isAnalyticalEnabled: boolean;
+    setIsAnalyticalEnabled: (val: boolean) => void;
     experimentalMeanSpeed: number;
     buildingDensity: number | undefined;
     totalFloors: number | undefined;
@@ -71,7 +73,8 @@ export const InputBuildingContextProvider = ({children}: {children: React.ReactN
     const [experimentalMeanSpeed, setExperimentalMeanSpeed] = useState<number>(1);
     const [experimentalFrequency, setExperimentalFrequency] = useState<number>(0.183);
     const [normalizedExperimentalFrequencies, setNormalizedExperimentalFrequencies] = useState<number[]>([]);
-    const [userMeanSpeed, setUserMeanSpeed] = useState<number | undefined>(undefined)
+    const [userMeanSpeed, setUserMeanSpeed] = useState<number | undefined>(undefined);
+    const [isAnalyticalEnabled, setIsAnalyticalEnabled] = useState<boolean>(true);
     return (
         <InputBuildingContext.Provider value={{
             width, height, depth, meanSpeed, buildingDensity, totalFloors, damping, Tone, terrain,csvData,experimentalMeanSpeed,experimentalFrequency,
@@ -79,6 +82,7 @@ export const InputBuildingContextProvider = ({children}: {children: React.ReactN
             mxData,myData,mzData,setMxData,setMyData,setMzData,
             Ttorsion, Tacross, Talong, setTalong, setTtorsion, setTacross,
             userMeanSpeed, setUserMeanSpeed,
+            isAnalyticalEnabled, setIsAnalyticalEnabled,
             setExperimentalFrequency,setExperimentalMeanSpeed,setWidth, setHeight, setDepth,setMeanSpeed, setBuildingDensity,setTotalFloors,setDamping,setTerrain,setTone, setCSVData}} >
             {children}
         </InputBuildingContext.Provider>

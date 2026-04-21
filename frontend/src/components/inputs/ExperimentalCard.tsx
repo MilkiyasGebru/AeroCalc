@@ -36,7 +36,8 @@ export default function ExperimentalCard() {
     const {
         experimentalFrequency, setExperimentalFrequency,
         experimentalMeanSpeed, setExperimentalMeanSpeed,
-        setMxData, setMyData, setMzData
+        setMxData, setMyData, setMzData,
+        isAnalyticalEnabled, setIsAnalyticalEnabled
     } = useInputBuildingContext();
 
     const { handleExperimentalCalculation } = useOutputBuildingContext();
@@ -71,32 +72,55 @@ export default function ExperimentalCard() {
 
     return (
         <Card className="bg-card border-border border-t-4 border-t-purple-500 shadow-sm">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-lg font-bold text-purple-700">Aerodynamic response</CardTitle>
-      </CardHeader>
+            <CardHeader className="pb-2">
+                <CardTitle className="text-lg font-bold text-purple-700">Aerodynamic response</CardTitle>
+            </CardHeader>
             <CardContent className="space-y-4">
                 <div className="space-y-3">
                     <div className="flex items-center space-x-2">
                         <Checkbox 
-                            id="internal-db" 
-                            checked={calcType === "internal"} 
-                            onCheckedChange={() => {
-                                if (calcType === "internal") setCalcType("none");
-                                else {
-                                    setCalcType("internal");
-                                    setShowInternalDialog(true);
-                                }
-                            }}
+                            id="analytical-model" 
+                            checked={isAnalyticalEnabled} 
+                            onCheckedChange={(checked) => setIsAnalyticalEnabled(!!checked)}
                         />
-                        <Label htmlFor="internal-db" className="cursor-pointer">Wind tunnel database</Label>
+                        <Label htmlFor="analytical-model" className="cursor-pointer font-bold">Analytical prediction models</Label>
                     </div>
-                    <div className="flex items-center space-x-2">
-                        <Checkbox 
-                            id="external-upload" 
-                            checked={calcType === "external"} 
-                            onCheckedChange={() => setCalcType(calcType === "external" ? "none" : "external")}
-                        />
-                        <Label htmlFor="external-upload" className="cursor-pointer">Upload base load time history</Label>
+
+                    <div className="border-t border-border my-2 pt-2">
+                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">Experimental options</p>
+                        <div className="space-y-3">
+                            <div className="flex items-center space-x-2">
+                                <Checkbox 
+                                    id="internal-db" 
+                                    checked={calcType === "internal"} 
+                                    onCheckedChange={() => {
+                                        if (calcType === "internal") {
+                                            setCalcType("none");
+                                            setMxData([]); setMyData([]); setMzData([]);
+                                        } else {
+                                            setCalcType("internal");
+                                            setShowInternalDialog(true);
+                                        }
+                                    }}
+                                />
+                                <Label htmlFor="internal-db" className="cursor-pointer">Wind tunnel database</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Checkbox 
+                                    id="external-upload" 
+                                    checked={calcType === "external"} 
+                                    onCheckedChange={() => {
+                                        if (calcType === "external") {
+                                            setCalcType("none");
+                                            setMxData([]); setMyData([]); setMzData([]);
+                                        } else {
+                                            setCalcType("external");
+                                        }
+                                    }}
+                                />
+                                <Label htmlFor="external-upload" className="cursor-pointer">Upload base load time history</Label>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

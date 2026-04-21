@@ -43,6 +43,7 @@ interface OutputBuildingContextInterface {
     setExperimentalVr: (val: number)=> void;
     handleAnalyticalCalculation : () => void;
     handleExperimentalCalculation : (Mx: number[], My: number[], Mz: number[]) => void;
+    clearExperimentalResults: () => void;
 }
 
 
@@ -50,7 +51,7 @@ export const OutputBuildingContext = createContext<OutputBuildingContextInterfac
 
 export const OutputBuildingContextProvider = ({children}: {children: React.ReactNode})=>{
 
-    const {width,height,depth,meanSpeed,damping,totalFloors,terrain,Talong,Ttorsion, Tacross,experimentalMeanSpeed, experimentalFrequency, setNormalizedExperimentalFrequencies, buildingDensity, userMeanSpeed} = useInputBuildingContext();
+    const {width,height,depth,meanSpeed,damping,totalFloors,terrain,Talong,Ttorsion, Tacross,experimentalMeanSpeed, experimentalFrequency, setNormalizedExperimentalFrequencies, buildingDensity, userMeanSpeed, isAnalyticalEnabled} = useInputBuildingContext();
 
     const [torsionPsds, setTorsionPsds] = useState<number[]>([]);
     const [acrossPsds, setAcrossPsds] = useState<number[]>([]);
@@ -64,7 +65,27 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
     const [accelartionYDirection, setAccelartionYDirection] = useState<number | null>(null)
     const [experimentalAccelartionYDirection, setExperimentalAccelartionYDirection] = useState<number | null>(null)
     const [experimentalAlongPsds, setExperimentalAlongPsds] = useState<number[]>([])
+
+    const clearExperimentalResults = useCallback(() => {
+        setExperimentalAr(null);
+        setExperimentalVr(null);
+        setExperimentalAccelartionYDirection(null);
+        setExperimentalAcrossPsds([]);
+        setExperimentalTorsionPsds([]);
+        setExperimentalAlongPsds([]);
+        setNormalizedExperimentalFrequencies([]);
+    }, [setNormalizedExperimentalFrequencies]);
+
     const handleAnalyticalCalculation = useCallback(()=>{
+        if (!isAnalyticalEnabled) {
+            setAr(null);
+            setVr(null);
+            setAccelartionYDirection(null);
+            setAcrossPsds([]);
+            setTorsionPsds([]);
+            return;
+        }
+
         if (height != null && width != null && depth != null && totalFloors != null && damping != null && meanSpeed != null && Talong != null && Ttorsion != null && Tacross != null && buildingDensity != null){
             const c = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
             let speed : number =(userMeanSpeed != null && Number.isFinite(userMeanSpeed))? userMeanSpeed:meanSpeed*c**0.5
@@ -79,7 +100,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
             setAcrossPsds(across_psds)
             setTorsionPsds(torsion_psds)
         }
-    }, [width, depth, height, meanSpeed, totalFloors, damping, terrain, userMeanSpeed])
+    }, [width, depth, height, meanSpeed, totalFloors, damping, terrain, userMeanSpeed, isAnalyticalEnabled, Talong, Ttorsion, Tacross, buildingDensity])
 
     const handleExperimentalCalculation = useCallback(async (Mx:number[], My:number[], Mz:number[])=>{
         // const Mx : number[] = mxData;
@@ -186,7 +207,8 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
             accelartionYDirection, setAccelartionYDirection,
             experimentalAlongPsds, setExperimentalAlongPsds,
             experimentalAccelartionYDirection, setExperimentalAccelartionYDirection,
-            setExperimentalTorsionPsds,setExperimentalAcrossPsds,setExperimentalAr,setExperimentalVr, handleAnalyticalCalculation,handleExperimentalCalculation
+            setExperimentalTorsionPsds,setExperimentalAcrossPsds,setExperimentalAr,setExperimentalVr, handleAnalyticalCalculation,handleExperimentalCalculation,
+            clearExperimentalResults
         }}>
             {children}
         </OutputBuildingContext.Provider>
