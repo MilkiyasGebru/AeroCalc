@@ -3,6 +3,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Info } from "lucide-react";
 import { useInputBuildingContext } from "@/contexts/useInputBuildingContext";
 import { useOutputBuildingContext } from "@/contexts/useOutputBuildingContext";
 import { useState } from "react";
@@ -84,15 +86,25 @@ export default function ExperimentalCard() {
                             onCheckedChange={(checked) => setIsAnalyticalEnabled(!!checked)}
                         />
                         <Label htmlFor="analytical-model" className="cursor-pointer font-bold">Analytical prediction models</Label>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Info className="h-4 w-4 text-muted-foreground" />
+                                </TooltipTrigger>
+                                <TooltipContent className="max-w-[400px]">
+                                    <p>Across-wind base moment and base torsion power spectral densities (PSDs) are calculated based on analytical equations developed in <a href="https://link.springer.com/chapter/10.1007/978-3-031-96763-4_26" target="_blank" rel="noopener noreferrer" className="underline text-blue-500">Berile et al. (2024)</a> using wind tunnel tests conducted on models representing tall mass-timber building geometries.</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
                     </div>
 
                     <div className="border-t border-border my-2 pt-2">
                         <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">Experimental options</p>
                         <div className="space-y-3">
                             <div className="flex items-center space-x-2">
-                                <Checkbox 
-                                    id="internal-db" 
-                                    checked={calcType === "internal"} 
+                                <Checkbox
+                                    id="internal-db"
+                                    checked={calcType === "internal"}
                                     onCheckedChange={() => {
                                         if (calcType === "internal") {
                                             setCalcType("none");
@@ -104,8 +116,17 @@ export default function ExperimentalCard() {
                                     }}
                                 />
                                 <Label htmlFor="internal-db" className="cursor-pointer">Wind tunnel database</Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <Info className="h-4 w-4 text-muted-foreground" />
+                                        </TooltipTrigger>
+                                        <TooltipContent className="max-w-[300px]">
+                                            <p>“HFPI and HFBB wind tunnel experiment database composed of tests conducted on models representing tall mass-timber building geometries”</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                            </div>                            <div className="flex items-center space-x-2">
                                 <Checkbox 
                                     id="external-upload" 
                                     checked={calcType === "external"} 
@@ -119,6 +140,16 @@ export default function ExperimentalCard() {
                                     }}
                                 />
                                 <Label htmlFor="external-upload" className="cursor-pointer">Upload base load time history</Label>
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <Info className="h-4 w-4 text-muted-foreground" />
+                                        </TooltipTrigger>
+                                        <TooltipContent className="max-w-[300px]">
+                                            <p>“A column vector of base moment time history (kNm) form a wind tunnel test scaled to full-scale geometry and the wind speed at roof as specified in the previous input, in .csv format”</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
                             </div>
                         </div>
                     </div>
