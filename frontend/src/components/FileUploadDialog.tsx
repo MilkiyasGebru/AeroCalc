@@ -60,7 +60,7 @@ export function FileUploadDialog({ open, onOpenChange, onFileSelect }: FileUploa
 
     return (
         <Dialog open={open} onOpenChange={handleClose}>
-            <DialogContent className="sm:max-w-md bg-white border-border">
+            <DialogContent className="sm:max-w-md bg-background border-border">
                 <DialogHeader>
                     <DialogTitle className="text-primary font-bold text-xl">Upload Data File</DialogTitle>
                     <DialogDescription className="text-muted-foreground">
@@ -121,7 +121,7 @@ export function FileUploadDialog({ open, onOpenChange, onFileSelect }: FileUploa
                         <Button variant="outline" onClick={handleClose}>
                             Cancel
                         </Button>
-                        <Button onClick={handleConfirm} disabled={!selectedFile} className="bg-primary text-white hover:bg-primary/90">
+                        <Button onClick={handleConfirm} disabled={!selectedFile} variant="outline">
                             Upload & Continue
                         </Button>
                     </div>

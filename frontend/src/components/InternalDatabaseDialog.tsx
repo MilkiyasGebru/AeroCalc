@@ -58,7 +58,7 @@ export function InternalDatabaseDialog({ open, onOpenChange, onConfirm }: Intern
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-             <DialogContent className="sm:max-w-[425px] bg-white border-border">
+             <DialogContent className="sm:max-w-[425px] bg-background border-border">
                 <DialogHeader>
                     <DialogTitle className="text-primary font-bold text-xl">Internal Wind Database</DialogTitle>
                     <DialogDescription className="text-muted-foreground">
@@ -68,10 +68,10 @@ export function InternalDatabaseDialog({ open, onOpenChange, onConfirm }: Intern
                  {!loading &&
                 <div className="grid gap-4 py-4">
                     <Select onValueChange={setValue}>
-                        <SelectTrigger className="w-full bg-white border-border">
+                        <SelectTrigger className="w-full bg-background border-border">
                             <SelectValue placeholder="Select experimental data..." />
                         </SelectTrigger>
-                        <SelectContent className="bg-white border-border">
+                        <SelectContent className="bg-background border-border">
                             {options.map((option: IResponse) => {
                                 return <SelectItem key={option.url} value={option.url} className="hover:bg-muted cursor-pointer">
                                     Width: {option.width}m, Height {option.height}m, Depth:{option.depth}m 
@@ -94,7 +94,7 @@ export function InternalDatabaseDialog({ open, onOpenChange, onConfirm }: Intern
                                 onConfirm(value)
                             }
                         }}
-                        className="bg-primary text-white hover:bg-primary/90"
+                        className="" variant="outline"
                     >
                         Confirm Selection
                     </Button>
