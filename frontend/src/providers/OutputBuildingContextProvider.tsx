@@ -44,6 +44,7 @@ interface OutputBuildingContextInterface {
     handleAnalyticalCalculation : () => void;
     handleExperimentalCalculation : (Mx: number[], My: number[], Mz: number[]) => void;
     clearExperimentalResults: () => void;
+    exportResults: () => void;
 }
 
 
@@ -51,7 +52,11 @@ export const OutputBuildingContext = createContext<OutputBuildingContextInterfac
 
 export const OutputBuildingContextProvider = ({children}: {children: React.ReactNode})=>{
 
-    const {width,height,depth,meanSpeed,damping,totalFloors,terrain,Talong,Ttorsion, Tacross,experimentalMeanSpeed, experimentalFrequency, setNormalizedExperimentalFrequencies, buildingDensity, userMeanSpeed, isAnalyticalEnabled} = useInputBuildingContext();
+    const {
+        width, height, depth, meanSpeed, damping, totalFloors, terrain, Talong, Ttorsion, Tacross,
+        experimentalMeanSpeed, experimentalFrequency, setNormalizedExperimentalFrequencies, 
+        buildingDensity, userMeanSpeed, isAnalyticalEnabled, mxData, myData, mzData
+    } = useInputBuildingContext();
 
     const [torsionPsds, setTorsionPsds] = useState<number[]>([]);
     const [acrossPsds, setAcrossPsds] = useState<number[]>([]);
@@ -75,6 +80,48 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         setExperimentalAlongPsds([]);
         setNormalizedExperimentalFrequencies([]);
     }, [setNormalizedExperimentalFrequencies]);
+
+    const exportResults = useCallback(() => {
+        const data = {
+            metadata: {
+                timestamp: new Date().toISOString(),
+                project: "McGill Timber Structures Group - Wind Response Prediction"
+            },
+            inputs: {
+                geometry: { width, height, depth, totalFloors },
+                dynamicProperties: { buildingDensity, damping, Talong, Tacross, Ttorsion },
+                windClimate: { terrain, meanSpeed, userMeanSpeed },
+                experimentalConfig: { experimentalMeanSpeed, experimentalFrequency }
+            },
+            results: {
+                analytical: isAnalyticalEnabled ? {
+                    acrossWindAcceleration_milliG: ar,
+                    torsionVelocity_milliRadS: vr,
+                    alongWindAcceleration_milliG: accelartionYDirection,
+                } : "Disabled",
+                experimental: (mxData.length > 0) ? {
+                    acrossWindAcceleration_milliG: experimentalAr,
+                    torsionVelocity_milliRadS: experimentalVr,
+                    alongWindAcceleration_milliG: experimentalAccelartionYDirection,
+                } : "No experimental data"
+            }
+        };
+
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `wind_analysis_results_${new Date().getTime()}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }, [
+        width, height, depth, totalFloors, buildingDensity, damping, Talong, Tacross, Ttorsion,
+        terrain, meanSpeed, userMeanSpeed, experimentalMeanSpeed, experimentalFrequency,
+        isAnalyticalEnabled, ar, vr, accelartionYDirection, experimentalAr, experimentalVr, 
+        experimentalAccelartionYDirection, mxData
+    ]);
 
     const handleAnalyticalCalculation = useCallback(()=>{
         if (!isAnalyticalEnabled) {
@@ -208,7 +255,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
             experimentalAlongPsds, setExperimentalAlongPsds,
             experimentalAccelartionYDirection, setExperimentalAccelartionYDirection,
             setExperimentalTorsionPsds,setExperimentalAcrossPsds,setExperimentalAr,setExperimentalVr, handleAnalyticalCalculation,handleExperimentalCalculation,
-            clearExperimentalResults
+            clearExperimentalResults, exportResults
         }}>
             {children}
         </OutputBuildingContext.Provider>

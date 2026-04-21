@@ -11,7 +11,7 @@ import { useInputBuildingContext } from "@/contexts/useInputBuildingContext";
 import { useTheme } from "@/contexts/ThemeContext";
 
 function App() {
-    const { handleAnalyticalCalculation, handleExperimentalCalculation, clearExperimentalResults } = useOutputBuildingContext();
+    const { handleAnalyticalCalculation, handleExperimentalCalculation, clearExperimentalResults, exportResults } = useOutputBuildingContext();
     const { mxData, myData, mzData } = useInputBuildingContext();
     const { theme, toggleTheme } = useTheme();
 
@@ -44,13 +44,22 @@ function App() {
                           <p className="text-sm text-muted-foreground">McGill Timber Structures Group (TSG)</p>
                       </div>
                   </div>
-                  <Button 
-                      onClick={runAnalysis} 
-                      className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 h-12 text-lg font-bold shadow-lg shadow-emerald-200 dark:shadow-emerald-900/20 transition-all active:scale-95 shrink-0"
-                  >
-                      <Play className="mr-2 h-5 w-5 fill-current" />
-                      Run Analysis
-                  </Button>
+                  <div className="flex gap-2">
+                      <Button 
+                          variant="outline"
+                          onClick={exportResults}
+                          className="px-6 h-12 font-bold shadow-sm transition-all active:scale-95"
+                      >
+                          Export Results
+                      </Button>
+                      <Button 
+                          onClick={runAnalysis} 
+                          className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 h-12 text-lg font-bold shadow-lg shadow-emerald-200 dark:shadow-emerald-900/20 transition-all active:scale-95 shrink-0"
+                      >
+                          <Play className="mr-2 h-5 w-5 fill-current" />
+                          Run Analysis
+                      </Button>
+                  </div>
               </div>
           </header>
 
