@@ -8,8 +8,9 @@ interface IGraph {
 export default function MGraphs({graph_data}:{graph_data: IGraph}) {
     const samplingRate = Math.ceil(graph_data.val.length / 1000);
     const sampledData = graph_data.val.filter((_, index) => index % samplingRate === 0).map(val => ({"val":val}));
-    const title : string= graph_data.Mtype === "MX"? "Across-wind base moment time history": graph_data.Mtype === "MY"? "Along-wind base moment time history":" Base torsion moment time history"
-    const y_axis_title : string = graph_data.Mtype === "MX"? "Macross-wind(KNm)": graph_data.Mtype === "MY"? "Malong-wind(KNm)":" Mtorsion(KNm)"
+    const title : string= graph_data.Mtype === "MX"? "Across-wind Aerodynamic base load timehistory": graph_data.Mtype === "MY"? "Along-wind Aerodynamic base load timehistory":" Aerodynamic base load timehistory (Torsion)"
+    // const y_axis_title : string = graph_data.Mtype === "MX"? "Macross-wind(KNm)": graph_data.Mtype === "MY"? "Malong-wind(KNm)":" Mtorsion(KNm)"
+    const y_axis_title: string = "M (kNm)"
     
     return (
         <div className="bg-card rounded-md border border-border w-full mx-auto p-4">
