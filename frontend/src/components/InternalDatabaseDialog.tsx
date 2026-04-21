@@ -31,7 +31,7 @@ export function InternalDatabaseDialog({ open, onOpenChange, onConfirm }: Intern
     const { width, height, depth} = useInputBuildingContext();
     const [options, setOptions] = useState<IResponse[]>([])
     const [loading, setLoading] = useState<boolean>(false)
-    const {setExperimentalFrequency} = useInputBuildingContext()
+    const {setExperimentalFrequency, setSelectedBuilding} = useInputBuildingContext()
 
     useEffect(() => {
         if (!open) return;
@@ -87,10 +87,11 @@ export function InternalDatabaseDialog({ open, onOpenChange, onConfirm }: Intern
                     <Button
                         disabled={!value}
                         onClick={() => {
-                            onConfirm(value)
                             let op: IResponse[] = options.filter(option => option.url === value)
                             if (op.length == 1){
                                 setExperimentalFrequency(op[0].frequency)
+                                setSelectedBuilding(`Width: ${op[0].width}m, Height: ${op[0].height}m, Depth: ${op[0].depth}m`)
+                                onConfirm(value)
                             }
                         }}
                         className="bg-primary text-white hover:bg-primary/90"

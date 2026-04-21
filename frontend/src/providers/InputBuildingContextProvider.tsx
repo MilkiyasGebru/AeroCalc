@@ -43,6 +43,8 @@ interface InputBuildingContextInterface {
     setTtorsion: (val :number) => void;
     setTacross: (val: number)=>void;
     setUserMeanSpeed: (val: number) => void;
+    selectedBuilding: string | null;
+    setSelectedBuilding: (val: string | null) => void;
 
 }
 interface IUploadData {
@@ -75,6 +77,7 @@ export const InputBuildingContextProvider = ({children}: {children: React.ReactN
     const [normalizedExperimentalFrequencies, setNormalizedExperimentalFrequencies] = useState<number[]>([]);
     const [userMeanSpeed, setUserMeanSpeed] = useState<number | undefined>(undefined);
     const [isAnalyticalEnabled, setIsAnalyticalEnabled] = useState<boolean>(true);
+    const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
     return (
         <InputBuildingContext.Provider value={{
             width, height, depth, meanSpeed, buildingDensity, totalFloors, damping, Tone, terrain,csvData,experimentalMeanSpeed,experimentalFrequency,
@@ -83,6 +86,7 @@ export const InputBuildingContextProvider = ({children}: {children: React.ReactN
             Ttorsion, Tacross, Talong, setTalong, setTtorsion, setTacross,
             userMeanSpeed, setUserMeanSpeed,
             isAnalyticalEnabled, setIsAnalyticalEnabled,
+            selectedBuilding, setSelectedBuilding,
             setExperimentalFrequency,setExperimentalMeanSpeed,setWidth, setHeight, setDepth,setMeanSpeed, setBuildingDensity,setTotalFloors,setDamping,setTerrain,setTone, setCSVData}} >
             {children}
         </InputBuildingContext.Provider>

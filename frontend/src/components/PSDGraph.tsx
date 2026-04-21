@@ -14,6 +14,7 @@ interface PSDGraphInterface {
     psds: number[];
     experimentalPsds: number[];
     graphType: string;
+    showLegend: boolean;
 }
 
 const SuperscriptLogTick = ({ x, y, payload }: any) => {
@@ -78,7 +79,7 @@ const CustomXLabel = (props: CustomYLabelProps) => {
 };
 
 export default function PSDGraph(props : PSDGraphInterface) {
-    const { psds, experimentalPsds} = props;
+    const { psds, experimentalPsds, showLegend = true} = props;
     const {normalizedExperimentalFrequencies} = useInputBuildingContext()
     const allFrequencies = Array.from(new Set([...frequencies, ...normalizedExperimentalFrequencies])).sort((a,b)=>a-b)
 
@@ -145,8 +146,8 @@ export default function PSDGraph(props : PSDGraphInterface) {
                                             Frequency: {Number(label).toExponential(2)}
                                         </span>
                                 )}
-                            />                            <Legend verticalAlign="top" height={36} iconType="plainline" />
-                            {psds.length > 0  && (
+                            />                            {showLegend && <Legend verticalAlign="top" height={36} iconType="plainline" />}
+                            {/* {psds.length > 0  && ( */}
                                 <Line 
                                     name="Analytical" 
                                     type="monotone" 
@@ -155,8 +156,9 @@ export default function PSDGraph(props : PSDGraphInterface) {
                                     connectNulls={true} 
                                     stroke={ANALYTICAL_COLOR} 
                                     strokeWidth={1.5} 
+                                    legendType="line"
                                 />
-                            )}
+                            {/* )} */}
                             {experimentalPsds.length > 0 && (
                                 <Line 
                                     name="Experimental" 

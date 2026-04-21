@@ -21,6 +21,7 @@ declare global {
 interface OutputBuildingContextInterface {
     torsionPsds: number[];
     acrossPsds: number[];
+    alongPsds: number[];
     ar: number | null;
     vr: number | null;
     accelartionYDirection: number | null;
@@ -55,11 +56,12 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
     const {
         width, height, depth, meanSpeed, damping, totalFloors, terrain, Talong, Ttorsion, Tacross,
         experimentalMeanSpeed, experimentalFrequency, setNormalizedExperimentalFrequencies, 
-        buildingDensity, userMeanSpeed, isAnalyticalEnabled, mxData, myData, mzData
+        buildingDensity, userMeanSpeed, isAnalyticalEnabled, mxData, myData, mzData, selectedBuilding
     } = useInputBuildingContext();
 
     const [torsionPsds, setTorsionPsds] = useState<number[]>([]);
     const [acrossPsds, setAcrossPsds] = useState<number[]>([]);
+    const [alongPsds, setAlongPsds] = useState<number[]>([]);
     const [ar, setAr] = useState<number | null>(null)
     const [vr, setVr] = useState<number | null>(null)
 
@@ -78,6 +80,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         setExperimentalAcrossPsds([]);
         setExperimentalTorsionPsds([]);
         setExperimentalAlongPsds([]);
+        setAlongPsds([]);
         setNormalizedExperimentalFrequencies([]);
     }, [setNormalizedExperimentalFrequencies]);
 
@@ -91,18 +94,23 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
                 geometry: { width, height, depth, totalFloors },
                 dynamicProperties: { buildingDensity, damping, Talong, Tacross, Ttorsion },
                 windClimate: { terrain, meanSpeed, userMeanSpeed },
-                experimentalConfig: { experimentalMeanSpeed, experimentalFrequency }
+                experimentalConfig: { 
+                    experimentalMeanSpeed, experimentalFrequency,
+                    selectedBuilding: selectedBuilding || "Custom Upload" 
+                }
             },
             results: {
                 analytical: isAnalyticalEnabled ? {
                     acrossWindAcceleration_milliG: ar,
                     torsionVelocity_milliRadS: vr,
                     alongWindAcceleration_milliG: accelartionYDirection,
+                    spectra: { acrossPsds, torsionPsds }
                 } : "Disabled",
                 experimental: (mxData.length > 0) ? {
                     acrossWindAcceleration_milliG: experimentalAr,
                     torsionVelocity_milliRadS: experimentalVr,
                     alongWindAcceleration_milliG: experimentalAccelartionYDirection,
+                    spectra: { experimentalAcrossPsds, experimentalTorsionPsds, experimentalAlongPsds }
                 } : "No experimental data"
             }
         };
@@ -146,6 +154,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
             setAr(y)
             setAcrossPsds(across_psds)
             setTorsionPsds(torsion_psds)
+            setAlongPsds([]) // Add missing state update
         }
     }, [width, depth, height, meanSpeed, totalFloors, damping, terrain, userMeanSpeed, isAnalyticalEnabled, Talong, Ttorsion, Tacross, buildingDensity])
 
@@ -249,7 +258,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
 
     return (
         <OutputBuildingContext.Provider value={{
-            torsionPsds, acrossPsds, ar,vr, setTorsionPsds, setAcrossPsds, setAr, setVr,
+            torsionPsds, acrossPsds, alongPsds, ar,vr, setTorsionPsds, setAcrossPsds, setAlongPsds, setAr, setVr,
             experimentalTorsionPsds,experimentalAcrossPsds,experimentalAr,experimentalVr,
             accelartionYDirection, setAccelartionYDirection,
             experimentalAlongPsds, setExperimentalAlongPsds,
