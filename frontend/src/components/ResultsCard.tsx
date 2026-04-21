@@ -64,13 +64,13 @@ export default function ResultsCard() {
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center gap-2 mb-4">
+            {/* <div className="flex items-center gap-2 mb-4">
                 <h2 className="text-xl font-bold tracking-tight">Dynamic response summary</h2>
-            </div>
+            </div> */}
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <ResponseCard 
-                    title="Along-wind acceleration" 
+                    title="Along-wind acceleration (rms)" 
                     unit="milli-g" 
                     analytical={accelartionYDirection} 
                     experimental={experimentalAccelartionYDirection} 
@@ -78,7 +78,7 @@ export default function ResultsCard() {
                     colorClass="text-[#854D0E]"
                 />
                 <ResponseCard 
-                    title="Across-wind acceleration" 
+                    title="Across-wind acceleration (rms)" 
                     unit="milli-g" 
                     analytical={ar} 
                     experimental={experimentalAr} 
@@ -86,19 +86,13 @@ export default function ResultsCard() {
                     colorClass="text-[#EA580C]"
                 />
                 <ResponseCard 
-                    title="Torsion velocity" 
+                    title="Torsion velocity (rms)" 
                     unit="milli-rad/s" 
                     analytical={vr} 
                     experimental={experimentalVr} 
                     icon={<RotateCw className="h-4 w-4" />}
                     colorClass="text-[#CA8A04]"
                 />
-            </div>
-
-            <div className="p-4 bg-muted/20 border border-dashed border-border rounded-lg">
-                <p className="text-xs text-muted-foreground italic text-center">
-                    Values shown are Root Mean Square (RMS) responses based on input building properties and site climate.
-                </p>
             </div>
         </div>
     );

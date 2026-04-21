@@ -101,7 +101,7 @@ export default function PSDGraph(props : PSDGraphInterface) {
 
     return (
         <div className="w-full flex flex-col items-center">
-            <h3 className="text-lg font-bold text-primary mb-2">{title}</h3>
+            <h3 className="text-sm font-bold text-muted-foreground mb-2">{title}</h3>
             { (psds.length > 0 || experimentalPsds.length>0) && (
                 <div className="w-full aspect-square max-w-[450px] bg-card rounded-lg p-2 border border-border">
                     <ResponsiveContainer width="100%" height="100%">

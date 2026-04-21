@@ -14,7 +14,7 @@ export default function MGraphs({graph_data}:{graph_data: IGraph}) {
     
     return (
         <div className="bg-card rounded-md border border-border w-full mx-auto p-4">
-            <h4 className="text-md font-bold text-primary mb-2 text-center">{title}</h4>
+            <h4 className="text-sm font-bold text-muted-foreground mb-2 text-center">{title}</h4>
             <div className="w-full h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart
