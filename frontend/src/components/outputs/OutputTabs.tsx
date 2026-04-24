@@ -3,6 +3,7 @@ import ResultsCard from "@/components/ResultsCard";
 import PSDGraph from "@/components/PSDGraph";
 import MGraphs from "@/components/MGraphs";
 import MeanSpeedGraph from "@/components/MeanSpeedGraph";
+import OptimizationTab from "@/components/outputs/OptimizationTab";
 import { RectangleWithArrow } from "@/components/RectangleWithArrow";
 import { useOutputBuildingContext } from "@/contexts/useOutputBuildingContext";
 import { useInputBuildingContext } from "@/contexts/useInputBuildingContext";
@@ -19,7 +20,7 @@ export default function OutputTabs() {
     const { 
         acrossPsds, torsionPsds, alongPsds,
         experimentalAcrossPsds, experimentalTorsionPsds, experimentalAlongPsds,
-        ar, experimentalAr
+        ar, experimentalAr,
     } = useOutputBuildingContext();
 
     const { mxData, myData, mzData, height, meanSpeed, terrain, width, depth } = useInputBuildingContext();
@@ -48,6 +49,7 @@ export default function OutputTabs() {
 
     const tabs = [
         { id: "overview", label: "Dynamic response summary" },
+        { id: "optimization", label: "Dynamic response optimization" },
         { id: "site", label: "Building orientation & wind profile" },
         { id: "history", label: "Aerodynamic base load timehistory" },
         { id: "spectral", label: "Aerodynamic base load spectra" },
@@ -88,6 +90,12 @@ export default function OutputTabs() {
                         <Card className="bg-card border-border">
                             <ResultsCard />
                         </Card>
+                    </div>
+                )}
+
+                {activeTab === "optimization" && hasResults && (
+                    <div className="animate-in fade-in duration-500">
+                        <OptimizationTab />
                     </div>
                 )}
 
