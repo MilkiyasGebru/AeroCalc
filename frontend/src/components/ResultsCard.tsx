@@ -1,4 +1,5 @@
 import { useOutputBuildingContext } from "@/contexts/useOutputBuildingContext.ts";
+import { useInputBuildingContext } from "@/contexts/useInputBuildingContext.ts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Wind, RotateCw } from "lucide-react";
@@ -11,10 +12,15 @@ interface ResponseCardProps {
     experimental: number | null;
     icon: React.ReactNode;
     colorClass: string;
+    isAnalyticalEnabled: boolean;
+    isExperimentalEnabled: boolean;
 }
 
-function ResponseCard({ title, unit, analytical, experimental, icon, colorClass }: ResponseCardProps) {
-    if (analytical === null && experimental === null) return null;
+function ResponseCard({ title, unit, analytical, experimental, icon, colorClass, isAnalyticalEnabled, isExperimentalEnabled }: ResponseCardProps) {
+    const showAnalytical = isAnalyticalEnabled && analytical !== null;
+    const showExperimental = isExperimentalEnabled && experimental !== null;
+
+    if (!showAnalytical && !showExperimental) return null;
 
     return (
         <Card className="overflow-hidden border-border bg-card hover:shadow-md transition-shadow">
@@ -23,24 +29,28 @@ function ResponseCard({ title, unit, analytical, experimental, icon, colorClass 
                 <div className={cn(colorClass)}>{icon}</div>
             </CardHeader>
             <CardContent className="pt-4">
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                        <p className="text-[10px] text-muted-foreground font-bold">Analytical</p>
-                        <div className="flex items-baseline gap-1">
-                            <span className={cn("text-2xl font-bold", colorClass)}>{analytical?.toFixed(2) ?? "--"}</span>
-                            <span className="text-[10px] text-muted-foreground">{unit}</span>
+                <div className={cn("grid gap-4", showAnalytical && showExperimental ? "grid-cols-2" : "grid-cols-1")}>
+                    {showAnalytical && (
+                        <div className="space-y-1">
+                            <p className="text-[10px] text-muted-foreground font-bold">Analytical</p>
+                            <div className="flex items-baseline gap-1">
+                                <span className={cn("text-2xl font-bold", colorClass)}>{analytical?.toFixed(2) ?? "--"}</span>
+                                <span className="text-[10px] text-muted-foreground">{unit}</span>
+                            </div>
                         </div>
-                    </div>
-                    <div className="space-y-1 border-l border-border pl-4">
-                        <p className="text-[10px] text-muted-foreground font-bold">Experimental</p>
-                        <div className="flex items-baseline gap-1">
-                            <span className="text-2xl font-bold text-sky-600">{experimental?.toFixed(2) ?? "--"}</span>
-                            <span className="text-[10px] text-muted-foreground">{unit}</span>
+                    )}
+                    {showExperimental && (
+                        <div className={cn("space-y-1", showAnalytical && "border-l border-border pl-4")}>
+                            <p className="text-[10px] text-muted-foreground font-bold">Experimental</p>
+                            <div className="flex items-baseline gap-1">
+                                <span className="text-2xl font-bold text-sky-600">{experimental?.toFixed(2) ?? "--"}</span>
+                                <span className="text-[10px] text-muted-foreground">{unit}</span>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
                 
-                {analytical !== null && experimental !== null && (
+                {showAnalytical && showExperimental && (
                     <div className="mt-4 pt-3 border-t border-border flex items-center justify-between">
                         <Badge variant="outline" className="text-[10px] font-mono">
                             Diff: {Math.abs(((analytical - experimental) / analytical) * 100).toFixed(1)}%
@@ -59,15 +69,12 @@ function ResponseCard({ title, unit, analytical, experimental, icon, colorClass 
 export default function ResultsCard() {
     const { 
         ar, vr, experimentalAr, experimentalVr, 
-        accelartionYDirection, experimentalAccelartionYDirection 
+        accelartionYDirection, experimentalAccelartionYDirection,
+        wasAnalyticalRun, wasExperimentalRun
     } = useOutputBuildingContext();
 
     return (
         <div className="space-y-6">
-            {/* <div className="flex items-center gap-2 mb-4">
-                <h2 className="text-xl font-bold tracking-tight">Dynamic response summary</h2>
-            </div> */}
-            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <ResponseCard 
                     title="Along-wind acceleration (rms)" 
@@ -76,6 +83,8 @@ export default function ResultsCard() {
                     experimental={experimentalAccelartionYDirection} 
                     icon={<ArrowRight className="h-4 w-4" />}
                     colorClass="text-[#854D0E]"
+                    isAnalyticalEnabled={wasAnalyticalRun}
+                    isExperimentalEnabled={wasExperimentalRun}
                 />
                 <ResponseCard 
                     title="Across-wind acceleration (rms)" 
@@ -84,6 +93,8 @@ export default function ResultsCard() {
                     experimental={experimentalAr} 
                     icon={<Wind className="h-4 w-4" />}
                     colorClass="text-[#EA580C]"
+                    isAnalyticalEnabled={wasAnalyticalRun}
+                    isExperimentalEnabled={wasExperimentalRun}
                 />
                 <ResponseCard 
                     title="Torsion velocity (rms)" 
@@ -92,6 +103,8 @@ export default function ResultsCard() {
                     experimental={experimentalVr} 
                     icon={<RotateCw className="h-4 w-4" />}
                     colorClass="text-[#CA8A04]"
+                    isAnalyticalEnabled={wasAnalyticalRun}
+                    isExperimentalEnabled={wasExperimentalRun}
                 />
             </div>
         </div>

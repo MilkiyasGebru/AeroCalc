@@ -32,6 +32,8 @@ interface OutputBuildingContextInterface {
     experimentalAr: number | null;
     experimentalVr: number | null;
     experimentalAccelartionYDirection: number | null;
+    wasAnalyticalRun: boolean;
+    wasExperimentalRun: boolean;
     setTorsionPsds: (val: number[])=> void;
     setAcrossPsds: (val: number[])=>void;
     setAr: (val: number)=> void;
@@ -74,6 +76,9 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
     const [experimentalAccelartionYDirection, setExperimentalAccelartionYDirection] = useState<number | null>(null)
     const [experimentalAlongPsds, setExperimentalAlongPsds] = useState<number[]>([])
 
+    const [wasAnalyticalRun, setWasAnalyticalRun] = useState(false);
+    const [wasExperimentalRun, setWasExperimentalRun] = useState(false);
+
     const clearExperimentalResults = useCallback(() => {
         setExperimentalAr(null);
         setExperimentalVr(null);
@@ -83,6 +88,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         setExperimentalAlongPsds([]);
         setAlongPsds([]);
         setNormalizedExperimentalFrequencies([]);
+        setWasExperimentalRun(false);
     }, [setNormalizedExperimentalFrequencies]);
 
     const exportResults = useCallback(() => {
@@ -133,6 +139,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
     ]);
 
     const handleAnalyticalCalculation = useCallback(()=>{
+        setWasAnalyticalRun(true);
         if (!isAnalyticalEnabled) {
             setAr(null);
             setVr(null);
@@ -160,6 +167,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
     }, [width, depth, height, meanSpeed, totalFloors, damping, terrain, userMeanSpeed, isAnalyticalEnabled, Talong, Ttorsion, Tacross, buildingDensity])
 
     const handleExperimentalCalculation = useCallback(async (Mx:number[], My:number[], Mz:number[])=>{
+        setWasExperimentalRun(true);
         // const Mx : number[] = mxData;
         // const My : number[] = myData;
         // const Mz: number[] = mzData;
@@ -264,6 +272,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
             accelartionYDirection, setAccelartionYDirection,
             experimentalAlongPsds, setExperimentalAlongPsds,
             experimentalAccelartionYDirection, setExperimentalAccelartionYDirection,
+            wasAnalyticalRun, wasExperimentalRun,
             setExperimentalTorsionPsds,setExperimentalAcrossPsds,setExperimentalAr,setExperimentalVr, handleAnalyticalCalculation,handleExperimentalCalculation,
             clearExperimentalResults, exportResults
         }}>
