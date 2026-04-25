@@ -4,10 +4,12 @@ import PSDGraph from "@/components/PSDGraph";
 import MGraphs from "@/components/MGraphs";
 import MeanSpeedGraph from "@/components/MeanSpeedGraph";
 import OptimizationTab from "@/components/outputs/OptimizationTab";
+import AccelartionLimitGraph from "@/components/AccelartionLimitGraph";
+import TorsionLimitGraph from "@/components/TorsionLimitGraph";
 import { RectangleWithArrow } from "@/components/RectangleWithArrow";
 import { useOutputBuildingContext } from "@/contexts/useOutputBuildingContext";
 import { useInputBuildingContext } from "@/contexts/useInputBuildingContext";
-import { Card } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 interface IMeanSpeedData {
@@ -20,10 +22,15 @@ export default function OutputTabs() {
     const { 
         acrossPsds, torsionPsds, alongPsds,
         experimentalAcrossPsds, experimentalTorsionPsds, experimentalAlongPsds,
-        ar, experimentalAr,
+        ar, experimentalAr, vr, experimentalVr, 
+        accelartionYDirection, experimentalAccelartionYDirection,
+        wasAnalyticalRun, wasExperimentalRun
     } = useOutputBuildingContext();
 
-    const { mxData, myData, mzData, height, meanSpeed, terrain, width, depth } = useInputBuildingContext();
+    const { 
+        mxData, myData, mzData, height, meanSpeed, terrain, width, depth,
+        Talong, Tacross, Ttorsion 
+    } = useInputBuildingContext();
     const [graphData, setGraphData] = useState<IMeanSpeedData[]>([]);
 
     const coefficient = (height !== undefined && meanSpeed !== undefined)
@@ -90,6 +97,46 @@ export default function OutputTabs() {
                         <Card className="bg-card border-border">
                             <ResultsCard />
                         </Card>
+
+                        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                            <Card className="border-border">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-sm font-bold text-muted-foreground text-center">Acceleration Limits</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <AccelartionLimitGraph 
+                                        points={[
+                                            ...(wasAnalyticalRun ? [
+                                                { frequency: Talong ? 1/Talong : 0, acceleration: accelartionYDirection ?? 0, label: "Analytical Along", color: "#ef4444", shape: "circle" as const},
+                                                { frequency: Tacross ? 1/Tacross : 0, acceleration: ar ?? 0, label: "Analytical Across", color: "#ef4444", shape: "diamond"  as const }
+                                            ] : []),
+                                            ...(wasExperimentalRun ? [
+                                                { frequency: Talong ? 1/Talong : 0, acceleration: experimentalAccelartionYDirection ?? 0, label: "Exp. Along", color: "#3b82f6", shape: "circle"  as const},
+                                                { frequency: Tacross ? 1/Tacross : 0, acceleration: experimentalAr ?? 0, label: "Exp. Across", color: "#3b82f6", shape: "diamond" as const }
+                                            ] : [])
+                                        ]} 
+                                    />
+                                </CardContent>
+                            </Card>
+
+                            <Card className="border-border">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-sm font-bold text-muted-foreground text-center">Torsional Velocity Limits</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <TorsionLimitGraph 
+                                        points={[
+                                            ...(wasAnalyticalRun ? [
+                                                { frequency: Ttorsion ? 1/Ttorsion : 0, velocity: vr ?? 0, label: "Analytical Torsion", color: "#ef4444", shape: "circle" as const }
+                                            ] : []),
+                                            ...(wasExperimentalRun ? [
+                                                { frequency: Ttorsion ? 1/Ttorsion : 0, velocity: experimentalVr ?? 0, label: "Exp. Torsion", color: "#3b82f6", shape: "circle" as const }
+                                            ] : [])
+                                        ]} 
+                                    />
+                                </CardContent>
+                            </Card>
+                        </div>
                     </div>
                 )}
 

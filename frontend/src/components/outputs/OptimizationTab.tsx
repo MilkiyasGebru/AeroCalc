@@ -52,7 +52,7 @@ function OptimizedResultCard({ title, unit, analytical, experimental, icon, colo
                         <div className={cn("space-y-1", showAnalytical && "border-l border-border pl-4")}>
                             <p className="text-[10px] text-muted-foreground font-bold">Experimental</p>
                             <div className="flex items-baseline gap-1">
-                                <span className="text-2xl font-bold text-sky-600">{experimental?.toFixed(8) ?? "--"}</span>
+                                <span className="text-2xl font-bold text-sky-600">{experimental?.toFixed(2) ?? "--"}</span>
                                 <span className="text-[10px] text-muted-foreground">{unit}</span>
                             </div>
                         </div>
@@ -288,12 +288,12 @@ export default function OptimizationTab() {
                                 <AccelartionLimitGraph 
                                     points={[
                                         ...(showAnalytical ? [
-                                            { frequency: optimizedResults?.analytical.alongFreq ?? 0, acceleration: optimizedResults?.analytical.alongAcc ?? 0, label: "Analytical Along" },
-                                            { frequency: optimizedResults?.analytical.acrossFreq ?? 0, acceleration: optimizedResults?.analytical.acrossAcc ?? 0, label: "Analytical Across" }
+                                            { frequency: optimizedResults?.analytical.alongFreq ?? 0, acceleration: optimizedResults?.analytical.alongAcc ?? 0, label: "Analytical Along", color: "#ef4444", shape: "circle" as const },
+                                            { frequency: optimizedResults?.analytical.acrossFreq ?? 0, acceleration: optimizedResults?.analytical.acrossAcc ?? 0, label: "Analytical Across", color: "#ef4444", shape: "diamond" as const}
                                         ] : []),
                                         ...(showExperimental ? [
-                                            { frequency: optimizedResults?.experimental.alongFreq ?? 0, acceleration: optimizedResults?.experimental.alongAcc ?? 0, label: "Exp. Along" },
-                                            { frequency: optimizedResults?.experimental.acrossFreq ?? 0, acceleration: optimizedResults?.experimental.acrossAcc ?? 0, label: "Exp. Across" }
+                                            { frequency: optimizedResults?.experimental.alongFreq ?? 0, acceleration: optimizedResults?.experimental.alongAcc ?? 0, label: "Exp. Along", color: "#3b82f6", shape: "circle" as const },
+                                            { frequency: optimizedResults?.experimental.acrossFreq ?? 0, acceleration: optimizedResults?.experimental.acrossAcc ?? 0, label: "Exp. Across", color: "#3b82f6", shape: "diamond" as const }
                                         ] : [])
                                     ]} 
                                 />
@@ -308,10 +308,10 @@ export default function OptimizationTab() {
                                 <TorsionLimitGraph 
                                     points={[
                                         ...(showAnalytical ? [
-                                            { frequency: optimizedResults?.analytical.torsionFreq ?? 0, velocity: optimizedResults?.analytical.torsionVel ?? 0, label: "Analytical Torsion" }
+                                            { frequency: optimizedResults?.analytical.torsionFreq ?? 0, velocity: optimizedResults?.analytical.torsionVel ?? 0, label: "Analytical Torsion", color: "#ef4444", shape: "circle" as const }
                                         ] : []),
                                         ...(showExperimental ? [
-                                            { frequency: optimizedResults?.experimental.torsionFreq ?? 0, velocity: optimizedResults?.experimental.torsionVel ?? 0, label: "Exp. Torsion" }
+                                            { frequency: optimizedResults?.experimental.torsionFreq ?? 0, velocity: optimizedResults?.experimental.torsionVel ?? 0, label: "Exp. Torsion", color: "#3b82f6", shape: "circle" as const }
                                         ] : [])
                                     ]} 
                                 />
