@@ -30,7 +30,7 @@ function OptimizedResultCard({ title, unit, analytical, experimental, icon, colo
     const showExperimental = isExperimentalEnabled && experimental !== null;
 
     if (!showAnalytical && !showExperimental) return null;
-
+    console.log("Optimization Tab", analytical)
     return (
         <Card className="overflow-hidden border-border bg-card hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-muted/30">
@@ -52,7 +52,7 @@ function OptimizedResultCard({ title, unit, analytical, experimental, icon, colo
                         <div className={cn("space-y-1", showAnalytical && "border-l border-border pl-4")}>
                             <p className="text-[10px] text-muted-foreground font-bold">Experimental</p>
                             <div className="flex items-baseline gap-1">
-                                <span className="text-2xl font-bold text-sky-600">{experimental?.toFixed(2) ?? "--"}</span>
+                                <span className="text-2xl font-bold text-sky-600">{experimental?.toFixed(8) ?? "--"}</span>
                                 <span className="text-[10px] text-muted-foreground">{unit}</span>
                             </div>
                         </div>
@@ -66,12 +66,12 @@ function OptimizedResultCard({ title, unit, analytical, experimental, icon, colo
 export default function OptimizationTab() {
     const {
         width, height, depth, meanSpeed, damping, totalFloors, terrain, Talong, Ttorsion, Tacross,
-        buildingDensity, userMeanSpeed, experimentalFrequency, experimentalMeanSpeed
+        buildingDensity, userMeanSpeed, experimentalFrequency, experimentalMeanSpeed,normalizedExperimentalFrequencies
     } = useInputBuildingContext();
 
     const { 
         experimentalAcrossPsds, experimentalTorsionPsds, experimentalAlongPsds,
-        normalizedExperimentalFrequencies, wasAnalyticalRun, wasExperimentalRun
+         wasAnalyticalRun, wasExperimentalRun
     } = useOutputBuildingContext();
 
     const [densityMult, setDensityMult] = useState(1);
@@ -92,8 +92,11 @@ export default function OptimizationTab() {
             const c = (terrain == "open") ? (height / 10) ** 0.28 : 0.5 * ((height / 12.7) ** 0.5);
             let speed: number = (userMeanSpeed != null && Number.isFinite(userMeanSpeed)) ? userMeanSpeed : meanSpeed * c ** 0.5;
             
+            const isDesktop = !!(window as any).pywebview;
+            const expCalcSpeed = isDesktop ? speed : (userMeanSpeed != null && Number.isFinite(userMeanSpeed)) ? userMeanSpeed : meanSpeed;
+
             // Reconstruct frequencies for experimental
-            const pwelch_frequencies = (normalizedExperimentalFrequencies && experimentalMeanSpeed && width) 
+            const pwelch_frequencies = (normalizedExperimentalFrequencies && normalizedExperimentalFrequencies.length > 0 && experimentalMeanSpeed && width) 
                 ? normalizedExperimentalFrequencies.map(fn => fn * experimentalMeanSpeed / width)
                 : frequencies;
 
@@ -110,22 +113,19 @@ export default function OptimizationTab() {
             let expAcrossAcc = null;
             let expTorsionVel = null;
 
-            // To match OutputBuildingContextProvider's inconsistent speed usage between web/desktop
-            const isDesktop = !!(window as any).pywebview;
-            const expCalcSpeed = isDesktop ? speed : meanSpeed;
-
             if (experimentalAcrossPsds.length > 0 && experimentalTorsionPsds.length > 0) {
-                const [exVT, exAR] = CalculateFD(width, height, depth, expCalcSpeed, currentTtorsion, totalFloors, currentDamping, pwelch_frequencies, experimentalAcrossPsds, experimentalTorsionPsds, currentDensity);
-                const [___, exAR_across] = CalculateFD(width, height, depth, expCalcSpeed, currentTacross, totalFloors, currentDamping, pwelch_frequencies, experimentalAcrossPsds, experimentalTorsionPsds, currentDensity);
+                const [exVT, __] = CalculateFD(Math.max(width, depth), height, Math.min(width, depth), expCalcSpeed, currentTtorsion, totalFloors, currentDamping, pwelch_frequencies, experimentalAcrossPsds, experimentalTorsionPsds, currentDensity);
+                const [___, exAR_across] = CalculateFD(Math.max(width, depth), height, Math.min(width, depth), expCalcSpeed, currentTacross, totalFloors, currentDamping, pwelch_frequencies, experimentalAcrossPsds, experimentalTorsionPsds, currentDensity);
                 
                 expAcrossAcc = exAR_across;
                 expTorsionVel = exVT;
 
                 if (experimentalAlongPsds.length > 0) {
-                    const [____, exAL] = CalculateFD(width, height, depth, expCalcSpeed, currentTalong, totalFloors, currentDamping, pwelch_frequencies, experimentalAlongPsds, experimentalTorsionPsds, currentDensity);
+                    const [____, exAL] = CalculateFD(Math.max(width, depth), height, Math.min(width, depth), expCalcSpeed, currentTalong, totalFloors, currentDamping, pwelch_frequencies, experimentalAlongPsds, experimentalTorsionPsds, currentDensity);
                     expAlongAcc = exAL;
                 }
             }
+            console.log("Experiment Values",expAlongAcc,expAcrossAcc,expTorsionVel)
 
             return {
                 analytical: {
@@ -202,35 +202,47 @@ export default function OptimizationTab() {
                         </CardContent>
                     </Card>
 
-                    <Card className="border-border bg-muted/20">
-                        <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-bold flex items-center gap-2">
-                                <Activity className="h-4 w-4" /> Optimized Parameters
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="text-[11px] space-y-2">
-                            <div className="flex justify-between border-b border-border pb-1">
-                                <span className="text-muted-foreground">Along Freq:</span>
-                                <span className="font-mono font-bold">{optimizedResults?.analytical.alongFreq.toFixed(3)} Hz</span>
-                            </div>
-                            <div className="flex justify-between border-b border-border pb-1">
-                                <span className="text-muted-foreground">Across Freq:</span>
-                                <span className="font-mono font-bold">{optimizedResults?.analytical.acrossFreq.toFixed(3)} Hz</span>
-                            </div>
-                            <div className="flex justify-between border-b border-border pb-1">
-                                <span className="text-muted-foreground">Torsion Freq:</span>
-                                <span className="font-mono font-bold">{optimizedResults?.analytical.torsionFreq.toFixed(3)} Hz</span>
-                            </div>
-                            <div className="flex justify-between border-b border-border pb-1">
-                                <span className="text-muted-foreground">Damping:</span>
-                                <span className="font-mono font-bold">{(optimizedResults?.analytical.damping ? optimizedResults.analytical.damping * 100 : 0).toFixed(2)} %</span>
-                            </div>
-                            <div className="flex justify-between border-b border-border pb-1">
-                                <span className="text-muted-foreground">Density:</span>
-                                <span className="font-mono font-bold">{optimizedResults?.analytical.density.toFixed(1)} kg/m³</span>
-                            </div>
-                        </CardContent>
-                    </Card>
+                    {(wasAnalyticalRun || wasExperimentalRun) && (
+                        <Card className="border-border bg-muted/20">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-sm font-bold flex items-center gap-2">
+                                    <Activity className="h-4 w-4" /> Optimized Parameters
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="text-[11px] space-y-2">
+                                {wasAnalyticalRun && (
+                                    <>
+                                        <div className="flex justify-between border-b border-border pb-1">
+                                            <span className="text-muted-foreground">Along Freq:</span>
+                                            <span className="font-mono font-bold">{optimizedResults?.analytical.alongFreq.toFixed(3)} Hz</span>
+                                        </div>
+                                        <div className="flex justify-between border-b border-border pb-1">
+                                            <span className="text-muted-foreground">Across Freq:</span>
+                                            <span className="font-mono font-bold">{optimizedResults?.analytical.acrossFreq.toFixed(3)} Hz</span>
+                                        </div>
+                                        <div className="flex justify-between border-b border-border pb-1">
+                                            <span className="text-muted-foreground">Torsion Freq:</span>
+                                            <span className="font-mono font-bold">{optimizedResults?.analytical.torsionFreq.toFixed(3)} Hz</span>
+                                        </div>
+                                    </>
+                                )}
+                                {wasExperimentalRun && !wasAnalyticalRun && (
+                                     <div className="flex justify-between border-b border-border pb-1">
+                                        <span className="text-muted-foreground">Exp. Freq:</span>
+                                        <span className="font-mono font-bold">{optimizedResults?.experimental.alongFreq.toFixed(3)} Hz</span>
+                                    </div>
+                                )}
+                                <div className="flex justify-between border-b border-border pb-1">
+                                    <span className="text-muted-foreground">Damping:</span>
+                                    <span className="font-mono font-bold">{(optimizedResults?.analytical.damping ? optimizedResults.analytical.damping * 100 : 0).toFixed(2)} %</span>
+                                </div>
+                                <div className="flex justify-between border-b border-border pb-1">
+                                    <span className="text-muted-foreground">Density:</span>
+                                    <span className="font-mono font-bold">{optimizedResults?.analytical.density.toFixed(1)} kg/m³</span>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    )}
                 </div>
 
                 <div className="lg:col-span-3 space-y-6">
