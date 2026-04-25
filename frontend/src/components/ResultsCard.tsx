@@ -1,5 +1,4 @@
 import { useOutputBuildingContext } from "@/contexts/useOutputBuildingContext.ts";
-import { useInputBuildingContext } from "@/contexts/useInputBuildingContext.ts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Wind, RotateCw } from "lucide-react";
