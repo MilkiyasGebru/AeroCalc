@@ -52,7 +52,7 @@ export default function AccelartionLimitGraph({ points = [] }: AccelartionLimitG
                 />
                 <Tooltip
                     contentStyle={{ backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px', fontSize: '12px' }}
-                    formatter={(value: number, name: string) => [value.toFixed(2), name]}
+                    formatter={(value: number = 0, name: string ="") => [value.toFixed(2), name]}
                     labelFormatter={(label: number) => `Frequency: ${label.toFixed(2)} Hz`}
                 />
                 <Legend verticalAlign="top" height={36} wrapperStyle={{ fontSize: '12px' }}/>
