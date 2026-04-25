@@ -19,10 +19,10 @@ export default function TorsionLimitGraph({ points = [] }: TorsionLimitGraphProp
     });
 
     return (
-        <ResponsiveContainer width="100%" height={400}>
+        <ResponsiveContainer width="100%" height={450}>
             <LineChart
                 data={graph_data}
-                margin={{ top: 20, right: 30, left: 40, bottom: 60 }}
+                margin={{ top: 10, right: 10, left: -20, bottom: 40 }}
             >
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
                 <XAxis
@@ -34,9 +34,9 @@ export default function TorsionLimitGraph({ points = [] }: TorsionLimitGraphProp
                         value: 'Lowest natural frequency fn (Hz)',
                         position: 'bottom',
                         offset: 20,
-                        style: { fill: 'var(--foreground)', fontWeight: "bold", fontSize: 14 }
+                        style: { fill: 'var(--foreground)', fontWeight: "bold", fontSize: 12 }
                     }}
-                    tick={{ fontSize: 12 }}
+                    tick={{ fontSize: 10 }}
                 />
                 <YAxis
                     stroke="var(--muted-foreground)"
@@ -45,15 +45,17 @@ export default function TorsionLimitGraph({ points = [] }: TorsionLimitGraphProp
                         value: 'Torsional Velocity (milli-rad/s)',
                         angle: -90,
                         position: 'insideLeft',
-                        offset: -10,
-                        style: { textAnchor: 'middle', fill: 'var(--foreground)', fontWeight: "bold", fontSize: 14 }
+                        offset: 30,
+                        style: { textAnchor: 'middle', fill: 'var(--foreground)', fontWeight: "bold", fontSize: 12 }
                     }}
-                    tick={{ fontSize: 12 }}
+                    tick={{ fontSize: 10 }}
                 />
                 <Tooltip
-                    contentStyle={{ backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px' }}
+                    contentStyle={{ backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px', fontSize: '12px' }}
+                    formatter={(value: number, name: string) => [value.toFixed(2), name]}
+                    labelFormatter={(label: number) => `Frequency: ${label.toFixed(2)} Hz`}
                 />
-                <Legend verticalAlign="top" height={36}/>
+                <Legend verticalAlign="top" height={36} iconType="plainline" wrapperStyle={{ fontSize: '12px' }}/>
 
                 <Line
                     name="Office Limit"
