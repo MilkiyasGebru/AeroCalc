@@ -1,7 +1,7 @@
-import {CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
+import {CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Symbols} from "recharts";
 
 interface AccelartionLimitGraphProps {
-    points?: { frequency: number; acceleration: number; label: string }[];
+    points?: { frequency: number; acceleration: number; label: string; color?: string; shape?: "circle" | "diamond" | "square" | "wye" }[];
 }
 
 export default function AccelartionLimitGraph({ points = [] }: AccelartionLimitGraphProps) {
@@ -18,7 +18,6 @@ export default function AccelartionLimitGraph({ points = [] }: AccelartionLimitG
             residence: parseFloat(residenceLimit.toFixed(4)),
         };
     });
-    console.log("Graph Data is ", graph_data)
 
     return (
         <ResponsiveContainer width="100%" height={450}>
@@ -56,7 +55,7 @@ export default function AccelartionLimitGraph({ points = [] }: AccelartionLimitG
                     formatter={(value: number, name: string) => [value.toFixed(2), name]}
                     labelFormatter={(label: number) => `Frequency: ${label.toFixed(2)} Hz`}
                 />
-                <Legend verticalAlign="top" height={36} iconType="plainline" wrapperStyle={{ fontSize: '12px' }}/>
+                <Legend verticalAlign="top" height={36} wrapperStyle={{ fontSize: '12px' }}/>
 
                 <Line
                     name="Office Limit"
@@ -65,6 +64,7 @@ export default function AccelartionLimitGraph({ points = [] }: AccelartionLimitG
                     stroke="var(--foreground)"
                     strokeWidth={2}
                     dot={false}
+                    legendType="plainline"
                 />
 
                 <Line
@@ -75,6 +75,7 @@ export default function AccelartionLimitGraph({ points = [] }: AccelartionLimitG
                     strokeWidth={2}
                     strokeDasharray="5 5"
                     dot={false}
+                    legendType="plainline"
                 />
 
                 {points.map((point, index) => (
@@ -84,10 +85,21 @@ export default function AccelartionLimitGraph({ points = [] }: AccelartionLimitG
                         data={[{ frequency: point.frequency, acceleration: point.acceleration }]}
                         type="monotone"
                         dataKey="acceleration"
-                        stroke={index === 0 ? "#EA580C" : "#854D0E"}
+                        stroke={point.color || (index === 0 ? "#EA580C" : "#854D0E")}
                         strokeWidth={0}
-                        dot={{ r: 6, fill: index === 0 ? "#EA580C" : "#854D0E" }}
-                        legendType="circle"
+                        dot={(props: any) => {
+                            const { cx, cy } = props;
+                            return (
+                                <Symbols
+                                    cx={cx}
+                                    cy={cy}
+                                    type={point.shape || "circle"}
+                                    size={80}
+                                    fill={point.color || (index === 0 ? "#EA580C" : "#854D0E")}
+                                />
+                            );
+                        }}
+                        legendType={point.shape || "circle"}
                     />
                 ))}
             </LineChart>

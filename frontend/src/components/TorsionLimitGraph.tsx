@@ -1,7 +1,7 @@
-import {CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
+import {CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Symbols} from "recharts";
 
 interface TorsionLimitGraphProps {
-    points?: { frequency: number; velocity: number; label: string }[];
+    points?: { frequency: number; velocity: number; label: string; color?: string; shape?: "circle" | "diamond" | "square" | "wye" }[];
 }
 
 export default function TorsionLimitGraph({ points = [] }: TorsionLimitGraphProps) {
@@ -55,7 +55,7 @@ export default function TorsionLimitGraph({ points = [] }: TorsionLimitGraphProp
                     formatter={(value: number, name: string) => [value.toFixed(2), name]}
                     labelFormatter={(label: number) => `Frequency: ${label.toFixed(2)} Hz`}
                 />
-                <Legend verticalAlign="top" height={36} iconType="plainline" wrapperStyle={{ fontSize: '12px' }}/>
+                <Legend verticalAlign="top" height={36} wrapperStyle={{ fontSize: '12px' }}/>
 
                 <Line
                     name="Office Limit"
@@ -64,6 +64,7 @@ export default function TorsionLimitGraph({ points = [] }: TorsionLimitGraphProp
                     stroke="var(--foreground)"
                     strokeWidth={3}
                     dot={false}
+                    legendType="plainline"
                 />
 
                 <Line
@@ -74,6 +75,7 @@ export default function TorsionLimitGraph({ points = [] }: TorsionLimitGraphProp
                     strokeWidth={3}
                     strokeDasharray="10 10"
                     dot={false}
+                    legendType="plainline"
                 />
 
                 {points.map((point, index) => (
@@ -83,10 +85,21 @@ export default function TorsionLimitGraph({ points = [] }: TorsionLimitGraphProp
                         data={[{ frequency: point.frequency, velocity: point.velocity }]}
                         type="monotone"
                         dataKey="velocity"
-                        stroke="#CA8A04"
+                        stroke={point.color || "#CA8A04"}
                         strokeWidth={0}
-                        dot={{ r: 6, fill: "#CA8A04" }}
-                        legendType="circle"
+                        dot={(props: any) => {
+                            const { cx, cy } = props;
+                            return (
+                                <Symbols
+                                    cx={cx}
+                                    cy={cy}
+                                    type={point.shape || "circle"}
+                                    size={80}
+                                    fill={point.color || "#CA8A04"}
+                                />
+                            );
+                        }}
+                        legendType={point.shape || "circle"}
                     />
                 ))}
             </LineChart>
