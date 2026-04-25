@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import ResultsCard from "@/components/ResultsCard";
 import PSDGraph from "@/components/PSDGraph";
 import MGraphs from "@/components/MGraphs";
@@ -18,7 +18,6 @@ interface IMeanSpeedData {
 }
 
 export default function OutputTabs() {
-    const [activeTab, setActiveTab] = useState("overview");
     const { 
         acrossPsds, torsionPsds, alongPsds,
         experimentalAcrossPsds, experimentalTorsionPsds, experimentalAlongPsds,
@@ -29,9 +28,67 @@ export default function OutputTabs() {
 
     const { 
         mxData, myData, mzData, height, meanSpeed, terrain, width, depth,
-        Talong, Tacross, Ttorsion 
+        Talong, Tacross, Ttorsion, isAnalyticalEnabled, selectedBuilding
     } = useInputBuildingContext();
+
     const [graphData, setGraphData] = useState<IMeanSpeedData[]>([]);
+
+    const isExperimentalSelected = mxData.length > 0 || (selectedBuilding !== null && selectedBuilding !== undefined);
+
+    const tabs = useMemo(() => {
+        const allTabs = {
+            overview: { id: "overview", label: "Dynamic response summary" },
+            optimization: { id: "optimization", label: "Dynamic response optimization" },
+            site: { id: "site", label: "Building orientation & wind profile" },
+            history: { id: "history", label: "Aerodynamic base load timehistory" },
+            spectral: { id: "spectral", label: "Aerodynamic base load spectra" },
+        };
+
+        if (isAnalyticalEnabled && isExperimentalSelected) {
+            // Case 3: Both
+            return [
+                allTabs.history,
+                allTabs.spectral,
+                allTabs.site,
+                allTabs.overview,
+                allTabs.optimization,
+            ];
+        } else if (isExperimentalSelected) {
+            // Case 2: Experimental Only
+            return [
+                allTabs.history,
+                allTabs.spectral,
+                allTabs.overview,
+                allTabs.optimization,
+            ];
+        } else if (isAnalyticalEnabled) {
+            // Case 1: Analytical Only
+            return [
+                allTabs.site,
+                allTabs.spectral,
+                allTabs.overview,
+                allTabs.optimization,
+            ];
+        }
+
+        // Default fallback if nothing selected
+        return [
+            allTabs.overview,
+            allTabs.optimization,
+            allTabs.site,
+            allTabs.history,
+            allTabs.spectral,
+        ];
+    }, [isAnalyticalEnabled, isExperimentalSelected]);
+
+    const [activeTab, setActiveTab] = useState(tabs[0].id);
+
+    // Ensure activeTab is always one of the visible tabs
+    useEffect(() => {
+        if (!tabs.find(t => t.id === activeTab)) {
+            setActiveTab(tabs[0].id);
+        }
+    }, [tabs, activeTab]);
 
     const coefficient = (height !== undefined && meanSpeed !== undefined)
         ? (terrain === "open" ? (height / 10) ** 0.28 : 0.5 * ((height / 12.7) ** 0.5))
@@ -53,15 +110,6 @@ export default function OutputTabs() {
             setGraphData(data);
         }
     }, [terrain, height, meanSpeed]);
-
-    const tabs = [
-        { id: "overview", label: "Dynamic response summary" },
-        { id: "optimization", label: "Dynamic response optimization" },
-        { id: "site", label: "Building orientation & wind profile" },
-        { id: "history", label: "Aerodynamic base load timehistory" },
-        { id: "spectral", label: "Aerodynamic base load spectra" },
-        
-    ];
 
     const hasResults = ar !== null || experimentalAr !== null;
 
@@ -107,11 +155,11 @@ export default function OutputTabs() {
                                     <AccelartionLimitGraph 
                                         points={[
                                             ...(wasAnalyticalRun ? [
-                                                { frequency: Talong ? 1/Talong : 0, acceleration: accelartionYDirection ?? 0, label: "Analytical Along", color: "#ef4444", shape: "circle" as const},
-                                                { frequency: Tacross ? 1/Tacross : 0, acceleration: ar ?? 0, label: "Analytical Across", color: "#ef4444", shape: "diamond"  as const }
+                                                { frequency: Talong ? 1/Talong : 0, acceleration: accelartionYDirection ?? 0, label: "Analytical Along", color: "#ef4444", shape: "circle" as const },
+                                                { frequency: Tacross ? 1/Tacross : 0, acceleration: ar ?? 0, label: "Analytical Across", color: "#ef4444", shape: "diamond" as const }
                                             ] : []),
                                             ...(wasExperimentalRun ? [
-                                                { frequency: Talong ? 1/Talong : 0, acceleration: experimentalAccelartionYDirection ?? 0, label: "Exp. Along", color: "#3b82f6", shape: "circle"  as const},
+                                                { frequency: Talong ? 1/Talong : 0, acceleration: experimentalAccelartionYDirection ?? 0, label: "Exp. Along", color: "#3b82f6", shape: "circle" as const },
                                                 { frequency: Tacross ? 1/Tacross : 0, acceleration: experimentalAr ?? 0, label: "Exp. Across", color: "#3b82f6", shape: "diamond" as const }
                                             ] : [])
                                         ]} 
@@ -180,11 +228,6 @@ export default function OutputTabs() {
                             <Card className="bg-card border-border p-2">
                                 <MGraphs graph_data={{ val: mzData, Mtype: "MZ" }} />
                             </Card>
-                        )}
-                        {mxData.length === 0 && myData.length === 0 && mzData.length === 0 && (
-                            <div className="text-center p-12 text-muted-foreground">
-                                No Aerodynamic base load timehistory data available. Use experimental data to see these graphs.
-                            </div>
                         )}
                     </div>
                 )}
