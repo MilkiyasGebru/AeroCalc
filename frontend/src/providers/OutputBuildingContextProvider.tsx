@@ -196,16 +196,23 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
                 const alongResult = await window.pywebview.api.compute(My, width, height, experimentalMeanSpeed, experimentalFrequency)
                 let along_psds = alongResult.psd.slice(1)
                 setExperimentalAlongPsds(along_psds)
-                const [x, _]: number[] = CalculateFD(width, height, depth, speed, Ttorsion, totalFloors, damping, pwelch_frequencies, across_psds, torsion_psds, buildingDensity)
-                const [__, y]: number[] = CalculateFD(width, height, depth, speed, Tacross, totalFloors, damping, pwelch_frequencies, across_psds, torsion_psds, buildingDensity)
-                const [___, z]: number[] = CalculateFD(width, height, depth, speed, Talong, totalFloors, damping, pwelch_frequencies, along_psds, torsion_psds, buildingDensity)
+                
+                // Use Math.max(width, depth) and Math.min(width, depth) for consistency with analytical
+                const B = Math.max(width, depth);
+                const D = Math.min(width, depth);
+
+                const [x, _]: number[] = CalculateFD(B, height, D, speed, Ttorsion, totalFloors, damping, pwelch_frequencies, across_psds, torsion_psds, buildingDensity)
+                const [__, y]: number[] = CalculateFD(B, height, D, speed, Tacross, totalFloors, damping, pwelch_frequencies, across_psds, torsion_psds, buildingDensity)
+                const [___, z]: number[] = CalculateFD(B, height, D, speed, Talong, totalFloors, damping, pwelch_frequencies, along_psds, torsion_psds, buildingDensity)
 
                 setExperimentalAccelartionYDirection(z)
-                //
                 setExperimentalVr(x)
                 setExperimentalAr(y)
             } else {
                 // WEB MODE: Fallback to Local JavaScript
+                const c = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
+                let speed : number =(userMeanSpeed != null && Number.isFinite(userMeanSpeed))? userMeanSpeed:meanSpeed*c**0.5
+                
                 let experi_across_psds: number[] = calculate_experimental_psd_normalized(Mx, width, height, experimentalMeanSpeed, experimentalFrequency).psd
                 experi_across_psds = experi_across_psds.slice(1)
                 let {
@@ -233,14 +240,16 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
                 setExperimentalAcrossPsds(experi_across_psds)
 
                 setNormalizedExperimentalFrequencies(f_normalized)
-                // console.log("new", calculate_experimental_psd_normalized(Mz, width, depth, experimentalMeanSpeed, experimentalFrequency))
-                // setCSVData(csvData)
-                const [x, _]: number[] = CalculateFD(width, height, depth, meanSpeed, Ttorsion, totalFloors, damping, pwelch_frequencies, experi_across_psds, psd, buildingDensity)
-                const [__, y]: number[] = CalculateFD(width, height, depth, meanSpeed, Tacross, totalFloors, damping, pwelch_frequencies, experi_across_psds, psd, buildingDensity)
-                const [___, z]: number[] = CalculateFD(width, height, depth, meanSpeed, Talong, totalFloors, damping, pwelch_frequencies, along_psds, psd, buildingDensity)
+                
+                // Use Math.max(width, depth) and Math.min(width, depth) for consistency with analytical
+                const B = Math.max(width, depth);
+                const D = Math.min(width, depth);
+
+                const [x, _]: number[] = CalculateFD(B, height, D, speed, Ttorsion, totalFloors, damping, pwelch_frequencies, experi_across_psds, psd, buildingDensity)
+                const [__, y]: number[] = CalculateFD(B, height, D, speed, Tacross, totalFloors, damping, pwelch_frequencies, experi_across_psds, psd, buildingDensity)
+                const [___, z]: number[] = CalculateFD(B, height, D, speed, Talong, totalFloors, damping, pwelch_frequencies, along_psds, psd, buildingDensity)
 
                 setExperimentalAccelartionYDirection(z)
-                //
                 setExperimentalVr(x)
                 setExperimentalAr(y)
             }
