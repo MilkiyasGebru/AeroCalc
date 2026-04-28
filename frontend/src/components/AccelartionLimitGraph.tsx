@@ -41,6 +41,7 @@ export default function AccelartionLimitGraph({ points = [] }: AccelartionLimitG
                 />
                 <YAxis
                     stroke="var(--muted-foreground)"
+                    domain={[0, 30]}
                     label={{
                         value: 'Acceleration (milli-g)',
                         angle: -90,
