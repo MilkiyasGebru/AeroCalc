@@ -11,12 +11,22 @@ import { useInputBuildingContext } from "@/contexts/useInputBuildingContext";
 import { useTheme } from "@/contexts/ThemeContext";
 
 function App() {
-    const { handleAnalyticalCalculation, handleExperimentalCalculation, clearExperimentalResults, exportResults } = useOutputBuildingContext();
-    const { mxData, myData, mzData } = useInputBuildingContext();
+    const { 
+        handleAnalyticalCalculation, handleExperimentalCalculation, 
+        clearExperimentalResults, clearAnalyticalResults, exportResults 
+    } = useOutputBuildingContext();
+    const { mxData, myData, mzData, isAnalyticalEnabled } = useInputBuildingContext();
     const { theme, toggleTheme } = useTheme();
 
     const runAnalysis = () => {
-        handleAnalyticalCalculation();
+        // Handle Analytical
+        if (isAnalyticalEnabled) {
+            handleAnalyticalCalculation();
+        } else {
+            clearAnalyticalResults();
+        }
+
+        // Handle Experimental
         if (mxData.length > 0 || myData.length > 0 || mzData.length > 0) {
             handleExperimentalCalculation(mxData, myData, mzData);
         } else {

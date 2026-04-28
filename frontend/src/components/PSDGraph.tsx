@@ -1,6 +1,7 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import {frequencies} from "../../CONSTANTS.ts";
 import {useInputBuildingContext} from "@/contexts/useInputBuildingContext.ts";
+import {useOutputBuildingContext} from "@/contexts/useOutputBuildingContext.ts";
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 
@@ -81,8 +82,9 @@ const CustomXLabel = (props: CustomYLabelProps) => {
 export default function PSDGraph(props : PSDGraphInterface) {
     const { psds, experimentalPsds, showLegend = true} = props;
     const {normalizedExperimentalFrequencies} = useInputBuildingContext()
+    const {wasAnalyticalRun, wasExperimentalRun} = useOutputBuildingContext()
     const allFrequencies = Array.from(new Set([...frequencies, ...normalizedExperimentalFrequencies])).sort((a,b)=>a-b)
-
+    
     const graph_data: graph_point[] = []
     for (let index = 0; index < allFrequencies.length; index++) {
         if (allFrequencies[index] <= 0) continue; 
@@ -109,8 +111,8 @@ export default function PSDGraph(props : PSDGraphInterface) {
         yTicks.push(Math.pow(10, e));
     }
 
-    const ANALYTICAL_COLOR = "#EA580C";
-    const EXPERIMENTAL_COLOR = "#0ea5e9";
+    const ANALYTICAL_COLOR = "#ef4444";
+    const EXPERIMENTAL_COLOR = "#3b82f6";
 
     return (
         <div className="w-full flex flex-col items-center">
@@ -147,8 +149,8 @@ export default function PSDGraph(props : PSDGraphInterface) {
                             />
                             <Tooltip
                                 contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', borderRadius: '8px' }}
-                                formatter={(value, name)=> [
-                                    <span className="font-mono font-bold" style={{ color: name === "Analytical" ? ANALYTICAL_COLOR : EXPERIMENTAL_COLOR }}>
+                                formatter={(value: any, name: any)=> [
+                                    <span key={name} className="font-mono font-bold" style={{ color: name === "Analytical" ? ANALYTICAL_COLOR : EXPERIMENTAL_COLOR }}>
                                             {typeof value === 'number' ? value.toExponential(2) : value}
                                         </span>,
                                     name === "Analytical"? `${props.graphType} PSD (Analytical)`
@@ -159,8 +161,9 @@ export default function PSDGraph(props : PSDGraphInterface) {
                                             Frequency: {Number(label).toExponential(2)}
                                         </span>
                                 )}
-                            />                            {showLegend && <Legend verticalAlign="top" height={36} iconType="plainline" />}
-                            {/* {psds.length > 0  && ( */}
+                            />                            
+                            {showLegend && <Legend verticalAlign="top" height={36} iconType="plainline" />}
+                            {wasAnalyticalRun && (
                                 <Line 
                                     name="Analytical" 
                                     type="monotone" 
@@ -171,8 +174,8 @@ export default function PSDGraph(props : PSDGraphInterface) {
                                     strokeWidth={1.5} 
                                     legendType="line"
                                 />
-                            {/* )} */}
-                            {experimentalPsds.length > 0 && (
+                            )}
+                            {wasExperimentalRun && (
                                 <Line 
                                     name="Experimental" 
                                     type="monotone" 
@@ -181,6 +184,7 @@ export default function PSDGraph(props : PSDGraphInterface) {
                                     connectNulls={true} 
                                     stroke={EXPERIMENTAL_COLOR} 
                                     strokeWidth={1.5} 
+                                    legendType="line"
                                 />
                             )}
                         </LineChart>

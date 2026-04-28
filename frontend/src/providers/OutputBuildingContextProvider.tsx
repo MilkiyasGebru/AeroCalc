@@ -48,6 +48,7 @@ interface OutputBuildingContextInterface {
     handleAnalyticalCalculation : () => void;
     handleExperimentalCalculation : (Mx: number[], My: number[], Mz: number[]) => void;
     clearExperimentalResults: () => void;
+    clearAnalyticalResults: () => void;
     exportResults: () => void;
 }
 
@@ -79,6 +80,16 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
     const [wasAnalyticalRun, setWasAnalyticalRun] = useState(false);
     const [wasExperimentalRun, setWasExperimentalRun] = useState(false);
 
+    const clearAnalyticalResults = useCallback(() => {
+        setAr(null);
+        setVr(null);
+        setAccelartionYDirection(null);
+        setAcrossPsds([]);
+        setTorsionPsds([]);
+        setAlongPsds([]);
+        setWasAnalyticalRun(false);
+    }, []);
+
     const clearExperimentalResults = useCallback(() => {
         setExperimentalAr(null);
         setExperimentalVr(null);
@@ -86,7 +97,6 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         setExperimentalAcrossPsds([]);
         setExperimentalTorsionPsds([]);
         setExperimentalAlongPsds([]);
-        setAlongPsds([]);
         setNormalizedExperimentalFrequencies([]);
         setWasExperimentalRun(false);
     }, [setNormalizedExperimentalFrequencies]);
@@ -283,7 +293,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
             experimentalAccelartionYDirection, setExperimentalAccelartionYDirection,
             wasAnalyticalRun, wasExperimentalRun,
             setExperimentalTorsionPsds,setExperimentalAcrossPsds,setExperimentalAr,setExperimentalVr, handleAnalyticalCalculation,handleExperimentalCalculation,
-            clearExperimentalResults, exportResults
+            clearExperimentalResults, clearAnalyticalResults, exportResults
         }}>
             {children}
         </OutputBuildingContext.Provider>
