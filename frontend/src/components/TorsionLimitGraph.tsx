@@ -58,7 +58,7 @@ export default function TorsionLimitGraph({ points = [] }: TorsionLimitGraphProp
                 <Legend verticalAlign="top" height={36} wrapperStyle={{ fontSize: '12px' }}/>
 
                 <Line
-                    name="Office Limit"
+                    name="Office limit"
                     type="monotone"
                     dataKey="office"
                     stroke="var(--foreground)"
@@ -68,7 +68,7 @@ export default function TorsionLimitGraph({ points = [] }: TorsionLimitGraphProp
                 />
 
                 <Line
-                    name="Residence Limit"
+                    name="Residence limit"
                     type="monotone"
                     dataKey="residence"
                     stroke="var(--foreground)"
