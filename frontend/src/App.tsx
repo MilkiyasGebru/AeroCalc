@@ -9,16 +9,29 @@ import { Play, Sun, Moon } from "lucide-react";
 import { useOutputBuildingContext } from "@/contexts/useOutputBuildingContext";
 import { useInputBuildingContext } from "@/contexts/useInputBuildingContext";
 import { useTheme } from "@/contexts/ThemeContext";
+import { cn } from "@/lib/utils";
 
 function App() {
     const { 
         handleAnalyticalCalculation, handleExperimentalCalculation, 
         clearExperimentalResults, clearAnalyticalResults, exportResults 
     } = useOutputBuildingContext();
-    const { mxData, myData, mzData, isAnalyticalEnabled } = useInputBuildingContext();
+    const { 
+        mxData, myData, mzData, isAnalyticalEnabled,
+        width, height, depth, meanSpeed, buildingDensity, totalFloors, damping,
+        Talong, Tacross, Ttorsion
+    } = useInputBuildingContext();
     const { theme, toggleTheme } = useTheme();
 
+    const isInputValid = 
+        width != null && height != null && depth != null && 
+        meanSpeed != null && buildingDensity != null && 
+        totalFloors != null && damping != null &&
+        Talong != null && Tacross != null && Ttorsion != null;
+
     const runAnalysis = () => {
+        if (!isInputValid) return;
+
         // Handle Analytical
         if (isAnalyticalEnabled) {
             handleAnalyticalCalculation();
@@ -64,7 +77,13 @@ function App() {
                       </Button>
                       <Button 
                           onClick={runAnalysis} 
-                          className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 h-12 text-lg font-bold shadow-lg shadow-emerald-200 dark:shadow-emerald-900/20 transition-all active:scale-95 shrink-0"
+                          disabled={!isInputValid}
+                          className={cn(
+                            "px-8 h-12 text-lg font-bold shadow-lg transition-all active:scale-95 shrink-0",
+                            isInputValid 
+                                ? "bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-200 dark:shadow-emerald-900/20" 
+                                : "bg-muted text-muted-foreground cursor-not-allowed opacity-50"
+                          )}
                       >
                           <Play className="mr-2 h-5 w-5 fill-current" />
                           Run Analysis
