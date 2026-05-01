@@ -26,6 +26,9 @@ interface OutputBuildingContextInterface {
     ar: number | null;
     vr: number | null;
     accelartionYDirection: number | null;
+    alongPeakFactor: number | null;
+    acrossPeakFactor: number | null;
+    torsionPeakFactor: number | null;
     experimentalTorsionPsds: number[];
     experimentalAcrossPsds: number[];
     experimentalAlongPsds: number[];
@@ -68,12 +71,16 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
     const [alongPsds, setAlongPsds] = useState<number[]>([]);
     const [ar, setAr] = useState<number | null>(null)
     const [vr, setVr] = useState<number | null>(null)
+    const [accelartionYDirection, setAccelartionYDirection] = useState<number | null>(null)
+
+    const [alongPeakFactor, setAlongPeakFactor] = useState<number | null>(null);
+    const [acrossPeakFactor, setAcrossPeakFactor] = useState<number | null>(null);
+    const [torsionPeakFactor, setTorsionPeakFactor] = useState<number | null>(null);
 
     const [experimentalTorsionPsds, setExperimentalTorsionPsds] = useState<number[]>([]);
     const [experimentalAcrossPsds, setExperimentalAcrossPsds] = useState<number[]>([]);
     const [experimentalAr, setExperimentalAr] = useState<number | null>(null)
     const [experimentalVr, setExperimentalVr] = useState<number | null>(null)
-    const [accelartionYDirection, setAccelartionYDirection] = useState<number | null>(null)
     const [experimentalAccelartionYDirection, setExperimentalAccelartionYDirection] = useState<number | null>(null)
     const [experimentalAlongPsds, setExperimentalAlongPsds] = useState<number[]>([])
 
@@ -84,6 +91,9 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         setAr(null);
         setVr(null);
         setAccelartionYDirection(null);
+        setAlongPeakFactor(null);
+        setAcrossPeakFactor(null);
+        setTorsionPeakFactor(null);
         setAcrossPsds([]);
         setTorsionPsds([]);
         setAlongPsds([]);
@@ -121,6 +131,9 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
                     acrossWindAcceleration_milliG: ar,
                     torsionVelocity_milliRadS: vr,
                     alongWindAcceleration_milliG: accelartionYDirection,
+                    alongPeakFactor,
+                    acrossPeakFactor,
+                    torsionPeakFactor,
                     spectra: { acrossPsds, torsionPsds }
                 } : "Disabled",
                 experimental: (mxData.length > 0) ? {
@@ -145,7 +158,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         width, height, depth, totalFloors, buildingDensity, damping, Talong, Tacross, Ttorsion,
         terrain, meanSpeed, userMeanSpeed, experimentalMeanSpeed, experimentalFrequency,
         isAnalyticalEnabled, ar, vr, accelartionYDirection, experimentalAr, experimentalVr, 
-        experimentalAccelartionYDirection, mxData
+        experimentalAccelartionYDirection, mxData, alongPeakFactor, acrossPeakFactor, torsionPeakFactor
     ]);
 
     const handleAnalyticalCalculation = useCallback(()=>{
@@ -154,6 +167,9 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
             setAr(null);
             setVr(null);
             setAccelartionYDirection(null);
+            setAlongPeakFactor(null);
+            setAcrossPeakFactor(null);
+            setTorsionPeakFactor(null);
             setAcrossPsds([]);
             setTorsionPsds([]);
             return;
@@ -172,7 +188,25 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
             setAr(y)
             setAcrossPsds(across_psds)
             setTorsionPsds(torsion_psds)
-            setAlongPsds([]) // Add missing state update
+            setAlongPsds([]) 
+
+            // Peak Factor Calculations
+            const fAlong = 1/Talong;
+            const fAcross = 1/Tacross;
+
+            // Across and Torsion Peak Factor: max(PF(w, across_f, along_f), PF(d, along_f, across_f))
+            import("@/hooks/useCalculateBuildingResponse.ts").then(({calculatePeakFactor}) => {
+                const pfAcross1 = calculatePeakFactor(height, width, fAcross, fAlong, speed, damping);
+                const pfAcross2 = calculatePeakFactor(height, depth, fAlong, fAcross, speed, damping);
+                const pfAcrossTorsion = Math.max(pfAcross1, pfAcross2);
+                
+                setAcrossPeakFactor(pfAcrossTorsion);
+                setTorsionPeakFactor(pfAcrossTorsion);
+
+                // Along Peak Factor: PF(d, along_f, across_f)
+                const pfAlong = calculatePeakFactor(height, depth, fAlong, fAcross, speed, damping);
+                setAlongPeakFactor(pfAlong);
+            });
         }
     }, [width, depth, height, meanSpeed, totalFloors, damping, terrain, userMeanSpeed, isAnalyticalEnabled, Talong, Ttorsion, Tacross, buildingDensity])
 
@@ -287,6 +321,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
     return (
         <OutputBuildingContext.Provider value={{
             torsionPsds, acrossPsds, alongPsds, ar,vr, setTorsionPsds, setAcrossPsds, setAlongPsds, setAr, setVr,
+            alongPeakFactor, acrossPeakFactor, torsionPeakFactor,
             experimentalTorsionPsds,experimentalAcrossPsds,experimentalAr,experimentalVr,
             accelartionYDirection, setAccelartionYDirection,
             experimentalAlongPsds, setExperimentalAlongPsds,

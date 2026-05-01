@@ -9,13 +9,14 @@ interface ResponseCardProps {
     unit: string;
     analytical: number | null;
     experimental: number | null;
+    peakFactor: number | null;
     icon: React.ReactNode;
     colorClass: string;
     isAnalyticalEnabled: boolean;
     isExperimentalEnabled: boolean;
 }
 
-function ResponseCard({ title, unit, analytical, experimental, icon, colorClass, isAnalyticalEnabled, isExperimentalEnabled }: ResponseCardProps) {
+function ResponseCard({ title, unit, analytical, experimental, peakFactor, icon, colorClass, isAnalyticalEnabled, isExperimentalEnabled }: ResponseCardProps) {
     const showAnalytical = isAnalyticalEnabled && analytical !== null;
     const showExperimental = isExperimentalEnabled && experimental !== null;
 
@@ -36,6 +37,14 @@ function ResponseCard({ title, unit, analytical, experimental, icon, colorClass,
                                 <span className={cn("text-2xl font-bold", colorClass)}>{analytical?.toFixed(2) ?? "--"}</span>
                                 <span className="text-[10px] text-muted-foreground">{unit}</span>
                             </div>
+                            {peakFactor && (
+                                <div className="mt-1 pt-1 border-t border-dashed border-border/50">
+                                    <div className="flex justify-between text-[10px]">
+                                        <span className="text-muted-foreground italic">Peak Value:</span>
+                                        <span className="font-bold">{(analytical * peakFactor).toFixed(2)}</span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     )}
                     {showExperimental && (
@@ -45,9 +54,25 @@ function ResponseCard({ title, unit, analytical, experimental, icon, colorClass,
                                 <span className="text-2xl font-bold text-sky-600">{experimental?.toFixed(2) ?? "--"}</span>
                                 <span className="text-[10px] text-muted-foreground">{unit}</span>
                             </div>
+                            {peakFactor && (
+                                <div className="mt-1 pt-1 border-t border-dashed border-border/50">
+                                    <div className="flex justify-between text-[10px]">
+                                        <span className="text-muted-foreground italic">Peak Value:</span>
+                                        <span className="font-bold">{(experimental * peakFactor).toFixed(2)}</span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
+                
+                {peakFactor && (
+                    <div className="mt-3 flex justify-center">
+                        <Badge variant="secondary" className="text-[10px] font-bold px-3 py-0.5">
+                            Peak Factor: {peakFactor.toFixed(3)}
+                        </Badge>
+                    </div>
+                )}
                 
                 {showAnalytical && showExperimental && (
                     <div className="mt-4 pt-3 border-t border-border flex items-center justify-between">
@@ -69,7 +94,8 @@ export default function ResultsCard() {
     const { 
         ar, vr, experimentalAr, experimentalVr, 
         accelartionYDirection, experimentalAccelartionYDirection,
-        wasAnalyticalRun, wasExperimentalRun
+        wasAnalyticalRun, wasExperimentalRun,
+        alongPeakFactor, acrossPeakFactor, torsionPeakFactor
     } = useOutputBuildingContext();
 
     return (
@@ -80,6 +106,7 @@ export default function ResultsCard() {
                     unit="milli-g" 
                     analytical={accelartionYDirection} 
                     experimental={experimentalAccelartionYDirection} 
+                    peakFactor={alongPeakFactor}
                     icon={<ArrowRight className="h-4 w-4" />}
                     colorClass="text-[#854D0E]"
                     isAnalyticalEnabled={wasAnalyticalRun}
@@ -90,6 +117,7 @@ export default function ResultsCard() {
                     unit="milli-g" 
                     analytical={ar} 
                     experimental={experimentalAr} 
+                    peakFactor={acrossPeakFactor}
                     icon={<Wind className="h-4 w-4" />}
                     colorClass="text-[#EA580C]"
                     isAnalyticalEnabled={wasAnalyticalRun}
@@ -100,6 +128,7 @@ export default function ResultsCard() {
                     unit="milli-rad/s" 
                     analytical={vr} 
                     experimental={experimentalVr} 
+                    peakFactor={torsionPeakFactor}
                     icon={<RotateCw className="h-4 w-4" />}
                     colorClass="text-[#CA8A04]"
                     isAnalyticalEnabled={wasAnalyticalRun}
