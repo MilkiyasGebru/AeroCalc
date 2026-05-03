@@ -28,37 +28,45 @@ function ResponseCard({ title, unit, analytical, experimental, peakFactor, icon,
                 <CardTitle className="text-sm font-bold tracking-tight">{title}</CardTitle>
                 <div className={cn(colorClass)}>{icon}</div>
             </CardHeader>
-            <CardContent className="pt-4">
+            <CardContent className="pt-4 space-y-4">
                 <div className={cn("grid gap-4", showAnalytical && showExperimental ? "grid-cols-2" : "grid-cols-1")}>
                     {showAnalytical && (
-                        <div className="space-y-1">
-                            <p className="text-[10px] text-muted-foreground font-bold">Analytical</p>
-                            <div className="flex items-baseline gap-1">
-                                <span className={cn("text-2xl font-bold", colorClass)}>{analytical?.toFixed(2) ?? "--"}</span>
-                                <span className="text-[10px] text-muted-foreground">{unit}</span>
+                        <div className="space-y-3">
+                            <div>
+                                <p className="text-[10px] text-muted-foreground font-bold">Analytical (RMS)</p>
+                                <div className="flex items-baseline gap-1">
+                                    <span className={cn("text-2xl font-bold", colorClass)}>{analytical?.toFixed(2) ?? "--"}</span>
+                                    <span className="text-[10px] text-muted-foreground">{unit}</span>
+                                </div>
                             </div>
+                            
                             {peakFactor && (
-                                <div className="mt-1 pt-1 border-t border-dashed border-border/50">
-                                    <div className="flex justify-between text-[10px]">
-                                        <span className="text-muted-foreground italic">Peak Value:</span>
-                                        <span className="font-bold">{(analytical * peakFactor).toFixed(2)}</span>
+                                <div className="pt-2 border-t border-dashed border-border/50">
+                                    <p className="text-[10px] text-muted-foreground font-bold">Analytical (Peak)</p>
+                                    <div className="flex items-baseline gap-1">
+                                        <span className={cn("text-2xl font-bold", colorClass)}>{(analytical * peakFactor).toFixed(2)}</span>
+                                        <span className="text-[10px] text-muted-foreground">{unit}</span>
                                     </div>
                                 </div>
                             )}
                         </div>
                     )}
                     {showExperimental && (
-                        <div className={cn("space-y-1", showAnalytical && "border-l border-border pl-4")}>
-                            <p className="text-[10px] text-muted-foreground font-bold">Experimental</p>
-                            <div className="flex items-baseline gap-1">
-                                <span className="text-2xl font-bold text-sky-600">{experimental?.toFixed(2) ?? "--"}</span>
-                                <span className="text-[10px] text-muted-foreground">{unit}</span>
+                        <div className={cn("space-y-3", showAnalytical && "border-l border-border pl-4")}>
+                            <div>
+                                <p className="text-[10px] text-muted-foreground font-bold">Experimental (RMS)</p>
+                                <div className="flex items-baseline gap-1">
+                                    <span className="text-2xl font-bold text-sky-600">{experimental?.toFixed(2) ?? "--"}</span>
+                                    <span className="text-[10px] text-muted-foreground">{unit}</span>
+                                </div>
                             </div>
+
                             {peakFactor && (
-                                <div className="mt-1 pt-1 border-t border-dashed border-border/50">
-                                    <div className="flex justify-between text-[10px]">
-                                        <span className="text-muted-foreground italic">Peak Value:</span>
-                                        <span className="font-bold">{(experimental * peakFactor).toFixed(2)}</span>
+                                <div className="pt-2 border-t border-dashed border-border/50">
+                                    <p className="text-[10px] text-muted-foreground font-bold">Experimental (Peak)</p>
+                                    <div className="flex items-baseline gap-1">
+                                        <span className="text-2xl font-bold text-sky-600">{(experimental * peakFactor).toFixed(2)}</span>
+                                        <span className="text-[10px] text-muted-foreground">{unit}</span>
                                     </div>
                                 </div>
                             )}
@@ -67,17 +75,17 @@ function ResponseCard({ title, unit, analytical, experimental, peakFactor, icon,
                 </div>
                 
                 {peakFactor && (
-                    <div className="mt-3 flex justify-center">
-                        <Badge variant="secondary" className="text-[10px] font-bold px-3 py-0.5">
+                    <div className="pt-2 border-t border-border flex justify-center">
+                        <Badge variant="secondary" className="text-[10px] font-bold px-4 py-1">
                             Peak Factor: {peakFactor.toFixed(3)}
                         </Badge>
                     </div>
                 )}
                 
                 {showAnalytical && showExperimental && (
-                    <div className="mt-4 pt-3 border-t border-border flex items-center justify-between">
+                    <div className="pt-3 border-t border-border flex items-center justify-between">
                         <Badge variant="outline" className="text-[10px] font-mono">
-                            Diff: {Math.abs(((analytical - experimental) / analytical) * 100).toFixed(1)}%
+                            Diff (RMS): {Math.abs(((analytical - experimental) / analytical) * 100).toFixed(1)}%
                         </Badge>
                         <div className="flex gap-1">
                             <div className={cn("h-1.5 w-1.5 rounded-full", colorClass.replace('text-', 'bg-'))}></div>

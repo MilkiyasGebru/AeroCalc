@@ -23,7 +23,8 @@ export default function OutputTabs() {
         experimentalAcrossPsds, experimentalTorsionPsds, experimentalAlongPsds,
         ar, experimentalAr, vr, experimentalVr, 
         accelartionYDirection, experimentalAccelartionYDirection,
-        wasAnalyticalRun, wasExperimentalRun
+        wasAnalyticalRun, wasExperimentalRun,
+        alongPeakFactor, acrossPeakFactor, torsionPeakFactor
     } = useOutputBuildingContext();
 
     const { 
@@ -155,12 +156,12 @@ export default function OutputTabs() {
                                     <AccelartionLimitGraph 
                                         points={[
                                             ...(wasAnalyticalRun ? [
-                                                { frequency: Talong ? 1/Talong : 0, acceleration: accelartionYDirection ?? 0, label: "Analytical Along", color: "#ef4444", shape: "circle" as const },
-                                                { frequency: Tacross ? 1/Tacross : 0, acceleration: ar ?? 0, label: "Analytical Across", color: "#ef4444", shape: "diamond" as const }
+                                                { frequency: Talong ? 1/Talong : 0, acceleration: (accelartionYDirection && alongPeakFactor) ? accelartionYDirection * alongPeakFactor : (accelartionYDirection ?? 0), label: "Analytical Along", color: "#ef4444", shape: "circle" as const },
+                                                { frequency: Tacross ? 1/Tacross : 0, acceleration: (ar && acrossPeakFactor) ? ar * acrossPeakFactor : (ar ?? 0), label: "Analytical Across", color: "#ef4444", shape: "diamond" as const }
                                             ] : []),
                                             ...(wasExperimentalRun ? [
-                                                { frequency: Talong ? 1/Talong : 0, acceleration: experimentalAccelartionYDirection ?? 0, label: "Exp. Along", color: "#3b82f6", shape: "circle" as const },
-                                                { frequency: Tacross ? 1/Tacross : 0, acceleration: experimentalAr ?? 0, label: "Exp. Across", color: "#3b82f6", shape: "diamond" as const }
+                                                { frequency: Talong ? 1/Talong : 0, acceleration: (experimentalAccelartionYDirection && alongPeakFactor) ? experimentalAccelartionYDirection * alongPeakFactor : (experimentalAccelartionYDirection ?? 0), label: "Exp. Along", color: "#3b82f6", shape: "circle" as const },
+                                                { frequency: Tacross ? 1/Tacross : 0, acceleration: (experimentalAr && acrossPeakFactor) ? experimentalAr * acrossPeakFactor : (experimentalAr ?? 0), label: "Exp. Across", color: "#3b82f6", shape: "diamond" as const }
                                             ] : [])
                                         ]} 
                                     />
@@ -175,10 +176,10 @@ export default function OutputTabs() {
                                     <TorsionLimitGraph 
                                         points={[
                                             ...(wasAnalyticalRun ? [
-                                                { frequency: Ttorsion ? 1/Ttorsion : 0, velocity: vr ?? 0, label: "Analytical Torsion", color: "#ef4444", shape: "circle" as const }
+                                                { frequency: Ttorsion ? 1/Ttorsion : 0, velocity: (vr && torsionPeakFactor) ? vr * torsionPeakFactor : (vr ?? 0), label: "Analytical Torsion", color: "#ef4444", shape: "circle" as const }
                                             ] : []),
                                             ...(wasExperimentalRun ? [
-                                                { frequency: Ttorsion ? 1/Ttorsion : 0, velocity: experimentalVr ?? 0, label: "Exp. Torsion", color: "#3b82f6", shape: "circle" as const }
+                                                { frequency: Ttorsion ? 1/Ttorsion : 0, velocity: (experimentalVr && torsionPeakFactor) ? experimentalVr * torsionPeakFactor : (experimentalVr ?? 0), label: "Exp. Torsion", color: "#3b82f6", shape: "circle" as const }
                                             ] : [])
                                         ]} 
                                     />

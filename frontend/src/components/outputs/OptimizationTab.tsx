@@ -12,6 +12,7 @@ import { frequencies } from "../../../CONSTANTS";
 import {
     CalculateAcrossPsdResponse, CalculateFD,
     CalculateTorsionPsdResponse, CalculateAlong,
+    calculatePeakFactor
 } from "@/hooks/useCalculateBuildingResponse";
 
 interface OptimizedResultCardProps {
@@ -19,45 +20,82 @@ interface OptimizedResultCardProps {
     unit: string;
     analytical: number | null;
     experimental: number | null;
+    analyticalPeakFactor?: number | null;
+    experimentalPeakFactor?: number | null;
     icon: React.ReactNode;
     colorClass: string;
     isAnalyticalEnabled: boolean;
     isExperimentalEnabled: boolean;
 }
 
-function OptimizedResultCard({ title, unit, analytical, experimental, icon, colorClass, isAnalyticalEnabled, isExperimentalEnabled }: OptimizedResultCardProps) {
+function OptimizedResultCard({ title, unit, analytical, experimental, analyticalPeakFactor, experimentalPeakFactor, icon, colorClass, isAnalyticalEnabled, isExperimentalEnabled }: OptimizedResultCardProps) {
     const showAnalytical = isAnalyticalEnabled && analytical !== null;
     const showExperimental = isExperimentalEnabled && experimental !== null;
 
     if (!showAnalytical && !showExperimental) return null;
-    console.log("Optimization tab", analytical)
+    
+    // Use either analytical or experimental peak factor (they are usually the same in this logic)
+    const peakFactor = analyticalPeakFactor || experimentalPeakFactor;
+
     return (
         <Card className="overflow-hidden border-border bg-card hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-muted/30">
                 <CardTitle className="text-sm font-bold tracking-tight">{title}</CardTitle>
                 <div className={cn(colorClass)}>{icon}</div>
             </CardHeader>
-            <CardContent className="pt-4">
+            <CardContent className="pt-4 space-y-4">
                 <div className={cn("grid gap-4", showAnalytical && showExperimental ? "grid-cols-2" : "grid-cols-1")}>
                     {showAnalytical && (
-                        <div className="space-y-1">
-                            <p className="text-[10px] text-muted-foreground font-bold">Analytical</p>
-                            <div className="flex items-baseline gap-1">
-                                <span className={cn("text-2xl font-bold", colorClass)}>{analytical?.toFixed(2) ?? "--"}</span>
-                                <span className="text-[10px] text-muted-foreground">{unit}</span>
+                        <div className="space-y-3">
+                            <div>
+                                <p className="text-[10px] text-muted-foreground font-bold">Analytical (RMS)</p>
+                                <div className="flex items-baseline gap-1">
+                                    <span className={cn("text-2xl font-bold", colorClass)}>{analytical?.toFixed(2) ?? "--"}</span>
+                                    <span className="text-[10px] text-muted-foreground">{unit}</span>
+                                </div>
                             </div>
+                            
+                            {peakFactor && (
+                                <div className="pt-2 border-t border-dashed border-border/50">
+                                    <p className="text-[10px] text-muted-foreground font-bold">Analytical (PEAK)</p>
+                                    <div className="flex items-baseline gap-1">
+                                        <span className={cn("text-2xl font-bold", colorClass)}>{(analytical * peakFactor).toFixed(2)}</span>
+                                        <span className="text-[10px] text-muted-foreground">{unit}</span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     )}
                     {showExperimental && (
-                        <div className={cn("space-y-1", showAnalytical && "border-l border-border pl-4")}>
-                            <p className="text-[10px] text-muted-foreground font-bold">Experimental</p>
-                            <div className="flex items-baseline gap-1">
-                                <span className="text-2xl font-bold text-sky-600">{experimental?.toFixed(2) ?? "--"}</span>
-                                <span className="text-[10px] text-muted-foreground">{unit}</span>
+                        <div className={cn("space-y-3", showAnalytical && "border-l border-border pl-4")}>
+                            <div>
+                                <p className="text-[10px] text-muted-foreground font-bold">Experimental (RMS)</p>
+                                <div className="flex items-baseline gap-1">
+                                    <span className="text-2xl font-bold text-sky-600">{experimental?.toFixed(2) ?? "--"}</span>
+                                    <span className="text-[10px] text-muted-foreground">{unit}</span>
+                                </div>
                             </div>
+
+                            {peakFactor && (
+                                <div className="pt-2 border-t border-dashed border-border/50">
+                                    <p className="text-[10px] text-muted-foreground font-bold">Experimental (PEAK)</p>
+                                    <div className="flex items-baseline gap-1">
+                                        <span className="text-2xl font-bold text-sky-600">{(experimental * peakFactor).toFixed(2)}</span>
+                                        <span className="text-[10px] text-muted-foreground">{unit}</span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
+
+                {peakFactor && (
+                    <div className="pt-2 border-t border-border flex justify-center">
+                        <Badge variant="secondary" className="text-[10px] font-bold px-4 py-1">
+                            Peak Factor: {peakFactor.toFixed(3)}
+                        </Badge>
+                    </div>
+                )}
             </CardContent>
         </Card>
     );
@@ -127,7 +165,19 @@ export default function OptimizationTab() {
                     expAlongAcc = exAL;
                 }
             }
-            console.log("Experiment Values",expAlongAcc,expAcrossAcc,expTorsionVel)
+
+            // Peak Factor Calculations based on the specified logic
+            // const { calculatePeakFactor } = require("@/hooks/useCalculateBuildingResponse.ts");
+            const fAlong = 1/currentTalong;
+            const fAcross = 1/currentTacross;
+            
+            // Across and Torsion Peak Factor: max(PF(w, across_f, along_f), PF(d, along_f, across_f))
+            const pfAcross1 = calculatePeakFactor(height, width, fAcross, fAlong, speed, currentDamping);
+            const pfAcross2 = calculatePeakFactor(height, depth, fAlong, fAcross, speed, currentDamping);
+            const pfAcrossTorsion = Math.max(pfAcross1, pfAcross2);
+
+            // Along Peak Factor: PF(d, along_f, across_f)
+            const pfAlong = calculatePeakFactor(height, depth, fAlong, fAcross, speed, currentDamping);
 
             return {
                 analytical: {
@@ -136,7 +186,10 @@ export default function OptimizationTab() {
                     acrossFreq: 1 / currentTacross,
                     torsionFreq: 1 / currentTtorsion,
                     damping: currentDamping,
-                    density: currentDensity
+                    density: currentDensity,
+                    alongPeakFactor: pfAlong,
+                    acrossPeakFactor: pfAcrossTorsion,
+                    torsionPeakFactor: pfAcrossTorsion
                 },
                 experimental: {
                     alongAcc: expAlongAcc,
@@ -284,6 +337,8 @@ export default function OptimizationTab() {
                             unit="milli-g" 
                             analytical={optimizedResults?.analytical.alongAcc ?? null} 
                             experimental={optimizedResults?.experimental.alongAcc ?? null}
+                            analyticalPeakFactor={optimizedResults?.analytical.alongPeakFactor ?? null}
+                            // experimentalPeakFactor={optimizedResults?.experimental.alongPeakFactor ?? null}
                             icon={<ArrowRight className="h-4 w-4" />}
                             colorClass="text-[#854D0E]"
                             isAnalyticalEnabled={wasAnalyticalRun}
@@ -294,6 +349,8 @@ export default function OptimizationTab() {
                             unit="milli-g" 
                             analytical={optimizedResults?.analytical.acrossAcc ?? null} 
                             experimental={optimizedResults?.experimental.acrossAcc ?? null}
+                            analyticalPeakFactor={optimizedResults?.analytical.acrossPeakFactor ?? null}
+                            // experimentalPeakFactor={optimizedResults?.experimental.acrossPeakFactor ?? null}
                             icon={<Wind className="h-4 w-4" />}
                             colorClass="text-[#EA580C]"
                             isAnalyticalEnabled={wasAnalyticalRun}
@@ -304,6 +361,8 @@ export default function OptimizationTab() {
                             unit="milli-rad/s" 
                             analytical={optimizedResults?.analytical.torsionVel ?? null} 
                             experimental={optimizedResults?.experimental.torsionVel ?? null}
+                            analyticalPeakFactor={optimizedResults?.analytical.torsionPeakFactor ?? null}
+                            // experimentalPeakFactor={optimizedResults?.experimental.torsionPeakFactor ?? null}
                             icon={<RotateCw className="h-4 w-4" />}
                             colorClass="text-[#CA8A04]"
                             isAnalyticalEnabled={wasAnalyticalRun}
@@ -320,12 +379,12 @@ export default function OptimizationTab() {
                                 <AccelartionLimitGraph 
                                     points={[
                                         ...(showAnalytical ? [
-                                            { frequency: optimizedResults?.analytical.alongFreq ?? 0, acceleration: optimizedResults?.analytical.alongAcc ?? 0, label: "Analytical along", color: "#ef4444", shape: "circle" as const },
-                                            { frequency: optimizedResults?.analytical.acrossFreq ?? 0, acceleration: optimizedResults?.analytical.acrossAcc ?? 0, label: "Analytical across", color: "#ef4444", shape: "diamond" as const}
+                                            { frequency: optimizedResults?.analytical.alongFreq ?? 0, acceleration: (optimizedResults?.analytical.alongAcc && optimizedResults?.analytical.alongPeakFactor) ? optimizedResults.analytical.alongAcc * optimizedResults.analytical.alongPeakFactor : (optimizedResults?.analytical.alongAcc ?? 0), label: "Analytical along", color: "#ef4444", shape: "circle" as const },
+                                            { frequency: optimizedResults?.analytical.acrossFreq ?? 0, acceleration: (optimizedResults?.analytical.acrossAcc && optimizedResults?.analytical.acrossPeakFactor) ? optimizedResults.analytical.acrossAcc * optimizedResults.analytical.acrossPeakFactor : (optimizedResults?.analytical.acrossAcc ?? 0), label: "Analytical across", color: "#ef4444", shape: "diamond" as const}
                                         ] : []),
                                         ...(showExperimental ? [
-                                            { frequency: optimizedResults?.experimental.alongFreq ?? 0, acceleration: optimizedResults?.experimental.alongAcc ?? 0, label: "Exp. along", color: "#3b82f6", shape: "circle" as const },
-                                            { frequency: optimizedResults?.experimental.acrossFreq ?? 0, acceleration: optimizedResults?.experimental.acrossAcc ?? 0, label: "Exp. across", color: "#3b82f6", shape: "diamond" as const }
+                                            { frequency: optimizedResults?.experimental.alongFreq ?? 0, acceleration: (optimizedResults?.experimental.alongAcc && optimizedResults?.experimental.alongPeakFactor) ? optimizedResults.experimental.alongAcc * optimizedResults.experimental.alongPeakFactor : (optimizedResults?.experimental.alongAcc ?? 0), label: "Exp. along", color: "#3b82f6", shape: "circle" as const },
+                                            { frequency: optimizedResults?.experimental.acrossFreq ?? 0, acceleration: (optimizedResults?.experimental.acrossAcc && optimizedResults?.experimental.acrossPeakFactor) ? optimizedResults.experimental.acrossAcc * optimizedResults.experimental.acrossPeakFactor : (optimizedResults?.experimental.acrossAcc ?? 0), label: "Exp. across", color: "#3b82f6", shape: "diamond" as const }
                                         ] : [])
                                     ]} 
                                 />
@@ -340,10 +399,10 @@ export default function OptimizationTab() {
                                 <TorsionLimitGraph 
                                     points={[
                                         ...(showAnalytical ? [
-                                            { frequency: optimizedResults?.analytical.torsionFreq ?? 0, velocity: optimizedResults?.analytical.torsionVel ?? 0, label: "Analytical torsion", color: "#ef4444", shape: "circle" as const }
+                                            { frequency: optimizedResults?.analytical.torsionFreq ?? 0, velocity: (optimizedResults?.analytical.torsionVel && optimizedResults?.analytical.torsionPeakFactor) ? optimizedResults.analytical.torsionVel * optimizedResults.analytical.torsionPeakFactor : (optimizedResults?.analytical.torsionVel ?? 0), label: "Analytical torsion", color: "#ef4444", shape: "circle" as const }
                                         ] : []),
                                         ...(showExperimental ? [
-                                            { frequency: optimizedResults?.experimental.torsionFreq ?? 0, velocity: optimizedResults?.experimental.torsionVel ?? 0, label: "Exp. Torsion", color: "#3b82f6", shape: "circle" as const }
+                                            { frequency: optimizedResults?.experimental.torsionFreq ?? 0, velocity: (optimizedResults?.experimental.torsionVel && optimizedResults?.experimental.torsionPeakFactor) ? optimizedResults.experimental.torsionVel * optimizedResults.experimental.torsionPeakFactor : (optimizedResults?.experimental.torsionVel ?? 0), label: "Exp. Torsion", color: "#3b82f6", shape: "circle" as const }
                                         ] : [])
                                     ]} 
                                 />
