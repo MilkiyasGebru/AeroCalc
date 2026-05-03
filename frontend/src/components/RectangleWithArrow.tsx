@@ -37,11 +37,11 @@ export const RectangleWithArrow: React.FC<RectangleWithArrowProps> = ({ width = 
         className="w-full max-w-[450px] h-auto"
       >
         <defs>
-          <pattern id="woodPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-            <rect width="20" height="20" className="fill-orange-50/50 dark:fill-orange-900/20" />
-            <path d="M0 10h20M10 0v20" className="stroke-orange-100 dark:stroke-orange-900/30" strokeWidth="1" />
-            <circle cx="10" cy="10" r="1.5" className="fill-orange-200 dark:fill-orange-800" opacity="0.3" />
-          </pattern>
+          {/*<pattern id="woodPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">*/}
+          {/*  <rect width="20" height="20" className="text-orange-100/30 dark:text-orange-900/20" />*/}
+          {/*  <path d="M0 10h20M10 0v20" className="stroke-orange-100 dark:stroke-orange-900/30" strokeWidth="1" />*/}
+          {/*  <circle cx="10" cy="10" r="1.5" className="fill-orange-200 dark:fill-orange-800" opacity="0.3" />*/}
+          {/*</pattern>*/}
           
           <marker
             id="techArrow"
