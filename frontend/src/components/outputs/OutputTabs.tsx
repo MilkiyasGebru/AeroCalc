@@ -176,10 +176,10 @@ export default function OutputTabs() {
                                     <TorsionLimitGraph 
                                         points={[
                                             ...(wasAnalyticalRun ? [
-                                                { frequency: Ttorsion ? 1/Ttorsion : 0, velocity: (vr && torsionPeakFactor) ? vr * torsionPeakFactor : (vr ?? 0), label: "Analytical Torsion", color: "#ef4444", shape: "circle" as const }
+                                                { frequency: Ttorsion ? 1/Ttorsion : 0, velocity: (vr && torsionPeakFactor) ? vr * torsionPeakFactor : (vr ?? 0), label: "Analytical torsion", color: "#ef4444", shape: "circle" as const }
                                             ] : []),
                                             ...(wasExperimentalRun ? [
-                                                { frequency: Ttorsion ? 1/Ttorsion : 0, velocity: (experimentalVr && torsionPeakFactor) ? experimentalVr * torsionPeakFactor : (experimentalVr ?? 0), label: "Exp. Torsion", color: "#3b82f6", shape: "circle" as const }
+                                                { frequency: Ttorsion ? 1/Ttorsion : 0, velocity: (experimentalVr && torsionPeakFactor) ? experimentalVr * torsionPeakFactor : (experimentalVr ?? 0), label: "Exp. torsion", color: "#3b82f6", shape: "circle" as const }
                                             ] : [])
                                         ]} 
                                     />
