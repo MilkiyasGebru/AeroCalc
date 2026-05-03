@@ -63,7 +63,8 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
     const {
         width, height, depth, meanSpeed, damping, totalFloors, terrain, Talong, Ttorsion, Tacross,
         experimentalMeanSpeed, experimentalFrequency, setNormalizedExperimentalFrequencies, 
-        buildingDensity, userMeanSpeed, isAnalyticalEnabled, mxData, selectedBuilding
+        buildingDensity, userMeanSpeed, isAnalyticalEnabled, mxData, selectedBuilding,
+        isManualPeakFactor, manualAlongPeakFactor, manualAcrossPeakFactor, manualTorsionPeakFactor
     } = useInputBuildingContext();
 
     const [torsionPsds, setTorsionPsds] = useState<number[]>([]);
@@ -73,9 +74,13 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
     const [vr, setVr] = useState<number | null>(null)
     const [accelartionYDirection, setAccelartionYDirection] = useState<number | null>(null)
 
-    const [alongPeakFactor, setAlongPeakFactor] = useState<number | null>(null);
-    const [acrossPeakFactor, setAcrossPeakFactor] = useState<number | null>(null);
-    const [torsionPeakFactor, setTorsionPeakFactor] = useState<number | null>(null);
+    const [calculatedAlongPeakFactor, setCalculatedAlongPeakFactor] = useState<number | null>(null);
+    const [calculatedAcrossPeakFactor, setCalculatedAcrossPeakFactor] = useState<number | null>(null);
+    const [calculatedTorsionPeakFactor, setCalculatedTorsionPeakFactor] = useState<number | null>(null);
+
+    const alongPeakFactor = isManualPeakFactor ? (manualAlongPeakFactor ?? calculatedAlongPeakFactor) : calculatedAlongPeakFactor;
+    const acrossPeakFactor = isManualPeakFactor ? (manualAcrossPeakFactor ?? calculatedAcrossPeakFactor) : calculatedAcrossPeakFactor;
+    const torsionPeakFactor = isManualPeakFactor ? (manualTorsionPeakFactor ?? calculatedTorsionPeakFactor) : calculatedTorsionPeakFactor;
 
     const [experimentalTorsionPsds, setExperimentalTorsionPsds] = useState<number[]>([]);
     const [experimentalAcrossPsds, setExperimentalAcrossPsds] = useState<number[]>([]);
@@ -91,9 +96,9 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         setAr(null);
         setVr(null);
         setAccelartionYDirection(null);
-        setAlongPeakFactor(null);
-        setAcrossPeakFactor(null);
-        setTorsionPeakFactor(null);
+        setCalculatedAlongPeakFactor(null);
+        setCalculatedAcrossPeakFactor(null);
+        setCalculatedTorsionPeakFactor(null);
         setAcrossPsds([]);
         setTorsionPsds([]);
         setAlongPsds([]);
@@ -167,9 +172,9 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
             setAr(null);
             setVr(null);
             setAccelartionYDirection(null);
-            setAlongPeakFactor(null);
-            setAcrossPeakFactor(null);
-            setTorsionPeakFactor(null);
+            setCalculatedAlongPeakFactor(null);
+            setCalculatedAcrossPeakFactor(null);
+            setCalculatedTorsionPeakFactor(null);
             setAcrossPsds([]);
             setTorsionPsds([]);
             return;
@@ -200,12 +205,12 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
                 const pfAcross2 = calculatePeakFactor(height, depth, fAlong, fAcross, speed, damping);
                 const pfAcrossTorsion = Math.max(pfAcross1, pfAcross2);
                 
-                setAcrossPeakFactor(pfAcrossTorsion);
-                setTorsionPeakFactor(pfAcrossTorsion);
+                setCalculatedAcrossPeakFactor(pfAcrossTorsion);
+                setCalculatedTorsionPeakFactor(pfAcrossTorsion);
 
                 // Along Peak Factor: PF(d, along_f, across_f)
                 const pfAlong = calculatePeakFactor(height, depth, fAlong, fAcross, speed, damping);
-                setAlongPeakFactor(pfAlong);
+                setCalculatedAlongPeakFactor(pfAlong);
             });
         }
     }, [width, depth, height, meanSpeed, totalFloors, damping, terrain, userMeanSpeed, isAnalyticalEnabled, Talong, Ttorsion, Tacross, buildingDensity])

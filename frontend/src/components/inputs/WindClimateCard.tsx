@@ -3,10 +3,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useInputBuildingContext } from "@/contexts/useInputBuildingContext";
+import { useOutputBuildingContext } from "@/contexts/useOutputBuildingContext";
 import { useEffect, useState } from "react";
 // import MeanSpeedGraph from "@/components/MeanSpeedGraph";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Separator } from "@/components/ui/separator";
 
 interface IMeanSpeedData {
   height: number;
@@ -14,7 +17,16 @@ interface IMeanSpeedData {
 }
 
 export default function WindClimateCard() {
-  const { height, meanSpeed, setMeanSpeed, terrain, setTerrain, userMeanSpeed, setUserMeanSpeed } = useInputBuildingContext();
+  const { 
+    height, meanSpeed, setMeanSpeed, terrain, setTerrain, userMeanSpeed, setUserMeanSpeed,
+    isManualPeakFactor, setIsManualPeakFactor,
+    manualAlongPeakFactor, setManualAlongPeakFactor,
+    manualAcrossPeakFactor, setManualAcrossPeakFactor,
+    manualTorsionPeakFactor, setManualTorsionPeakFactor
+  } = useInputBuildingContext();
+
+  const { alongPeakFactor, acrossPeakFactor, torsionPeakFactor } = useOutputBuildingContext();
+  
   const [_, setGraphData] = useState<IMeanSpeedData[]>([]);
 
   const coefficient = (height !== undefined && meanSpeed !== undefined)
@@ -96,6 +108,63 @@ export default function WindClimateCard() {
             onChange={(e) => setUserMeanSpeed(Number(parseFloat(e.target.value).toFixed(2)))}
             className="bg-background border-border"
           />
+        </div>
+
+        <Separator className="my-2" />
+
+        <div className="space-y-4 pt-2">
+          <div className="flex items-center space-x-2">
+            <Checkbox 
+              id="manualPeak" 
+              checked={isManualPeakFactor} 
+              onCheckedChange={(checked) => setIsManualPeakFactor(checked as boolean)}
+            />
+            <Label 
+              htmlFor="manualPeak" 
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+            >
+              Manual peak factors
+            </Label>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="alongPeak">Along-wind peak factor</Label>
+              <Input
+                id="alongPeak"
+                type="number"
+                step="0.01"
+                disabled={!isManualPeakFactor}
+                value={isManualPeakFactor ? (manualAlongPeakFactor ?? "") : (alongPeakFactor?.toFixed(2) ?? "Calculated after run")}
+                onChange={(e) => setManualAlongPeakFactor(parseFloat(e.target.value))}
+                className="bg-background border-border"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="acrossPeak">Across-wind peak factor</Label>
+              <Input
+                id="acrossPeak"
+                type="number"
+                step="0.01"
+                disabled={!isManualPeakFactor}
+                value={isManualPeakFactor ? (manualAcrossPeakFactor ?? "") : (acrossPeakFactor?.toFixed(2) ?? "Calculated after run")}
+                onChange={(e) => setManualAcrossPeakFactor(parseFloat(e.target.value))}
+                className="bg-background border-border"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="torsionPeak">Torsional peak factor</Label>
+              <Input
+                id="torsionPeak"
+                type="number"
+                step="0.01"
+                disabled={!isManualPeakFactor}
+                value={isManualPeakFactor ? (manualTorsionPeakFactor ?? "") : (torsionPeakFactor?.toFixed(2) ?? "Calculated after run")}
+                onChange={(e) => setManualTorsionPeakFactor(parseFloat(e.target.value))}
+                className="bg-background border-border"
+              />
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>
