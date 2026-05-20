@@ -286,6 +286,8 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
 
                 console.log("Experi Across PSDS is", experi_across_psds)
                 console.log("Frequencies is ", pwelch_frequencies)
+                console.log("Normalized is ", f_normalized)
+                console.log("Experiment Torsion PSD values is", psd)
                 setExperimentalAcrossPsds(experi_across_psds)
 
                 setNormalizedExperimentalFrequencies(f_normalized)
@@ -294,9 +296,9 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
                 const B = Math.max(width, depth);
                 const D = Math.min(width, depth);
 
-                const [x, _]: number[] = CalculateFD(B, height, D, speed, Ttorsion, totalFloors, damping, pwelch_frequencies, experi_across_psds, psd, buildingDensity)
-                const [__, y]: number[] = CalculateFD(B, height, D, speed, Tacross, totalFloors, damping, pwelch_frequencies, experi_across_psds, psd, buildingDensity)
-                const [___, z]: number[] = CalculateFD(B, height, D, speed, Talong, totalFloors, damping, pwelch_frequencies, along_psds, psd, buildingDensity)
+                const [x, _]: number[] = CalculateFD(B, height, D, speed, Ttorsion, totalFloors, damping, f_normalized, experi_across_psds, psd, buildingDensity)
+                const [__, y]: number[] = CalculateFD(B, height, D, speed, Tacross, totalFloors, damping, f_normalized, experi_across_psds, psd, buildingDensity)
+                const [___, z]: number[] = CalculateFD(B, height, D, speed, Talong, totalFloors, damping, f_normalized, along_psds, psd, buildingDensity)
 
                 setExperimentalAccelartionYDirection(z)
                 setExperimentalVr(x)
