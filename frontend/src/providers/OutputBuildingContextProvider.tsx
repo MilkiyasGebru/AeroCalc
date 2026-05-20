@@ -220,8 +220,8 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
         // const Mx : number[] = mxData;
         // const My : number[] = myData;
         // const Mz: number[] = mzData;
-        if (height != null && width != null && depth != null && totalFloors != null && damping != null && meanSpeed != null && Talong != null && Ttorsion != null && Tacross != null && buildingDensity != null) {
 
+        if (height != null && width != null && depth != null && totalFloors != null && damping != null && meanSpeed != null && Talong != null && Ttorsion != null && Tacross != null && buildingDensity != null) {
             if (window.pywebview?.api?.compute) {
                 // DESKTOP MODE: Call Python
                 console.log("Using Python for calculation...");
@@ -259,8 +259,8 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
                 setExperimentalAr(y)
             } else {
                 // WEB MODE: Fallback to Local JavaScript
-                const c = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
-                let speed : number =(userMeanSpeed != null && Number.isFinite(userMeanSpeed))? userMeanSpeed:meanSpeed*c**0.5
+                // const c = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
+                // let speed : number =(userMeanSpeed != null && Number.isFinite(userMeanSpeed))? userMeanSpeed:meanSpeed*c**0.5
                 
                 let experi_across_psds: number[] = calculate_experimental_psd_normalized(Mx, width, height, experimentalMeanSpeed, experimentalFrequency).psd
                 experi_across_psds = experi_across_psds.slice(1)
@@ -295,7 +295,14 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
                 // Use Math.max(width, depth) and Math.min(width, depth) for consistency with analytical
                 const B = Math.max(width, depth);
                 const D = Math.min(width, depth);
-
+                const c = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
+                let speed : number =(userMeanSpeed != null && Number.isFinite(userMeanSpeed))? userMeanSpeed:meanSpeed*c**0.5
+                console.log("width", B)
+                console.log("height", height)
+                console.log("Depth", D)
+                console.log("damping", damping)
+                console.log("Usermean Speed", userMeanSpeed)
+                console.log("Speed", speed)
                 const [x, _]: number[] = CalculateFD(B, height, D, speed, Ttorsion, totalFloors, damping, f_normalized, experi_across_psds, psd, buildingDensity)
                 const [__, y]: number[] = CalculateFD(B, height, D, speed, Tacross, totalFloors, damping, f_normalized, experi_across_psds, psd, buildingDensity)
                 const [___, z]: number[] = CalculateFD(B, height, D, speed, Talong, totalFloors, damping, f_normalized, along_psds, psd, buildingDensity)
@@ -323,7 +330,7 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
 
 
 
-    },[width, depth, height, meanSpeed, totalFloors, damping, buildingDensity, terrain,Talong, Tacross, Ttorsion,experimentalMeanSpeed,experimentalFrequency])
+    },[width, depth, height, meanSpeed, totalFloors, damping, buildingDensity, terrain,Talong, Tacross, Ttorsion,experimentalMeanSpeed,experimentalFrequency, userMeanSpeed])
 
     return (
         <OutputBuildingContext.Provider value={{
