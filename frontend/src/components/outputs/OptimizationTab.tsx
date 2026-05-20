@@ -144,7 +144,9 @@ export default function OptimizationTab() {
 
             let across_psds: number[] = CalculateAcrossPsdResponse(Math.max(width, depth), height, Math.min(width, depth), frequencies);
             let torsion_psds: number[] = CalculateTorsionPsdResponse(Math.max(width, depth), height, Math.min(width, depth), speed, frequencies);
-            
+            const f_normalized: number[] = pwelch_frequencies.map(f => {
+                return f*width/experimentalMeanSpeed
+            });
             // Analytical
             const alongAcc = CalculateAlong(Math.max(width, depth), height, Math.min(width, depth), speed, currentTalong, currentDamping, frequencies, currentDensity);
             const [torsionVel, _] = CalculateFD(Math.max(width, depth), height, Math.min(width, depth), speed, currentTtorsion, totalFloors, currentDamping, frequencies, across_psds, torsion_psds, currentDensity);
@@ -156,14 +158,14 @@ export default function OptimizationTab() {
             let expTorsionVel = null;
 
             if (experimentalAcrossPsds.length > 0 && experimentalTorsionPsds.length > 0) {
-                const [exVT, __] = CalculateFD(Math.max(width, depth), height, Math.min(width, depth), expCalcSpeed, currentTtorsion, totalFloors, currentDamping, pwelch_frequencies, experimentalAcrossPsds, experimentalTorsionPsds, currentDensity);
-                const [___, exAR_across] = CalculateFD(Math.max(width, depth), height, Math.min(width, depth), expCalcSpeed, currentTacross, totalFloors, currentDamping, pwelch_frequencies, experimentalAcrossPsds, experimentalTorsionPsds, currentDensity);
+                const [exVT, __] = CalculateFD(Math.max(width, depth), height, Math.min(width, depth), expCalcSpeed, currentTtorsion, totalFloors, currentDamping, f_normalized, experimentalAcrossPsds, experimentalTorsionPsds, currentDensity);
+                const [___, exAR_across] = CalculateFD(Math.max(width, depth), height, Math.min(width, depth), expCalcSpeed, currentTacross, totalFloors, currentDamping, f_normalized, experimentalAcrossPsds, experimentalTorsionPsds, currentDensity);
                 
                 expAcrossAcc = exAR_across;
                 expTorsionVel = exVT;
 
                 if (experimentalAlongPsds.length > 0) {
-                    const [____, exAL] = CalculateFD(Math.max(width, depth), height, Math.min(width, depth), expCalcSpeed, currentTalong, totalFloors, currentDamping, pwelch_frequencies, experimentalAlongPsds, experimentalTorsionPsds, currentDensity);
+                    const [____, exAL] = CalculateFD(Math.max(width, depth), height, Math.min(width, depth), expCalcSpeed, currentTalong, totalFloors, currentDamping, f_normalized, experimentalAlongPsds, experimentalTorsionPsds, currentDensity);
                     expAlongAcc = exAL;
                 }
             }
