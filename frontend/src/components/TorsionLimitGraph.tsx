@@ -40,7 +40,8 @@ export default function TorsionLimitGraph({ points = [] }: TorsionLimitGraphProp
                 />
                 <YAxis
                     stroke="var(--muted-foreground)"
-                    domain={[0, 6]}
+                    domain={[0, 10]}
+                    allowDataOverflow={true}
                     label={{
                         value: 'Torsional Velocity (milli-rad/s)',
                         angle: -90,
