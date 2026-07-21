@@ -503,3 +503,28 @@ export function CalculateAlong(width: number, height: number, depth: number, mea
     return Math.sqrt(area) * 1000/9.81
 
 }
+
+export function calculatePeakFactor(height: number, width: number, across_frequency: number, along_frequency: number, speed_roof: number, damping_ratio: number): number {
+    const min_freq = Math.min(across_frequency, along_frequency);
+    const size_reduction_factor = Math.PI / 3 / (1 + 8 * min_freq * height / 3 / speed_roof) / (1 + 10 * min_freq * width / speed_roof);
+
+    // Now lets calculate the wave_number
+    const wave_number = 1220 * min_freq / speed_roof;
+
+    // Calculating the Gust Energy ratio
+    const guest_energy_ratio = Math.pow(wave_number, 2) / Math.pow(1 + Math.pow(wave_number, 2), 4 / 3);
+    const n13 = 914 / height;
+    const n14 = n13 / 100;
+    const dx = n14;
+    let background_turbulence_factor = 0;
+    for (let i = 0; i < 100; i++) {
+        const m = i * n14 + n14 / 2;
+        const n = 4 / 3 / (1 + m * height / 457) / (1 + m * width / 122) * m / Math.pow(1 + Math.pow(m, 2), 4 / 3) * dx;
+        background_turbulence_factor += n;
+    }
+    const average_fluctuation_rate = along_frequency * Math.sqrt(size_reduction_factor * guest_energy_ratio / (size_reduction_factor * guest_energy_ratio + damping_ratio * background_turbulence_factor));
+
+    const peak_factor = Math.sqrt(2 * Math.log(average_fluctuation_rate * 3600)) + 0.577 / Math.sqrt(2 * Math.log(average_fluctuation_rate * 3600));
+
+    return peak_factor;
+}

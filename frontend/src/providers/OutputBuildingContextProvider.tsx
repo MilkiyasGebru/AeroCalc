@@ -21,15 +21,22 @@ declare global {
 interface OutputBuildingContextInterface {
     torsionPsds: number[];
     acrossPsds: number[];
+    alongPsds: number[];
+    setAlongPsds: (val: number[]) => void;
     ar: number | null;
     vr: number | null;
     accelartionYDirection: number | null;
+    alongPeakFactor: number | null;
+    acrossPeakFactor: number | null;
+    torsionPeakFactor: number | null;
     experimentalTorsionPsds: number[];
     experimentalAcrossPsds: number[];
     experimentalAlongPsds: number[];
     experimentalAr: number | null;
     experimentalVr: number | null;
     experimentalAccelartionYDirection: number | null;
+    wasAnalyticalRun: boolean;
+    wasExperimentalRun: boolean;
     setTorsionPsds: (val: number[])=> void;
     setAcrossPsds: (val: number[])=>void;
     setAr: (val: number)=> void;
@@ -43,6 +50,9 @@ interface OutputBuildingContextInterface {
     setExperimentalVr: (val: number)=> void;
     handleAnalyticalCalculation : () => void;
     handleExperimentalCalculation : (Mx: number[], My: number[], Mz: number[]) => void;
+    clearExperimentalResults: () => void;
+    clearAnalyticalResults: () => void;
+    exportResults: () => void;
 }
 
 
@@ -50,25 +60,131 @@ export const OutputBuildingContext = createContext<OutputBuildingContextInterfac
 
 export const OutputBuildingContextProvider = ({children}: {children: React.ReactNode})=>{
 
-    const {width,height,depth,meanSpeed,damping,totalFloors,terrain,Talong,Ttorsion, Tacross,experimentalMeanSpeed, experimentalFrequency, setNormalizedExperimentalFrequencies, buildingDensity, userMeanSpeed} = useInputBuildingContext();
+    const {
+        width, height, depth, meanSpeed, damping, totalFloors, terrain, Talong, Ttorsion, Tacross,
+        experimentalMeanSpeed, experimentalFrequency, setNormalizedExperimentalFrequencies, 
+        buildingDensity, userMeanSpeed, isAnalyticalEnabled, mxData, selectedBuilding,
+        isManualPeakFactor, manualAlongPeakFactor, manualAcrossPeakFactor, manualTorsionPeakFactor
+    } = useInputBuildingContext();
 
     const [torsionPsds, setTorsionPsds] = useState<number[]>([]);
     const [acrossPsds, setAcrossPsds] = useState<number[]>([]);
+    const [alongPsds, setAlongPsds] = useState<number[]>([]);
     const [ar, setAr] = useState<number | null>(null)
     const [vr, setVr] = useState<number | null>(null)
+    const [accelartionYDirection, setAccelartionYDirection] = useState<number | null>(null)
+
+    const [calculatedAlongPeakFactor, setCalculatedAlongPeakFactor] = useState<number | null>(null);
+    const [calculatedAcrossPeakFactor, setCalculatedAcrossPeakFactor] = useState<number | null>(null);
+    const [calculatedTorsionPeakFactor, setCalculatedTorsionPeakFactor] = useState<number | null>(null);
+
+    const alongPeakFactor = isManualPeakFactor ? (manualAlongPeakFactor ?? calculatedAlongPeakFactor) : calculatedAlongPeakFactor;
+    const acrossPeakFactor = isManualPeakFactor ? (manualAcrossPeakFactor ?? calculatedAcrossPeakFactor) : calculatedAcrossPeakFactor;
+    const torsionPeakFactor = isManualPeakFactor ? (manualTorsionPeakFactor ?? calculatedTorsionPeakFactor) : calculatedTorsionPeakFactor;
 
     const [experimentalTorsionPsds, setExperimentalTorsionPsds] = useState<number[]>([]);
     const [experimentalAcrossPsds, setExperimentalAcrossPsds] = useState<number[]>([]);
     const [experimentalAr, setExperimentalAr] = useState<number | null>(null)
     const [experimentalVr, setExperimentalVr] = useState<number | null>(null)
-    const [accelartionYDirection, setAccelartionYDirection] = useState<number | null>(null)
     const [experimentalAccelartionYDirection, setExperimentalAccelartionYDirection] = useState<number | null>(null)
     const [experimentalAlongPsds, setExperimentalAlongPsds] = useState<number[]>([])
+
+    const [wasAnalyticalRun, setWasAnalyticalRun] = useState(false);
+    const [wasExperimentalRun, setWasExperimentalRun] = useState(false);
+
+    const clearAnalyticalResults = useCallback(() => {
+        setAr(null);
+        setVr(null);
+        setAccelartionYDirection(null);
+        setCalculatedAlongPeakFactor(null);
+        setCalculatedAcrossPeakFactor(null);
+        setCalculatedTorsionPeakFactor(null);
+        setAcrossPsds([]);
+        setTorsionPsds([]);
+        setAlongPsds([]);
+        setWasAnalyticalRun(false);
+    }, []);
+
+    const clearExperimentalResults = useCallback(() => {
+        setExperimentalAr(null);
+        setExperimentalVr(null);
+        setExperimentalAccelartionYDirection(null);
+        setExperimentalAcrossPsds([]);
+        setExperimentalTorsionPsds([]);
+        setExperimentalAlongPsds([]);
+        setNormalizedExperimentalFrequencies([]);
+        setWasExperimentalRun(false);
+    }, [setNormalizedExperimentalFrequencies]);
+
+    const exportResults = useCallback(() => {
+        const data = {
+            metadata: {
+                timestamp: new Date().toISOString(),
+                project: "McGill Timber Structures Group - Wind Response Prediction"
+            },
+            inputs: {
+                geometry: { width, height, depth, totalFloors },
+                dynamicProperties: { buildingDensity, damping, Talong, Tacross, Ttorsion },
+                windClimate: { terrain, meanSpeed, userMeanSpeed },
+                experimentalConfig: { 
+                    experimentalMeanSpeed, experimentalFrequency,
+                    selectedBuilding: selectedBuilding || "Custom Upload" 
+                }
+            },
+            results: {
+                analytical: isAnalyticalEnabled ? {
+                    acrossWindAcceleration_milliG: ar,
+                    torsionVelocity_milliRadS: vr,
+                    alongWindAcceleration_milliG: accelartionYDirection,
+                    alongPeakFactor,
+                    acrossPeakFactor,
+                    torsionPeakFactor,
+                    spectra: { acrossPsds, torsionPsds }
+                } : "Disabled",
+                experimental: (mxData.length > 0) ? {
+                    acrossWindAcceleration_milliG: experimentalAr,
+                    torsionVelocity_milliRadS: experimentalVr,
+                    alongWindAcceleration_milliG: experimentalAccelartionYDirection,
+                    spectra: { experimentalAcrossPsds, experimentalTorsionPsds, experimentalAlongPsds }
+                } : "No experimental data"
+            }
+        };
+
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `wind_analysis_results_${new Date().getTime()}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }, [
+        width, height, depth, totalFloors, buildingDensity, damping, Talong, Tacross, Ttorsion,
+        terrain, meanSpeed, userMeanSpeed, experimentalMeanSpeed, experimentalFrequency,
+        isAnalyticalEnabled, ar, vr, accelartionYDirection, experimentalAr, experimentalVr, 
+        experimentalAccelartionYDirection, mxData, alongPeakFactor, acrossPeakFactor, torsionPeakFactor
+    ]);
+
     const handleAnalyticalCalculation = useCallback(()=>{
+        setWasAnalyticalRun(true);
+        if (!isAnalyticalEnabled) {
+            setAr(null);
+            setVr(null);
+            setAccelartionYDirection(null);
+            setCalculatedAlongPeakFactor(null);
+            setCalculatedAcrossPeakFactor(null);
+            setCalculatedTorsionPeakFactor(null);
+            setAcrossPsds([]);
+            setTorsionPsds([]);
+            return;
+        }
+
         if (height != null && width != null && depth != null && totalFloors != null && damping != null && meanSpeed != null && Talong != null && Ttorsion != null && Tacross != null && buildingDensity != null){
             const c = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
             let speed : number =(userMeanSpeed != null && Number.isFinite(userMeanSpeed))? userMeanSpeed:meanSpeed*c**0.5
             let across_psds: number[] = CalculateAcrossPsdResponse(Math.max(width,depth),height,Math.min(width,depth),frequencies)
+            console.log(across_psds)
             let torsion_psds: number[] = CalculateTorsionPsdResponse(Math.max(width,depth),height,Math.min(width,depth),speed,frequencies)
             setAccelartionYDirection(CalculateAlong(Math.max(width, depth), height, Math.min(width,depth),speed ,Talong,damping,frequencies,buildingDensity))
             const [x,__]:number[] = CalculateFD(Math.max(width,depth), height, Math.min(width,depth), speed,Ttorsion, totalFloors, damping, frequencies, across_psds, torsion_psds, buildingDensity)
@@ -77,15 +193,35 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
             setAr(y)
             setAcrossPsds(across_psds)
             setTorsionPsds(torsion_psds)
+            setAlongPsds([]) 
+
+            // Peak Factor Calculations
+            const fAlong = 1/Talong;
+            const fAcross = 1/Tacross;
+
+            // Across and Torsion Peak Factor: max(PF(w, across_f, along_f), PF(d, along_f, across_f))
+            import("@/hooks/useCalculateBuildingResponse.ts").then(({calculatePeakFactor}) => {
+                const pfAcross1 = calculatePeakFactor(height, width, fAcross, fAlong, speed, damping);
+                const pfAcross2 = calculatePeakFactor(height, depth, fAlong, fAcross, speed, damping);
+                const pfAcrossTorsion = Math.max(pfAcross1, pfAcross2);
+                
+                setCalculatedAcrossPeakFactor(pfAcrossTorsion);
+                setCalculatedTorsionPeakFactor(pfAcrossTorsion);
+
+                // Along Peak Factor: PF(d, along_f, across_f)
+                const pfAlong = calculatePeakFactor(height, depth, fAlong, fAcross, speed, damping);
+                setCalculatedAlongPeakFactor(pfAlong);
+            });
         }
-    }, [width, depth, height, meanSpeed, totalFloors, damping, terrain, userMeanSpeed])
+    }, [width, depth, height, meanSpeed, totalFloors, damping, terrain, userMeanSpeed, isAnalyticalEnabled, Talong, Ttorsion, Tacross, buildingDensity])
 
     const handleExperimentalCalculation = useCallback(async (Mx:number[], My:number[], Mz:number[])=>{
+        setWasExperimentalRun(true);
         // const Mx : number[] = mxData;
         // const My : number[] = myData;
         // const Mz: number[] = mzData;
-        if (height != null && width != null && depth != null && totalFloors != null && damping != null && meanSpeed != null && Talong != null && Ttorsion != null && Tacross != null && buildingDensity != null) {
 
+        if (height != null && width != null && depth != null && totalFloors != null && damping != null && meanSpeed != null && Talong != null && Ttorsion != null && Tacross != null && buildingDensity != null) {
             if (window.pywebview?.api?.compute) {
                 // DESKTOP MODE: Call Python
                 console.log("Using Python for calculation...");
@@ -109,16 +245,23 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
                 const alongResult = await window.pywebview.api.compute(My, width, height, experimentalMeanSpeed, experimentalFrequency)
                 let along_psds = alongResult.psd.slice(1)
                 setExperimentalAlongPsds(along_psds)
-                const [x, _]: number[] = CalculateFD(width, height, depth, speed, Ttorsion, totalFloors, damping, pwelch_frequencies, across_psds, torsion_psds, buildingDensity)
-                const [__, y]: number[] = CalculateFD(width, height, depth, speed, Tacross, totalFloors, damping, pwelch_frequencies, across_psds, torsion_psds, buildingDensity)
-                const [___, z]: number[] = CalculateFD(width, height, depth, speed, Talong, totalFloors, damping, pwelch_frequencies, along_psds, torsion_psds, buildingDensity)
+                
+                // Use Math.max(width, depth) and Math.min(width, depth) for consistency with analytical
+                const B = Math.max(width, depth);
+                const D = Math.min(width, depth);
+
+                const [x, _]: number[] = CalculateFD(B, height, D, speed, Ttorsion, totalFloors, damping, pwelch_frequencies, across_psds, torsion_psds, buildingDensity)
+                const [__, y]: number[] = CalculateFD(B, height, D, speed, Tacross, totalFloors, damping, pwelch_frequencies, across_psds, torsion_psds, buildingDensity)
+                const [___, z]: number[] = CalculateFD(B, height, D, speed, Talong, totalFloors, damping, pwelch_frequencies, along_psds, torsion_psds, buildingDensity)
 
                 setExperimentalAccelartionYDirection(z)
-                //
                 setExperimentalVr(x)
                 setExperimentalAr(y)
             } else {
                 // WEB MODE: Fallback to Local JavaScript
+                // const c = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
+                // let speed : number =(userMeanSpeed != null && Number.isFinite(userMeanSpeed))? userMeanSpeed:meanSpeed*c**0.5
+                
                 let experi_across_psds: number[] = calculate_experimental_psd_normalized(Mx, width, height, experimentalMeanSpeed, experimentalFrequency).psd
                 experi_across_psds = experi_across_psds.slice(1)
                 let {
@@ -143,17 +286,28 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
 
                 console.log("Experi Across PSDS is", experi_across_psds)
                 console.log("Frequencies is ", pwelch_frequencies)
+                console.log("Normalized is ", f_normalized)
+                console.log("Experiment Torsion PSD values is", psd)
                 setExperimentalAcrossPsds(experi_across_psds)
 
                 setNormalizedExperimentalFrequencies(f_normalized)
-                // console.log("new", calculate_experimental_psd_normalized(Mz, width, depth, experimentalMeanSpeed, experimentalFrequency))
-                // setCSVData(csvData)
-                const [x, _]: number[] = CalculateFD(width, height, depth, meanSpeed, Ttorsion, totalFloors, damping, pwelch_frequencies, experi_across_psds, psd, buildingDensity)
-                const [__, y]: number[] = CalculateFD(width, height, depth, meanSpeed, Tacross, totalFloors, damping, pwelch_frequencies, experi_across_psds, psd, buildingDensity)
-                const [___, z]: number[] = CalculateFD(width, height, depth, meanSpeed, Talong, totalFloors, damping, pwelch_frequencies, along_psds, psd, buildingDensity)
+                
+                // Use Math.max(width, depth) and Math.min(width, depth) for consistency with analytical
+                const B = Math.max(width, depth);
+                const D = Math.min(width, depth);
+                const c = (terrain == "open")? (height/10)**0.28: 0.5*((height/12.7)**0.5);
+                let speed : number =(userMeanSpeed != null && Number.isFinite(userMeanSpeed))? userMeanSpeed:meanSpeed*c**0.5
+                console.log("width", B)
+                console.log("height", height)
+                console.log("Depth", D)
+                console.log("damping", damping)
+                console.log("Usermean Speed", userMeanSpeed)
+                console.log("Speed", speed)
+                const [x, _]: number[] = CalculateFD(B, height, D, speed, Ttorsion, totalFloors, damping, f_normalized, experi_across_psds, psd, buildingDensity)
+                const [__, y]: number[] = CalculateFD(B, height, D, speed, Tacross, totalFloors, damping, f_normalized, experi_across_psds, psd, buildingDensity)
+                const [___, z]: number[] = CalculateFD(B, height, D, speed, Talong, totalFloors, damping, f_normalized, along_psds, psd, buildingDensity)
 
                 setExperimentalAccelartionYDirection(z)
-                //
                 setExperimentalVr(x)
                 setExperimentalAr(y)
             }
@@ -176,16 +330,19 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
 
 
 
-    },[width, depth, height, meanSpeed, totalFloors, damping, buildingDensity, terrain,Talong, Tacross, Ttorsion,experimentalMeanSpeed,experimentalFrequency])
+    },[width, depth, height, meanSpeed, totalFloors, damping, buildingDensity, terrain,Talong, Tacross, Ttorsion,experimentalMeanSpeed,experimentalFrequency, userMeanSpeed])
 
     return (
         <OutputBuildingContext.Provider value={{
-            torsionPsds, acrossPsds, ar,vr, setTorsionPsds, setAcrossPsds, setAr, setVr,
+            torsionPsds, acrossPsds, alongPsds, ar,vr, setTorsionPsds, setAcrossPsds, setAlongPsds, setAr, setVr,
+            alongPeakFactor, acrossPeakFactor, torsionPeakFactor,
             experimentalTorsionPsds,experimentalAcrossPsds,experimentalAr,experimentalVr,
             accelartionYDirection, setAccelartionYDirection,
             experimentalAlongPsds, setExperimentalAlongPsds,
             experimentalAccelartionYDirection, setExperimentalAccelartionYDirection,
-            setExperimentalTorsionPsds,setExperimentalAcrossPsds,setExperimentalAr,setExperimentalVr, handleAnalyticalCalculation,handleExperimentalCalculation
+            wasAnalyticalRun, wasExperimentalRun,
+            setExperimentalTorsionPsds,setExperimentalAcrossPsds,setExperimentalAr,setExperimentalVr, handleAnalyticalCalculation,handleExperimentalCalculation,
+            clearExperimentalResults, clearAnalyticalResults, exportResults
         }}>
             {children}
         </OutputBuildingContext.Provider>

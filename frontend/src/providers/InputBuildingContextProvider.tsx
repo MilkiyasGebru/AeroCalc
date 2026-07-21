@@ -6,6 +6,8 @@ interface InputBuildingContextInterface {
     depth: number | undefined;
     meanSpeed: number | undefined;
     userMeanSpeed: number | undefined;
+    isAnalyticalEnabled: boolean;
+    setIsAnalyticalEnabled: (val: boolean) => void;
     experimentalMeanSpeed: number;
     buildingDensity: number | undefined;
     totalFloors: number | undefined;
@@ -41,6 +43,16 @@ interface InputBuildingContextInterface {
     setTtorsion: (val :number) => void;
     setTacross: (val: number)=>void;
     setUserMeanSpeed: (val: number) => void;
+    selectedBuilding: string | null;
+    setSelectedBuilding: (val: string | null) => void;
+    isManualPeakFactor: boolean;
+    setIsManualPeakFactor: (val: boolean) => void;
+    manualAlongPeakFactor: number | undefined;
+    setManualAlongPeakFactor: (val: number | undefined) => void;
+    manualAcrossPeakFactor: number | undefined;
+    setManualAcrossPeakFactor: (val: number | undefined) => void;
+    manualTorsionPeakFactor: number | undefined;
+    setManualTorsionPeakFactor: (val: number | undefined) => void;
 
 }
 interface IUploadData {
@@ -69,9 +81,17 @@ export const InputBuildingContextProvider = ({children}: {children: React.ReactN
     const [myData, setMyData] = useState<number[]>([]);
     const [mzData, setMzData] = useState<number[]>([]);
     const [experimentalMeanSpeed, setExperimentalMeanSpeed] = useState<number>(1);
-    const [experimentalFrequency, setExperimentalFrequency] = useState<number>(0.183);
+    const [experimentalFrequency, setExperimentalFrequency] = useState<number>(0.18);
     const [normalizedExperimentalFrequencies, setNormalizedExperimentalFrequencies] = useState<number[]>([]);
-    const [userMeanSpeed, setUserMeanSpeed] = useState<number | undefined>(undefined)
+    const [userMeanSpeed, setUserMeanSpeed] = useState<number | undefined>(undefined);
+    const [isAnalyticalEnabled, setIsAnalyticalEnabled] = useState<boolean>(true);
+    const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
+
+    const [isManualPeakFactor, setIsManualPeakFactor] = useState<boolean>(false);
+    const [manualAlongPeakFactor, setManualAlongPeakFactor] = useState<number | undefined>(undefined);
+    const [manualAcrossPeakFactor, setManualAcrossPeakFactor] = useState<number | undefined>(undefined);
+    const [manualTorsionPeakFactor, setManualTorsionPeakFactor] = useState<number | undefined>(undefined);
+
     return (
         <InputBuildingContext.Provider value={{
             width, height, depth, meanSpeed, buildingDensity, totalFloors, damping, Tone, terrain,csvData,experimentalMeanSpeed,experimentalFrequency,
@@ -79,6 +99,12 @@ export const InputBuildingContextProvider = ({children}: {children: React.ReactN
             mxData,myData,mzData,setMxData,setMyData,setMzData,
             Ttorsion, Tacross, Talong, setTalong, setTtorsion, setTacross,
             userMeanSpeed, setUserMeanSpeed,
+            isAnalyticalEnabled, setIsAnalyticalEnabled,
+            selectedBuilding, setSelectedBuilding,
+            isManualPeakFactor, setIsManualPeakFactor,
+            manualAlongPeakFactor, setManualAlongPeakFactor,
+            manualAcrossPeakFactor, setManualAcrossPeakFactor,
+            manualTorsionPeakFactor, setManualTorsionPeakFactor,
             setExperimentalFrequency,setExperimentalMeanSpeed,setWidth, setHeight, setDepth,setMeanSpeed, setBuildingDensity,setTotalFloors,setDamping,setTerrain,setTone, setCSVData}} >
             {children}
         </InputBuildingContext.Provider>

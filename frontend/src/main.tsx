@@ -4,14 +4,17 @@ import './index.css'
 import App from './App.tsx'
 import {InputBuildingContextProvider} from "@/providers/InputBuildingContextProvider.tsx";
 import {OutputBuildingContextProvider} from "@/providers/OutputBuildingContextProvider.tsx";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 
 createRoot(document.getElementById('root')!).render(
 
   <StrictMode>
-      <InputBuildingContextProvider>
-        <OutputBuildingContextProvider>
-            <App />
-        </OutputBuildingContextProvider>
-      </InputBuildingContextProvider>
+      <ThemeProvider>
+          <InputBuildingContextProvider>
+            <OutputBuildingContextProvider>
+                <App />
+            </OutputBuildingContextProvider>
+          </InputBuildingContextProvider>
+      </ThemeProvider>
   </StrictMode>,
 )
