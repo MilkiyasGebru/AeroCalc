@@ -108,10 +108,9 @@ export default function OptimizationTab() {
         isManualPeakFactor, manualAlongPeakFactor, manualAcrossPeakFactor, manualTorsionPeakFactor
     } = useInputBuildingContext();
 
-    const { 
+    const {
         experimentalAcrossPsds, experimentalTorsionPsds, experimentalAlongPsds,
-        wasAnalyticalRun, wasExperimentalRun,
-        alongPeakFactor, acrossPeakFactor, torsionPeakFactor
+        wasAnalyticalRun, wasExperimentalRun
     } = useOutputBuildingContext();
 
     const [densityMult, setDensityMult] = useState(1);
@@ -134,8 +133,9 @@ export default function OptimizationTab() {
             const c = (terrain == "open") ? (height / 10) ** 0.28 : 0.5 * ((height / 12.7) ** 0.5);
             let speed: number = (userMeanSpeed != null && Number.isFinite(userMeanSpeed)) ? userMeanSpeed : meanSpeed * c ** 0.5;
             
-            const isDesktop = !!(window as any).pywebview;
-            const expCalcSpeed = isDesktop ? speed : (userMeanSpeed != null && Number.isFinite(userMeanSpeed)) ? userMeanSpeed : meanSpeed;
+            // OutputBuildingContextProvider uses this same terrain-corrected `speed` for the
+            // CalculateFD mean_speed argument in both desktop and web experimental paths.
+            const expCalcSpeed = speed;
 
             // Reconstruct frequencies for experimental
             const pwelch_frequencies = (normalizedExperimentalFrequencies && normalizedExperimentalFrequencies.length > 0 && experimentalMeanSpeed && width) 
@@ -218,7 +218,7 @@ export default function OptimizationTab() {
             };
         }
         return null;
-    }, [width, height, depth, meanSpeed, damping, totalFloors, terrain, Talong, Tacross, Ttorsion, buildingDensity, userMeanSpeed, densityMult, dampingMult, stiffnessMultAlong, stiffnessMultAcross, stiffnessMultTorsion, experimentalFrequency, experimentalAcrossPsds, experimentalTorsionPsds, experimentalAlongPsds, normalizedExperimentalFrequencies, experimentalMeanSpeed, alongPeakFactor, acrossPeakFactor, torsionPeakFactor, isManualPeakFactor, manualAlongPeakFactor, manualAcrossPeakFactor, manualTorsionPeakFactor]);
+    }, [width, height, depth, meanSpeed, damping, totalFloors, terrain, Talong, Tacross, Ttorsion, buildingDensity, userMeanSpeed, densityMult, dampingMult, stiffnessMultAlong, stiffnessMultAcross, stiffnessMultTorsion, experimentalFrequency, experimentalAcrossPsds, experimentalTorsionPsds, experimentalAlongPsds, normalizedExperimentalFrequencies, experimentalMeanSpeed, isManualPeakFactor, manualAlongPeakFactor, manualAcrossPeakFactor, manualTorsionPeakFactor]);
 
     const showAnalytical = wasAnalyticalRun;
     const showExperimental = wasExperimentalRun;
@@ -354,7 +354,6 @@ export default function OptimizationTab() {
                             analytical={optimizedResults?.analytical.alongAcc ?? null} 
                             experimental={optimizedResults?.experimental.alongAcc ?? null}
                             analyticalPeakFactor={optimizedResults?.analytical.alongPeakFactor ?? null}
-                            // experimentalPeakFactor={optimizedResults?.experimental.alongPeakFactor ?? null}
                             icon={<ArrowRight className="h-4 w-4" />}
                             colorClass="text-[#854D0E]"
                             isAnalyticalEnabled={wasAnalyticalRun}
@@ -366,7 +365,6 @@ export default function OptimizationTab() {
                             analytical={optimizedResults?.analytical.acrossAcc ?? null} 
                             experimental={optimizedResults?.experimental.acrossAcc ?? null}
                             analyticalPeakFactor={optimizedResults?.analytical.acrossPeakFactor ?? null}
-                            // experimentalPeakFactor={optimizedResults?.experimental.acrossPeakFactor ?? null}
                             icon={<Wind className="h-4 w-4" />}
                             colorClass="text-[#EA580C]"
                             isAnalyticalEnabled={wasAnalyticalRun}
@@ -378,7 +376,6 @@ export default function OptimizationTab() {
                             analytical={optimizedResults?.analytical.torsionVel ?? null} 
                             experimental={optimizedResults?.experimental.torsionVel ?? null}
                             analyticalPeakFactor={optimizedResults?.analytical.torsionPeakFactor ?? null}
-                            // experimentalPeakFactor={optimizedResults?.experimental.torsionPeakFactor ?? null}
                             icon={<RotateCw className="h-4 w-4" />}
                             colorClass="text-[#CA8A04]"
                             isAnalyticalEnabled={wasAnalyticalRun}
@@ -399,8 +396,8 @@ export default function OptimizationTab() {
                                             { frequency: optimizedResults?.analytical.acrossFreq ?? 0, acceleration: (optimizedResults?.analytical.acrossAcc && optimizedResults?.analytical.acrossPeakFactor) ? optimizedResults.analytical.acrossAcc * optimizedResults.analytical.acrossPeakFactor : (optimizedResults?.analytical.acrossAcc ?? 0), label: "Analytical across", color: "#ef4444", shape: "diamond" as const}
                                         ] : []),
                                         ...(showExperimental ? [
-                                            { frequency: optimizedResults?.experimental.alongFreq ?? 0, acceleration: (optimizedResults?.experimental.alongAcc && alongPeakFactor) ? optimizedResults.experimental.alongAcc * alongPeakFactor : (optimizedResults?.experimental.alongAcc ?? 0), label: "Exp. along", color: "#3b82f6", shape: "circle" as const },
-                                            { frequency: optimizedResults?.experimental.acrossFreq ?? 0, acceleration: (optimizedResults?.experimental.acrossAcc && acrossPeakFactor) ? optimizedResults.experimental.acrossAcc * acrossPeakFactor : (optimizedResults?.experimental.acrossAcc ?? 0), label: "Exp. across", color: "#3b82f6", shape: "diamond" as const }
+                                            { frequency: optimizedResults?.experimental.alongFreq ?? 0, acceleration: (optimizedResults?.experimental.alongAcc && optimizedResults?.analytical.alongPeakFactor) ? optimizedResults.experimental.alongAcc * optimizedResults.analytical.alongPeakFactor : (optimizedResults?.experimental.alongAcc ?? 0), label: "Exp. along", color: "#3b82f6", shape: "circle" as const },
+                                            { frequency: optimizedResults?.experimental.acrossFreq ?? 0, acceleration: (optimizedResults?.experimental.acrossAcc && optimizedResults?.analytical.acrossPeakFactor) ? optimizedResults.experimental.acrossAcc * optimizedResults.analytical.acrossPeakFactor : (optimizedResults?.experimental.acrossAcc ?? 0), label: "Exp. across", color: "#3b82f6", shape: "diamond" as const }
                                         ] : [])
                                     ]} 
                                 />
@@ -418,7 +415,7 @@ export default function OptimizationTab() {
                                             { frequency: optimizedResults?.analytical.torsionFreq ?? 0, velocity: (optimizedResults?.analytical.torsionVel && optimizedResults?.analytical.torsionPeakFactor) ? optimizedResults.analytical.torsionVel * optimizedResults.analytical.torsionPeakFactor : (optimizedResults?.analytical.torsionVel ?? 0), label: "Analytical torsion", color: "#ef4444", shape: "circle" as const }
                                         ] : []),
                                         ...(showExperimental ? [
-                                            { frequency: optimizedResults?.experimental.torsionFreq ?? 0, velocity: (optimizedResults?.experimental.torsionVel && torsionPeakFactor) ? optimizedResults.experimental.torsionVel * torsionPeakFactor : (optimizedResults?.experimental.torsionVel ?? 0), label: "Exp. Torsion", color: "#3b82f6", shape: "circle" as const }
+                                            { frequency: optimizedResults?.experimental.torsionFreq ?? 0, velocity: (optimizedResults?.experimental.torsionVel && optimizedResults?.analytical.torsionPeakFactor) ? optimizedResults.experimental.torsionVel * optimizedResults.analytical.torsionPeakFactor : (optimizedResults?.experimental.torsionVel ?? 0), label: "Exp. Torsion", color: "#3b82f6", shape: "circle" as const }
                                         ] : [])
                                     ]} 
                                 />
