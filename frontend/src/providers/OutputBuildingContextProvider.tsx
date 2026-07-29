@@ -269,25 +269,30 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
                     pwelch_frequencies
                 } = calculate_experimental_psd_normalized(Mz, width, depth, experimentalMeanSpeed, experimentalFrequency)
 
+                console.log("pwelch_frequencies is ", pwelch_frequencies)
+                console.log("Length of pwelch frequencies is ", pwelch_frequencies.length)
 
                 // console.log("UnNormalized Frequency is ", pwelch_frequencies)
                 // const  : number[] = calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency)
                 let along_psds: number[] = calculate_experimental_psd_normalized(My, width, height, experimentalMeanSpeed, experimentalFrequency).psd
+                let torsion_psds: number[] = calculate_experimental_psd_normalized(Mz, width, height, experimentalMeanSpeed, experimentalFrequency).psd
                 along_psds = along_psds.slice(1)
                 setExperimentalAlongPsds(along_psds)
                 // console.log("Normalized ",normalizedFrequency)
                 pwelch_frequencies = pwelch_frequencies.slice(1)
+                console.log("PSD is", torsion_psds)
+                torsion_psds = torsion_psds.slice(1)
                 psd = psd.slice(1)
-                setExperimentalTorsionPsds(psd)
+                setExperimentalTorsionPsds(torsion_psds)
 
                 const f_normalized: number[] = pwelch_frequencies.map(f => {
                     return f*width/experimentalMeanSpeed
                 });
 
-                console.log("Experi Across PSDS is", experi_across_psds)
-                console.log("Frequencies is ", pwelch_frequencies)
-                console.log("Normalized is ", f_normalized)
-                console.log("Experiment Torsion PSD values is", psd)
+                // console.log("Experi Across PSDS is", experi_across_psds)
+                // console.log("Frequencies is ", pwelch_frequencies)
+                // console.log("Normalized is ", f_normalized)
+                // console.log("Experiment Torsion PSD values is", psd)
                 setExperimentalAcrossPsds(experi_across_psds)
 
                 setNormalizedExperimentalFrequencies(f_normalized)
