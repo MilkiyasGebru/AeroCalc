@@ -80,9 +80,9 @@ export function calculate_experimental_psd_normalized(M: number[], width_depth: 
     "psd": number[],
     "pwelch_frequencies": number[],
 }{
-    const meanM : number = mean(M)
+    const meanM : number = mean(M.map(x => Math.abs(x)))
     const window = hamming(3000);
-    const mZeroMean = M.map(x => 1000 * (x - meanM));
+    const mZeroMean = M.map(x => (x - meanM));
     const { psd, freqs } =
         pwelchMatlab(mZeroMean, f_expt, window);
     return normalizePsd(psd, freqs, width_depth, height, UH);

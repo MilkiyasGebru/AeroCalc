@@ -24,6 +24,7 @@ interface IResponse {
     terrain: string;
     url: string;
     frequency: number;
+    meanspeed: number;
 }
 
 export function InternalDatabaseDialog({ open, onOpenChange, onConfirm }: InternalDatabaseDialogProps) {
@@ -31,7 +32,7 @@ export function InternalDatabaseDialog({ open, onOpenChange, onConfirm }: Intern
     const { width, height, depth} = useInputBuildingContext();
     const [options, setOptions] = useState<IResponse[]>([])
     const [loading, setLoading] = useState<boolean>(false)
-    const {setExperimentalFrequency, setSelectedBuilding} = useInputBuildingContext()
+    const {setExperimentalFrequency, setSelectedBuilding, setExperimentalMeanSpeed} = useInputBuildingContext()
 
     useEffect(() => {
         if (!open) return;
@@ -90,6 +91,7 @@ export function InternalDatabaseDialog({ open, onOpenChange, onConfirm }: Intern
                             let op: IResponse[] = options.filter(option => option.url === value)
                             if (op.length == 1){
                                 setExperimentalFrequency(op[0].frequency)
+                                setExperimentalMeanSpeed(op[0].meanspeed)
                                 setSelectedBuilding(`Width: ${op[0].width}m, Height: ${op[0].height}m, Depth: ${op[0].depth}m`)
                                 onConfirm(value)
                             }
