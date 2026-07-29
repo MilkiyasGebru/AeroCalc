@@ -275,15 +275,13 @@ export const OutputBuildingContextProvider = ({children}: {children: React.React
                 // console.log("UnNormalized Frequency is ", pwelch_frequencies)
                 // const  : number[] = calculate_experimental_psd_normalized(Mz,width,depth,experimentalMeanSpeed, experimentalFrequency)
                 let along_psds: number[] = calculate_experimental_psd_normalized(My, width, height, experimentalMeanSpeed, experimentalFrequency).psd
-                let torsion_psds: number[] = calculate_experimental_psd_normalized(Mz, width, height, experimentalMeanSpeed, experimentalFrequency).psd
                 along_psds = along_psds.slice(1)
                 setExperimentalAlongPsds(along_psds)
                 // console.log("Normalized ",normalizedFrequency)
                 pwelch_frequencies = pwelch_frequencies.slice(1)
-                console.log("PSD is", torsion_psds)
-                torsion_psds = torsion_psds.slice(1)
+                console.log("PSD is", psd)
                 psd = psd.slice(1)
-                setExperimentalTorsionPsds(torsion_psds)
+                setExperimentalTorsionPsds(psd)
 
                 const f_normalized: number[] = pwelch_frequencies.map(f => {
                     return f*width/experimentalMeanSpeed
