@@ -62,6 +62,7 @@ function App() {
                       >
                           {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
                       </Button>
+                      <img src="/logo.svg" alt="AeroCalc logo" className="h-11 w-11 shrink-0" />
                       <div>
                           <h1 className="text-2xl font-bold text-primary leading-tight">Cloud-based platform for wind response prediction of tall mass timber buildings</h1>
                           <p className="text-sm text-muted-foreground">McGill Timber Structures Group (TSG)</p>
