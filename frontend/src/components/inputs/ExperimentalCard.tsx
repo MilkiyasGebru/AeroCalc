@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Info } from "lucide-react";
+import { Info, BookMarked } from "lucide-react";
 import { useInputBuildingContext } from "@/contexts/useInputBuildingContext";
 // import { useOutputBuildingContext } from "@/contexts/useOutputBuildingContext";
 import { useState } from "react";
@@ -39,7 +39,10 @@ export default function ExperimentalCard() {
         experimentalFrequency, setExperimentalFrequency,
         experimentalMeanSpeed, setExperimentalMeanSpeed,
         setMxData, setMyData, setMzData,
-        isAnalyticalEnabled, setIsAnalyticalEnabled
+        isAnalyticalEnabled, setIsAnalyticalEnabled,
+        selectedBuilding, setSelectedBuilding,
+        selectedBuildingSource, setSelectedBuildingSource,
+        selectedBuildingSourceLink, setSelectedBuildingSourceLink
     } = useInputBuildingContext();
 
     // const { handleExperimentalCalculation } = useOutputBuildingContext();
@@ -109,6 +112,9 @@ export default function ExperimentalCard() {
                                         if (calcType === "internal") {
                                             setCalcType("none");
                                             setMxData([]); setMyData([]); setMzData([]);
+                                            setSelectedBuilding(null);
+                                            setSelectedBuildingSource(null);
+                                            setSelectedBuildingSourceLink(null);
                                         } else {
                                             setCalcType("internal");
                                             setShowInternalDialog(true);
@@ -126,9 +132,42 @@ export default function ExperimentalCard() {
                                         </TooltipContent>
                                     </Tooltip>
                                 </TooltipProvider>
-                            </div>                            <div className="flex items-center space-x-2">
-                                <Checkbox 
-                                    id="external-upload" 
+                            </div>
+                            {calcType === "internal" && selectedBuilding && (
+                                <div className="ml-6 rounded-md border border-border bg-muted/40 p-2.5 text-xs space-y-1">
+                                    <div className="flex items-center justify-between gap-2">
+                                        <span className="font-medium text-foreground">{selectedBuilding}</span>
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="h-6 px-2 text-xs shrink-0"
+                                            onClick={() => setShowInternalDialog(true)}
+                                        >
+                                            Change
+                                        </Button>
+                                    </div>
+                                    {selectedBuildingSource && (
+                                        <div className="flex gap-1.5 text-muted-foreground">
+                                            <BookMarked className="h-3 w-3 shrink-0 mt-0.5" />
+                                            {selectedBuildingSourceLink ? (
+                                                <a
+                                                    href={selectedBuildingSourceLink}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="underline hover:text-primary"
+                                                >
+                                                    {selectedBuildingSource}
+                                                </a>
+                                            ) : (
+                                                <span>{selectedBuildingSource}</span>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                            <div className="flex items-center space-x-2">
+                                <Checkbox
+                                    id="external-upload"
                                     checked={calcType === "external"} 
                                     onCheckedChange={() => {
                                         if (calcType === "external") {
