@@ -45,6 +45,10 @@ interface InputBuildingContextInterface {
     setUserMeanSpeed: (val: number) => void;
     selectedBuilding: string | null;
     setSelectedBuilding: (val: string | null) => void;
+    selectedBuildingSource: string | null;
+    setSelectedBuildingSource: (val: string | null) => void;
+    selectedBuildingSourceLink: string | null;
+    setSelectedBuildingSourceLink: (val: string | null) => void;
     isManualPeakFactor: boolean;
     setIsManualPeakFactor: (val: boolean) => void;
     manualAlongPeakFactor: number | undefined;
@@ -86,6 +90,8 @@ export const InputBuildingContextProvider = ({children}: {children: React.ReactN
     const [userMeanSpeed, setUserMeanSpeed] = useState<number | undefined>(undefined);
     const [isAnalyticalEnabled, setIsAnalyticalEnabled] = useState<boolean>(true);
     const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
+    const [selectedBuildingSource, setSelectedBuildingSource] = useState<string | null>(null);
+    const [selectedBuildingSourceLink, setSelectedBuildingSourceLink] = useState<string | null>(null);
 
     const [isManualPeakFactor, setIsManualPeakFactor] = useState<boolean>(false);
     const [manualAlongPeakFactor, setManualAlongPeakFactor] = useState<number | undefined>(undefined);
@@ -101,6 +107,8 @@ export const InputBuildingContextProvider = ({children}: {children: React.ReactN
             userMeanSpeed, setUserMeanSpeed,
             isAnalyticalEnabled, setIsAnalyticalEnabled,
             selectedBuilding, setSelectedBuilding,
+            selectedBuildingSource, setSelectedBuildingSource,
+            selectedBuildingSourceLink, setSelectedBuildingSourceLink,
             isManualPeakFactor, setIsManualPeakFactor,
             manualAlongPeakFactor, setManualAlongPeakFactor,
             manualAcrossPeakFactor, setManualAcrossPeakFactor,
