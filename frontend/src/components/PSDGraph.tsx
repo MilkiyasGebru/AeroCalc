@@ -99,13 +99,15 @@ export default function PSDGraph(props : PSDGraphInterface) {
     const title : string = props.graphType === "Across"? "Across-wind base moment spectrum" : props.graphType === "Along"?  "Along-wind base moment spectrum" :  "Torsion base moment spectrum"
 
     // Dynamically calculate Y-axis range
-    const allValues = [...psds, ...experimentalPsds].filter(v => v > 0);
-    const minVal = allValues.length > 0 ? Math.min(...allValues) : 1e-6;
-    const maxVal = allValues.length > 0 ? Math.max(...allValues) : 1e-2;
-    
+    // const allValues = [...psds, ...experimentalPsds].filter(v => v > 0);
+    // const minVal = allValues.length > 0 ? Math.min(...allValues) : 1e-6;
+    // const maxVal = allValues.length > 0 ? Math.max(...allValues) : 1e-2;
+    const minVal = 1e-6;
+    const maxVal = 1e0;
     const minExp = Math.floor(Math.log10(minVal));
+    // const minExp = 1e-8;
     const maxExp = Math.ceil(Math.log10(maxVal));
-    
+    // const maxExp = 1e0
     const yTicks = [];
     for (let e = minExp; e <= maxExp; e++) {
         yTicks.push(Math.pow(10, e));
