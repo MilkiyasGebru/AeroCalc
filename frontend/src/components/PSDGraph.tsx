@@ -146,6 +146,7 @@ export default function PSDGraph(props : PSDGraphInterface) {
                                 stroke="var(--muted-foreground)"
                                 ticks={yTicks}
                                 domain={[Math.pow(10, minExp), Math.pow(10, maxExp)]}
+                                allowDataOverflow={true}
                             />
                             <Tooltip
                                 contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', borderRadius: '8px' }}
